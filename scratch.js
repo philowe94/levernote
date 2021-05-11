@@ -8,3 +8,5 @@ $.ajax({
 }).then(res => console.log(res))
 
 heroku stack:set heroku-18
+
+comment out uglifier in production.rb
