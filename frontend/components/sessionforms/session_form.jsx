@@ -1,11 +1,13 @@
 import React from 'react';
+import { Redirect } from 'react-router';
 
 class SessionForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             email: "",
-            password: ""
+            password: "",
+            redirectToHome: false 
         };
         this.handleSubmit = this.handleSubmit.bind(this)
     }
@@ -20,6 +22,7 @@ class SessionForm extends React.Component {
         e.preventDefault();
         const user = Object.assign({}, this.state);
         this.props.processForm( user );
+        this.setState({redirectToHome: true});
     }
     
     renderErrors() {
@@ -35,28 +38,53 @@ class SessionForm extends React.Component {
     }
 
     render(){
-        return(
-            <div className="session_form_container">
-                <form className="session_form" onSubmit={this.handleSubmit}>
-                    <h2>{this.props.formType}</h2>
-                    <label>Email address:
-                        <input type="text"
-                            value={this.state.username}
-                            onChange={this.update('email')}
-                        />
-                    </label>
-                    <label>Password:
-                        <input type="password"
-                            value={this.state.password}
-                            onChange={this.update('password')}
-                        />
-                    </label>
-                    <input className="session_form_continue" type="submit" value="Continue"/>
-                    {this.props.navText}
-                    {this.props.navLink}
-                </form>
-            </div>
-        )
+
+        if (this.state.redirectToHome) {
+            return <Redirect to="/" />
+        } else {
+            return(
+                <div className="session-form-background">
+                    <div className="session-form-container">
+                        <div className="session-form-body">
+    
+                            <div className="session-heading">
+                                <img src="/assets/logo.png" className="logo"/>
+                                <h1 className="logo-link">Levernote</h1>
+                                <p>Leverage the power of notes.</p>
+                            </div>
+                            <form className="session-form" onSubmit={this.handleSubmit}>
+                                <ul>
+                                    <li>
+                                        <input type="text"
+                                            value={this.state.username}
+                                            onChange={this.update('email')}
+                                            placeholder="Email address"
+                                            className="email-pass-field"
+                                        />
+                                    </li>
+                                    <li>
+                                        <input type="password"
+                                            value={this.state.password}
+                                            onChange={this.update('password')}
+                                            placeholder="Password"
+                                            className="email-pass-field"
+                                        />
+                                    </li>
+                                    <li>
+                                        <input className="session-form-continue" type="submit" value="Continue"/>
+                                    </li>
+    
+                                </ul>
+                                <div className="context-switch">
+                                    <div>{this.props.navText}</div>
+                                    <div className="switch">{this.props.navLink}</div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
     }
 }
 

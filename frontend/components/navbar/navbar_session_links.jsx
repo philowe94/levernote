@@ -5,13 +5,13 @@ const NavbarSessionLinks = ({ currentUser, logout }) => {
 
     const loginorSignupLinks = () => (
         <nav className="session-nav">
-            <Link to="/login">Login</Link>
+            <Link to="/login">Log In</Link>
         </nav>
     );
     const greetingAndLogout = () => (
         <nav className="session-nav">
             <h2>Hello {currentUser.email}</h2>
-            <Link to="/logout" onClick={logout}>Log out!</Link>
+            <Link to="/" onClick={logout}>Log out!</Link>
         </nav>
     )
 

@@ -191,6 +191,10 @@ var _signup_form_container = __webpack_require__(/*! ./sessionforms/signup_form_
 
 var _signup_form_container2 = _interopRequireDefault(_signup_form_container);
 
+var _splash_content = __webpack_require__(/*! ./splash_content/splash_content */ "./frontend/components/splash_content/splash_content.jsx");
+
+var _splash_content2 = _interopRequireDefault(_splash_content);
+
 var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -201,9 +205,10 @@ var App = function App() {
         null,
         _react2.default.createElement(
             'header',
-            null,
-            _react2.default.createElement(_navbar_container2.default, null)
+            { className: 'header' },
+            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _navbar_container2.default })
         ),
+        _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _splash_content2.default }),
         _react2.default.createElement(_reactRouterDom.Route, { path: '/login', component: _login_form_container2.default }),
         _react2.default.createElement(_reactRouterDom.Route, { path: '/signup', component: _signup_form_container2.default })
     );
@@ -246,45 +251,42 @@ var Navbar = function Navbar(_ref) {
 
     return _react2.default.createElement(
         'div',
-        null,
+        { className: 'navbar' },
         _react2.default.createElement(
-            'nav',
+            _reactRouterDom.Link,
+            { to: '/', className: 'logo-link' },
+            ' ',
+            _react2.default.createElement('img', { src: '/assets/logo.png', className: 'logo' }),
+            'Levernote'
+        ),
+        _react2.default.createElement(
+            'ul',
             { className: 'top-level-nav' },
-            _react2.default.createElement('img', { src: '/assets/logo.png' }),
             _react2.default.createElement(
-                _reactRouterDom.Link,
-                { to: '/', className: 'header-link' },
-                'Levernote'
-            ),
-            _react2.default.createElement(
-                'ul',
+                'li',
                 null,
                 _react2.default.createElement(
-                    'li',
-                    null,
-                    _react2.default.createElement(
-                        'a',
-                        { href: '#' },
-                        'Why Levernote'
-                    )
-                ),
+                    'a',
+                    { href: '#' },
+                    'Why Levernote'
+                )
+            ),
+            _react2.default.createElement(
+                'li',
+                null,
                 _react2.default.createElement(
-                    'li',
-                    null,
-                    _react2.default.createElement(
-                        'a',
-                        { href: 'https://github.com/philowe94/' },
-                        'Github'
-                    )
-                ),
+                    'a',
+                    { href: 'https://github.com/philowe94/' },
+                    'Github'
+                )
+            ),
+            _react2.default.createElement(
+                'li',
+                null,
                 _react2.default.createElement(
-                    'li',
-                    null,
-                    _react2.default.createElement(
-                        'a',
-                        { href: 'https://www.linkedin.com/in/philip-lowe-274b9a9a/' },
-                        'Linkedin'
-                    )
+                    'a',
+                    { href: 'https://www.linkedin.com/in/philip-lowe-274b9a9a/' },
+                    'Linkedin'
                 )
             )
         ),
@@ -375,7 +377,7 @@ var NavbarSessionLinks = function NavbarSessionLinks(_ref) {
             _react2.default.createElement(
                 _reactRouterDom.Link,
                 { to: '/login' },
-                'Login'
+                'Log In'
             )
         );
     };
@@ -391,7 +393,7 @@ var NavbarSessionLinks = function NavbarSessionLinks(_ref) {
             ),
             _react2.default.createElement(
                 _reactRouterDom.Link,
-                { to: '/logout', onClick: logout },
+                { to: '/', onClick: logout },
                 'Log out!'
             )
         );
@@ -536,7 +538,7 @@ var mapStateToProps = function mapStateToProps(_ref) {
         navText: 'Don\'t have an account?',
         navLink: _react2.default.createElement(
             _reactRouterDom.Link,
-            { to: '/signup' },
+            { to: '/signup', className: 'switch' },
             'Create account'
         )
     };
@@ -577,6 +579,8 @@ var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouter = __webpack_require__(/*! react-router */ "./node_modules/react-router/es/index.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -597,14 +601,15 @@ var SessionForm = function (_React$Component) {
 
         _this.state = {
             email: "",
-            password: ""
+            password: "",
+            redirectToHome: false
         };
         _this.handleSubmit = _this.handleSubmit.bind(_this);
         return _this;
     }
 
     _createClass(SessionForm, [{
-        key: "update",
+        key: 'update',
         value: function update(field) {
             var _this2 = this;
 
@@ -613,64 +618,110 @@ var SessionForm = function (_React$Component) {
             };
         }
     }, {
-        key: "handleSubmit",
+        key: 'handleSubmit',
         value: function handleSubmit(e) {
             e.preventDefault();
             var user = Object.assign({}, this.state);
             this.props.processForm(user);
+            this.setState({ redirectToHome: true });
         }
     }, {
-        key: "renderErrors",
+        key: 'renderErrors',
         value: function renderErrors() {
             return _react2.default.createElement(
-                "ul",
+                'ul',
                 null,
                 this.props.errors.map(function (error, i) {
                     return _react2.default.createElement(
-                        "li",
-                        { key: "error-" + i },
+                        'li',
+                        { key: 'error-' + i },
                         error
                     );
                 })
             );
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
-            return _react2.default.createElement(
-                "div",
-                { className: "session_form_container" },
-                _react2.default.createElement(
-                    "form",
-                    { className: "session_form", onSubmit: this.handleSubmit },
+
+            if (this.state.redirectToHome) {
+                return _react2.default.createElement(_reactRouter.Redirect, { to: '/' });
+            } else {
+                return _react2.default.createElement(
+                    'div',
+                    { className: 'session-form-background' },
                     _react2.default.createElement(
-                        "h2",
-                        null,
-                        this.props.formType
-                    ),
-                    _react2.default.createElement(
-                        "label",
-                        null,
-                        "Email address:",
-                        _react2.default.createElement("input", { type: "text",
-                            value: this.state.username,
-                            onChange: this.update('email')
-                        })
-                    ),
-                    _react2.default.createElement(
-                        "label",
-                        null,
-                        "Password:",
-                        _react2.default.createElement("input", { type: "password",
-                            value: this.state.password,
-                            onChange: this.update('password')
-                        })
-                    ),
-                    _react2.default.createElement("input", { className: "session_form_continue", type: "submit", value: "Continue" }),
-                    this.props.navText,
-                    this.props.navLink
-                )
-            );
+                        'div',
+                        { className: 'session-form-container' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'session-form-body' },
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'session-heading' },
+                                _react2.default.createElement('img', { src: '/assets/logo.png', className: 'logo' }),
+                                _react2.default.createElement(
+                                    'h1',
+                                    { className: 'logo-link' },
+                                    'Levernote'
+                                ),
+                                _react2.default.createElement(
+                                    'p',
+                                    null,
+                                    'Leverage the power of notes.'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                'form',
+                                { className: 'session-form', onSubmit: this.handleSubmit },
+                                _react2.default.createElement(
+                                    'ul',
+                                    null,
+                                    _react2.default.createElement(
+                                        'li',
+                                        null,
+                                        _react2.default.createElement('input', { type: 'text',
+                                            value: this.state.username,
+                                            onChange: this.update('email'),
+                                            placeholder: 'Email address',
+                                            className: 'email-pass-field'
+                                        })
+                                    ),
+                                    _react2.default.createElement(
+                                        'li',
+                                        null,
+                                        _react2.default.createElement('input', { type: 'password',
+                                            value: this.state.password,
+                                            onChange: this.update('password'),
+                                            placeholder: 'Password',
+                                            className: 'email-pass-field'
+                                        })
+                                    ),
+                                    _react2.default.createElement(
+                                        'li',
+                                        null,
+                                        _react2.default.createElement('input', { className: 'session-form-continue', type: 'submit', value: 'Continue' })
+                                    )
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'context-switch' },
+                                    _react2.default.createElement(
+                                        'div',
+                                        null,
+                                        this.props.navText
+                                    ),
+                                    _react2.default.createElement(
+                                        'div',
+                                        { className: 'switch' },
+                                        this.props.navLink
+                                    )
+                                )
+                            )
+                        )
+                    )
+                );
+            }
         }
     }]);
 
@@ -723,7 +774,7 @@ var mapStateToProps = function mapStateToProps(_ref) {
         navText: 'Already have an account?',
         navLink: _react2.default.createElement(
             _reactRouterDom.Link,
-            { to: '/login' },
+            { to: '/login', className: 'switch' },
             'Sign in'
         )
     };
@@ -741,6 +792,53 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_session_form2.default);
+
+/***/ }),
+
+/***/ "./frontend/components/splash_content/splash_content.jsx":
+/*!***************************************************************!*\
+  !*** ./frontend/components/splash_content/splash_content.jsx ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SplashContent = function SplashContent() {
+    return _react2.default.createElement(
+        'div',
+        { className: 'splash-content' },
+        _react2.default.createElement(
+            'div',
+            { className: 'value-prop' },
+            _react2.default.createElement(
+                'h1',
+                null,
+                'Leverage the power of notes'
+            ),
+            _react2.default.createElement(
+                'h5',
+                null,
+                'Levernote helps you do more with less force'
+            )
+        )
+    );
+};
+
+exports.default = SplashContent;
 
 /***/ }),
 
@@ -33220,6 +33318,68 @@ var generatePath = function generatePath() {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (generatePath);
+
+/***/ }),
+
+/***/ "./node_modules/react-router/es/index.js":
+/*!***********************************************!*\
+  !*** ./node_modules/react-router/es/index.js ***!
+  \***********************************************/
+/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _MemoryRouter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MemoryRouter */ "./node_modules/react-router/es/MemoryRouter.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MemoryRouter", function() { return _MemoryRouter__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+
+/* harmony import */ var _Prompt__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Prompt */ "./node_modules/react-router/es/Prompt.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Prompt", function() { return _Prompt__WEBPACK_IMPORTED_MODULE_1__["default"]; });
+
+/* harmony import */ var _Redirect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Redirect */ "./node_modules/react-router/es/Redirect.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Redirect", function() { return _Redirect__WEBPACK_IMPORTED_MODULE_2__["default"]; });
+
+/* harmony import */ var _Route__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Route */ "./node_modules/react-router/es/Route.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Route", function() { return _Route__WEBPACK_IMPORTED_MODULE_3__["default"]; });
+
+/* harmony import */ var _Router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Router */ "./node_modules/react-router/es/Router.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Router", function() { return _Router__WEBPACK_IMPORTED_MODULE_4__["default"]; });
+
+/* harmony import */ var _StaticRouter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./StaticRouter */ "./node_modules/react-router/es/StaticRouter.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "StaticRouter", function() { return _StaticRouter__WEBPACK_IMPORTED_MODULE_5__["default"]; });
+
+/* harmony import */ var _Switch__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Switch */ "./node_modules/react-router/es/Switch.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Switch", function() { return _Switch__WEBPACK_IMPORTED_MODULE_6__["default"]; });
+
+/* harmony import */ var _generatePath__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./generatePath */ "./node_modules/react-router/es/generatePath.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "generatePath", function() { return _generatePath__WEBPACK_IMPORTED_MODULE_7__["default"]; });
+
+/* harmony import */ var _matchPath__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./matchPath */ "./node_modules/react-router/es/matchPath.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "matchPath", function() { return _matchPath__WEBPACK_IMPORTED_MODULE_8__["default"]; });
+
+/* harmony import */ var _withRouter__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./withRouter */ "./node_modules/react-router/es/withRouter.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "withRouter", function() { return _withRouter__WEBPACK_IMPORTED_MODULE_9__["default"]; });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /***/ }),
 
