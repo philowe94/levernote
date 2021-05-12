@@ -4,21 +4,25 @@ import ReactDOM from "react-dom";
 
 //testing
 import * as SessionAPIUtil from './util/session_api_util'
+import * as SessionActions from './actions/session_actions'
 
 //components
 import configureStore from './store/store';
+import Root from "./components/root";
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    window.signup = SessionAPIUtil.signup;
-    window.login = SessionAPIUtil.login;
-    window.logout = SessionAPIUtil.logout;
+    //SessionActions
+    window.signup = SessionActions.signup;
+    window.login = SessionActions.login;
+    window.logout = SessionActions.logout;
 
+    //store
     const store = configureStore();
     window.getState = store.getState;
     window.dispatch = store.dispatch;
 
     const root = document.getElementById("root");
-    ReactDOM.render(<h1>Levernote</h1>, root);
+    ReactDOM.render(<Root store={store} />, root);
 });
 
