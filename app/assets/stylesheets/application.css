@@ -120,14 +120,7 @@ h5 {
 }
 
 /* session form */
-.session-form-background {
-    background: image_url('pattern.png');
-    border:none;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    min-width: 100%;
-}
+
 .session-form-container {
     background: #fff;
     position: absolute;
