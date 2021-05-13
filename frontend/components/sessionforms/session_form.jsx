@@ -10,6 +10,8 @@ class SessionForm extends React.Component {
             redirectToHome: false 
         };
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleDemo = this.handleDemo.bind(this)
+
     }
 
     update(field) {
@@ -22,7 +24,14 @@ class SessionForm extends React.Component {
         e.preventDefault();
         const user = Object.assign({}, this.state);
         this.props.processForm( user );
-        this.setState({redirectToHome: true});
+
+    }
+
+    handleDemo(e) {
+        this.props.processForm( {
+            email: "demo",
+            password: "password"
+        } );
     }
     
     renderErrors() {
@@ -38,53 +47,50 @@ class SessionForm extends React.Component {
     }
 
     render(){
+        return(
+            <div className="session-form-background">
+                <div className="session-form-container">
+                    <div className="session-form-body">
 
-        if (this.state.redirectToHome) {
-            return <Redirect to="/" />
-        } else {
-            return(
-                <div className="session-form-background">
-                    <div className="session-form-container">
-                        <div className="session-form-body">
-    
-                            <div className="session-heading">
-                                <img src="/assets/logo.png" className="logo"/>
-                                <h1 className="logo-link">Levernote</h1>
-                                <p>Leverage the power of notes.</p>
-                            </div>
-                            <form className="session-form" onSubmit={this.handleSubmit}>
-                                <ul>
-                                    <li>
-                                        <input type="text"
-                                            value={this.state.username}
-                                            onChange={this.update('email')}
-                                            placeholder="Email address"
-                                            className="email-pass-field"
-                                        />
-                                    </li>
-                                    <li>
-                                        <input type="password"
-                                            value={this.state.password}
-                                            onChange={this.update('password')}
-                                            placeholder="Password"
-                                            className="email-pass-field"
-                                        />
-                                    </li>
-                                    <li>
-                                        <input className="session-form-continue" type="submit" value="Continue"/>
-                                    </li>
-    
-                                </ul>
-                                <div className="context-switch">
-                                    <div>{this.props.navText}</div>
-                                    <div className="switch">{this.props.navLink}</div>
-                                </div>
-                            </form>
+                        <div className="session-heading">
+                            <img src="/assets/logo.png" className="logo"/>
+                            <h1 className="logo-link">Levernote</h1>
+                            <p>Leverage the power of notes.</p>
+                            <div className="errors">{this.renderErrors()}</div>
                         </div>
+                        <form className="session-form" onSubmit={this.handleSubmit}>
+                            <ul>
+                                <li>
+                                    <input type="text"
+                                        value={this.state.username}
+                                        onChange={this.update('email')}
+                                        placeholder="Email address"
+                                        className="email-pass-field"
+                                    />
+                                </li>
+                                <li>
+                                    <input type="password"
+                                        value={this.state.password}
+                                        onChange={this.update('password')}
+                                        placeholder="Password"
+                                        className="email-pass-field"
+                                    />
+                                </li>
+                                <li>
+                                    <input className="session-form-continue" type="submit" value="Continue"/>
+                                </li>
+
+                            </ul>
+                            <div className="context-switch">
+                                <div>{this.props.navText}</div>
+                                <div className="switch">{this.props.navLink}</div>
+                                <div className="switch"><a onClick={this.handleDemo}>Log in with Demo user</a></div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            )
-        }
+            </div>
+        )
     }
 }
 
