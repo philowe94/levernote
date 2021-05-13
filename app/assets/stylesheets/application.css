@@ -121,7 +121,7 @@ h5 {
 
 /* session form */
 .session-form-background {
-    background: url('/assets/pattern.png');
+    background: image_url('pattern.png');
     border:none;
     margin: 0;
     padding: 0;

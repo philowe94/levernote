@@ -53,7 +53,7 @@ class SessionForm extends React.Component {
                     <div className="session-form-body">
 
                         <div className="session-heading">
-                            <img src="/assets/logo.png" className="logo"/>
+                            <img src={window.logoURL} className="logo"/>
                             <h1 className="logo-link">Levernote</h1>
                             <p>Leverage the power of notes.</p>
                             <div className="errors">{this.renderErrors()}</div>

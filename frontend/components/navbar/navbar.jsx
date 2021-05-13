@@ -7,7 +7,7 @@ const Navbar = ({ currentUser, logout }) => {
     return (
         <div className="navbar">
            
-            <Link to="/" className="logo-link"> <img src="/assets/logo.png" className="logo"/>Levernote</Link>
+            <Link to="/" className="logo-link"> <img src={window.logoURL} className="logo"/>Levernote</Link>
      
             <ul className="top-level-nav">
                 <li><a href="#">Why Levernote</a></li>

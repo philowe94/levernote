@@ -258,7 +258,7 @@ var Navbar = function Navbar(_ref) {
             _reactRouterDom.Link,
             { to: '/', className: 'logo-link' },
             ' ',
-            _react2.default.createElement('img', { src: '/assets/logo.png', className: 'logo' }),
+            _react2.default.createElement('img', { src: window.logoURL, className: 'logo' }),
             'Levernote'
         ),
         _react2.default.createElement(
@@ -666,7 +666,7 @@ var SessionForm = function (_React$Component) {
                         _react2.default.createElement(
                             'div',
                             { className: 'session-heading' },
-                            _react2.default.createElement('img', { src: '/assets/logo.png', className: 'logo' }),
+                            _react2.default.createElement('img', { src: window.logoURL, className: 'logo' }),
                             _react2.default.createElement(
                                 'h1',
                                 { className: 'logo-link' },
