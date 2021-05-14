@@ -7,5 +7,22 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
-User.create!(email: 'philip.lowe94@gmail.com', password: 'password')
-User.create!(email: 'demo', password: 'password')
+udemo = User.create!(email: 'demo', password: 'password')
+uphil = User.create!(email: 'philip.lowe94@gmail.com', password: 'password')
+
+note1 = Note.create!(title: 'Grocery Shopping List', 
+    body: '1. Eggs 2. Milk', 
+    author_id: udemo.id,
+    notebook_id: 1    
+)
+
+note2 = Note.create!(title: 'Mothers Day Shopping List', 
+    body: '1. Flowers 2. ???', 
+    author_id: udemo.id,
+    notebook_id: 1    
+)
+
+note3 = Note.create!(title: 'Games to play after graduating aA',
+    body: '1. Resident Evil 8',
+    author_id: uphil.id
+)

@@ -127,19 +127,14 @@ h5 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    font-style: normal;
-    font-weight: 400;
     max-width: 512px;
-    margin: 0px auto 28px auto;
-    box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.1);
-    border-radius: 2px;
-    text-align: left;
+    box-shadow: 0px 5px 22px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
 }
 
 .session-form-body {
-    margin: 62.12px 99px 48px;
-    width: 314px;
+    margin: 60px 100px 50px;
+    width: 310px;
 }
 
 .session-heading {
@@ -148,11 +143,11 @@ h5 {
 
 .session-heading h1 {
     font-size: 57px;
-    margin-bottom: 19px;
+    margin-bottom: 18px;
 }
 
 .session-heading p {
-    margin-bottom: 44px;
+    margin-bottom: 45px;
 }
 
 .session-form ul {
@@ -172,18 +167,20 @@ h5 {
     background-color: #00a82d;
     border-radius: 7px;
     margin-top: -9px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    font-style: normal;
-    font-weight: 400;
     width: 100%;
     color: #ffffff;
     border-color: #00a82d;
     border-width: 1px;
     border-style: solid;    
-    transition: all .2s ease;
+    transition: all .3s ease;
     padding: 12px 16px;
     margin: 5px;
     font-size: 16px;
+}
+
+.session-form-continue:hover {
+    background-color: #074d19;
+
 }
 .context-switch {
     margin-top: 34px;
@@ -193,8 +190,13 @@ h5 {
     line-height: 35px;
 }
 .context-switch .switch {
-    color: #008f26 !important;
-    transition: all .2s ease;
-    text-decoration: none !important;
+    color: #008f26;
+    transition: all .3s ease;
+    text-decoration: none;
     cursor:pointer;
+}
+
+.context-switch .switch:hover {
+    color: #074d19;
+
 }
