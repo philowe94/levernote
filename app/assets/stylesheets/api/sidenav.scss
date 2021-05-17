@@ -7,10 +7,26 @@
     color: #a6a6a6;
     text-decoration: none;
     height: 100vh;
+    padding: 20px;
+
+    ul {
+        list-style-type: none;
+    }
 
     a {
         color: #a6a6a6;
         text-decoration: none;
     }
-}
+    .new-note {
+        background-color: #00a82d;
+        border-radius: 15px;
+        width: 100%;
+        padding: 5px;
+        margin: 5px;
 
+        a {
+            color: white;
+
+        }
+    }
+}

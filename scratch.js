@@ -1,12 +1,19 @@
-$.ajax({
-    method: 'POST',
-    url: '/api/session',
-    data: {user: {
-        email: 'qwer@qwer.com',
-        password: 'qwer'
-    }}
-}).then(res => console.log(res))
+// Components for Notes
 
-heroku stack:set heroku-18
+// SideNav
+// NotesList
+// NoteDetail
 
-comment out uglifier in production.rb
+<li>
+            <Link to={`/notes/${props.note.id}`}>
+                <div>
+                    {props.note.title}
+                </div>
+                <div>
+                    {note.body}
+                </div>
+                <div>
+                    {note.updated_at}
+                </div>
+            </Link>
+        </li>

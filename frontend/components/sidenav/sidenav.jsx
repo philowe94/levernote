@@ -31,17 +31,17 @@ class SideNav extends React.Component {
                     <li>
                         <Link to="/" onClick={logout}>Sign out {currentUser.name}</Link>
                     </li>
-                    <li>
+                    <li className="new-note">
                         <a href="#">New Note</a>
                     </li>
                     <li>
-                        <a href="#">Notes</a>
+                        <Link to="/notes"><i className="fas fa-sticky-note"></i> Notes</Link>
                     </li>
                     <li>
-                        <a href="#">Notebooks</a>
+                        <a href="#"><i className="fas fa-book-open"></i> Notebooks</a>
                     </li>
                     <li>
-                        <a href="#">Tags</a>
+                        <a href="#"><i className="fas fa-tag"></i> Tags</a>
                     </li>
                 </ul>
             </div>

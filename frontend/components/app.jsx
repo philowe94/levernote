@@ -15,11 +15,12 @@ const App = () => (
         <header className="header">
             <Route exact path="/" component={NavBarContainer} />
         </header>
-
         <Route exact path="/" component={SplashContent} />
+        
         <AuthRoute path="/login" component={LoginFormContainer} />
         <AuthRoute path="/signup" component={SignupFormContainer} />
-        <Route exact path="/notes" component={Main} />
+        <Route path="/notes" component={Main} />
+
     </div>
 )
 

@@ -26,3 +26,4 @@ note3 = Note.create!(title: 'Games to play after graduating aA',
     body: '1. Resident Evil 8',
     author_id: uphil.id
 )
+
