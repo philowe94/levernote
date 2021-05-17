@@ -86,6 +86,102 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./frontend/actions/note_actions.js":
+/*!******************************************!*\
+  !*** ./frontend/actions/note_actions.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.deleteNote = exports.updateNote = exports.createNote = exports.fetchNote = exports.fetchNotes = exports.REMOVE_NOTE = exports.RECEIVE_NOTE = exports.RECEIVE_NOTES = undefined;
+
+var _note_api_util = __webpack_require__(/*! ../util/note_api_util */ "./frontend/util/note_api_util.js");
+
+var NoteApiUtil = _interopRequireWildcard(_note_api_util);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+//Export constants
+
+var RECEIVE_NOTES = exports.RECEIVE_NOTES = 'RECEIVE_NOTES';
+var RECEIVE_NOTE = exports.RECEIVE_NOTE = 'RECEIVE_NOTE';
+var REMOVE_NOTE = exports.REMOVE_NOTE = 'REMOVE_NOTE';
+
+//action creators
+var receiveNotes = function receiveNotes(notes) {
+
+    return {
+        type: RECEIVE_NOTES,
+        notes: notes
+    };
+};
+
+var receiveNote = function receiveNote(_ref) {
+    var note = _ref.note;
+
+    return {
+        type: RECEIVE_NOTE,
+        note: note
+    };
+};
+
+var removeNote = function removeNote(_ref2) {
+    var note = _ref2.note;
+
+    return {
+        type: REMOVE_NOTE,
+        noteId: noteId
+    };
+};
+
+//thunk action creators
+//fetchNotes
+//fetchNote
+//createNote
+//updateNote
+//deleteNote
+var fetchNotes = exports.fetchNotes = function fetchNotes() {
+    return NoteApiUtil.fetchNotes().then(function (notes) {
+
+        console.log(notes);
+        return dispatch(receiveNotes(notes));
+    });
+};
+
+var fetchNote = exports.fetchNote = function fetchNote(noteId) {
+    return NoteApiUtil.fetchNote(noteId).then(function (note) {
+        return dispatch(receiveNote(note));
+    });
+};
+
+var createNote = exports.createNote = function createNote(note) {
+    return NoteApiUtil.createNote(note).then(function (note) {
+        return dispatch(receiveNote(note));
+    });
+};
+
+var updateNote = exports.updateNote = function updateNote(note) {
+    return NoteApiUtil.updateNote(note).then(function (note) {
+        return dispatch(receiveNotes(note));
+    });
+};
+
+var deleteNote = exports.deleteNote = function deleteNote(noteId) {
+    return NoteApiUtil.deleteNote(noteId).then(function () {
+        return dispatch(removeNote(noteId));
+    });
+};
+
+window.receiveNotes = receiveNotes;
+
+/***/ }),
+
 /***/ "./frontend/actions/session_actions.js":
 /*!*********************************************!*\
   !*** ./frontend/actions/session_actions.js ***!
@@ -195,6 +291,10 @@ var _splash_content = __webpack_require__(/*! ./splash_content/splash_content */
 
 var _splash_content2 = _interopRequireDefault(_splash_content);
 
+var _main = __webpack_require__(/*! ./main/main */ "./frontend/components/main/main.jsx");
+
+var _main2 = _interopRequireDefault(_main);
+
 var _route_util = __webpack_require__(/*! ../util/route_util */ "./frontend/util/route_util.jsx");
 
 var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
@@ -212,11 +312,53 @@ var App = function App() {
         ),
         _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _splash_content2.default }),
         _react2.default.createElement(_route_util.AuthRoute, { path: '/login', component: _login_form_container2.default }),
-        _react2.default.createElement(_route_util.AuthRoute, { path: '/signup', component: _signup_form_container2.default })
+        _react2.default.createElement(_route_util.AuthRoute, { path: '/signup', component: _signup_form_container2.default }),
+        _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/notes', component: _main2.default })
     );
 };
 
 exports.default = App;
+
+/***/ }),
+
+/***/ "./frontend/components/main/main.jsx":
+/*!*******************************************!*\
+  !*** ./frontend/components/main/main.jsx ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _sidenav_container = __webpack_require__(/*! ../sidenav/sidenav_container */ "./frontend/components/sidenav/sidenav_container.jsx");
+
+var _sidenav_container2 = _interopRequireDefault(_sidenav_container);
+
+var _notes_index_container = __webpack_require__(/*! ../notes_index/notes_index_container */ "./frontend/components/notes_index/notes_index_container.jsx");
+
+var _notes_index_container2 = _interopRequireDefault(_notes_index_container);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Main = function Main() {
+    return _react2.default.createElement(
+        'div',
+        { className: 'main' },
+        _react2.default.createElement(_sidenav_container2.default, null),
+        _react2.default.createElement(_notes_index_container2.default, null)
+    );
+};
+
+exports.default = Main;
 
 /***/ }),
 
@@ -450,6 +592,144 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_navbar_session_links2.default);
+
+/***/ }),
+
+/***/ "./frontend/components/notes_index/notes_index.jsx":
+/*!*********************************************************!*\
+  !*** ./frontend/components/notes_index/notes_index.jsx ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
+var _note_actions = __webpack_require__(/*! ../../actions/note_actions */ "./frontend/actions/note_actions.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var NotesIndex = function (_React$Component) {
+    _inherits(NotesIndex, _React$Component);
+
+    function NotesIndex(props) {
+        _classCallCheck(this, NotesIndex);
+
+        return _possibleConstructorReturn(this, (NotesIndex.__proto__ || Object.getPrototypeOf(NotesIndex)).call(this, props));
+    }
+
+    _createClass(NotesIndex, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            (0, _note_actions.fetchNotes)();
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _props = this.props,
+                currentUser = _props.currentUser,
+                logout = _props.logout;
+            var notes = this.props.notes;
+
+            debugger;
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'notes-index' },
+                _react2.default.createElement(
+                    'ul',
+                    { className: 'notes-index-list' },
+                    notes.map(function (note) {
+                        return _react2.default.createElement(
+                            'li',
+                            null,
+                            _react2.default.createElement(
+                                'div',
+                                null,
+                                note.title
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                null,
+                                note.body
+                            )
+                        );
+                    })
+                )
+            );
+        }
+    }]);
+
+    return NotesIndex;
+}(_react2.default.Component);
+
+exports.default = NotesIndex;
+
+/***/ }),
+
+/***/ "./frontend/components/notes_index/notes_index_container.jsx":
+/*!*******************************************************************!*\
+  !*** ./frontend/components/notes_index/notes_index_container.jsx ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var _session_actions = __webpack_require__(/*! ../../actions/session_actions */ "./frontend/actions/session_actions.js");
+
+var _notes_index = __webpack_require__(/*! ./notes_index */ "./frontend/components/notes_index/notes_index.jsx");
+
+var _notes_index2 = _interopRequireDefault(_notes_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(_ref) {
+    var session = _ref.session,
+        _ref$entities = _ref.entities,
+        users = _ref$entities.users,
+        notes = _ref$entities.notes;
+
+    return {
+        currentUser: users[session.id],
+        notes: Object.values(notes)
+    };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        logout: function logout() {
+            return dispatch((0, _session_actions.logout)());
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_notes_index2.default);
 
 /***/ }),
 
@@ -815,6 +1095,179 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 
 /***/ }),
 
+/***/ "./frontend/components/sidenav/sidenav.jsx":
+/*!*************************************************!*\
+  !*** ./frontend/components/sidenav/sidenav.jsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SideNav = function (_React$Component) {
+    _inherits(SideNav, _React$Component);
+
+    function SideNav(props) {
+        _classCallCheck(this, SideNav);
+
+        return _possibleConstructorReturn(this, (SideNav.__proto__ || Object.getPrototypeOf(SideNav)).call(this, props));
+    }
+
+    _createClass(SideNav, [{
+        key: 'render',
+        value: function render() {
+            var _props = this.props,
+                currentUser = _props.currentUser,
+                logout = _props.logout;
+
+            //Things to Display 
+            //logged in user email
+            //  drop down > sign out
+            //Search ??
+            //+ New Note
+            //"Home"
+            //"Shortcuts"
+            //Notes
+            //Notebooks
+            //Tags
+            //"Shared with me"
+            //"Trash"
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'side-nav' },
+                _react2.default.createElement(
+                    'ul',
+                    { className: 'side-nav-list' },
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        currentUser.email
+                    ),
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        _react2.default.createElement(
+                            _reactRouterDom.Link,
+                            { to: '/', onClick: logout },
+                            'Sign out ',
+                            currentUser.name
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { href: '#' },
+                            'New Note'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { href: '#' },
+                            'Notes'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { href: '#' },
+                            'Notebooks'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { href: '#' },
+                            'Tags'
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return SideNav;
+}(_react2.default.Component);
+
+exports.default = SideNav;
+
+/***/ }),
+
+/***/ "./frontend/components/sidenav/sidenav_container.jsx":
+/*!***********************************************************!*\
+  !*** ./frontend/components/sidenav/sidenav_container.jsx ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var _session_actions = __webpack_require__(/*! ../../actions/session_actions */ "./frontend/actions/session_actions.js");
+
+var _sidenav = __webpack_require__(/*! ./sidenav */ "./frontend/components/sidenav/sidenav.jsx");
+
+var _sidenav2 = _interopRequireDefault(_sidenav);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(_ref) {
+    var session = _ref.session,
+        users = _ref.entities.users;
+
+    return {
+        currentUser: users[session.id]
+    };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        logout: function logout() {
+            return dispatch((0, _session_actions.logout)());
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_sidenav2.default);
+
+/***/ }),
+
 /***/ "./frontend/components/splash_content/splash_content.jsx":
 /*!***************************************************************!*\
   !*** ./frontend/components/splash_content/splash_content.jsx ***!
@@ -884,6 +1337,10 @@ var _session_api_util = __webpack_require__(/*! ./util/session_api_util */ "./fr
 
 var SessionAPIUtil = _interopRequireWildcard(_session_api_util);
 
+var _note_actions = __webpack_require__(/*! ./actions/note_actions */ "./frontend/actions/note_actions.js");
+
+var NotesActions = _interopRequireWildcard(_note_actions);
+
 var _session_actions = __webpack_require__(/*! ./actions/session_actions */ "./frontend/actions/session_actions.js");
 
 var SessionActions = _interopRequireWildcard(_session_actions);
@@ -911,10 +1368,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 document.addEventListener("DOMContentLoaded", function () {
 
-  //SessionActions
-  window.signup = SessionActions.signup;
-  window.login = SessionActions.login;
-  window.logout = SessionActions.logout;
+  //notesAPI Testing
+  window.fetchNotes = NotesActions.fetchNotes;
+  window.fetchNote = NotesActions.fetchNote;
+  window.createNote = NotesActions.createNote;
+  window.updateNote = NotesActions.updateNote;
+  window.deleteNote = NotesActions.deleteNote;
 
   //store
   var store = void 0;
@@ -959,10 +1418,15 @@ var _users_reducer = __webpack_require__(/*! ./users_reducer */ "./frontend/redu
 
 var _users_reducer2 = _interopRequireDefault(_users_reducer);
 
+var _notes_reducer = __webpack_require__(/*! ./notes_reducer */ "./frontend/reducers/notes_reducer.js");
+
+var _notes_reducer2 = _interopRequireDefault(_notes_reducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var entitiesReducer = (0, _redux.combineReducers)({
-    users: _users_reducer2.default
+    users: _users_reducer2.default,
+    notes: _notes_reducer2.default
 });
 
 exports.default = entitiesReducer;
@@ -996,6 +1460,49 @@ var errorsReducer = (0, _redux.combineReducers)({
 });
 
 exports.default = errorsReducer;
+
+/***/ }),
+
+/***/ "./frontend/reducers/notes_reducer.js":
+/*!********************************************!*\
+  !*** ./frontend/reducers/notes_reducer.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _note_actions = __webpack_require__(/*! ../actions/note_actions */ "./frontend/actions/note_actions.js");
+
+var notesReducer = function notesReducer() {
+    var oldState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    Object.freeze(oldState);
+    var newState = Object.assign({}, oldState);
+
+    switch (action.type) {
+        case _note_actions.RECEIVE_NOTES:
+
+            return action.notes;
+        case _note_actions.RECEIVE_NOTE:
+
+            newState[action.note.id] = action.note;
+
+            return newState;
+        case _note_actions.REMOVE_NOTE:
+            delete newState[action.note.id];
+        default:
+            return oldState;
+    }
+};
+
+exports.default = notesReducer;
 
 /***/ }),
 
@@ -1188,6 +1695,58 @@ var configureStore = function configureStore() {
 };
 
 exports.default = configureStore;
+
+/***/ }),
+
+/***/ "./frontend/util/note_api_util.js":
+/*!****************************************!*\
+  !*** ./frontend/util/note_api_util.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var fetchNotes = exports.fetchNotes = function fetchNotes() {
+    return $.ajax({
+        method: 'GET',
+        url: 'api/notes'
+    });
+};
+
+var fetchNote = exports.fetchNote = function fetchNote(noteId) {
+    return $.ajax({
+        method: 'GET',
+        url: 'api/notes/' + noteId
+    });
+};
+
+var createNote = exports.createNote = function createNote(note) {
+    return $.ajax({
+        method: 'POST',
+        url: 'api/notes',
+        data: { note: note }
+    });
+};
+
+var updateNote = exports.updateNote = function updateNote(note) {
+    return $.ajax({
+        method: 'PATCH',
+        url: 'api/notes' + note.id,
+        data: { note: note }
+    });
+};
+
+var deleteNote = exports.deleteNote = function deleteNote(noteId) {
+    return $.ajax({
+        method: 'DELETE',
+        url: 'api/notes' + noteId
+    });
+};
 
 /***/ }),
 

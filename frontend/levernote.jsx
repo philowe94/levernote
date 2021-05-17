@@ -4,6 +4,9 @@ import ReactDOM from "react-dom";
 
 //testing
 import * as SessionAPIUtil from './util/session_api_util'
+
+import * as NotesActions from './actions/note_actions'
+
 import * as SessionActions from './actions/session_actions'
 
 //components
@@ -12,10 +15,12 @@ import Root from "./components/root";
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    //SessionActions
-    window.signup = SessionActions.signup;
-    window.login = SessionActions.login;
-    window.logout = SessionActions.logout;
+  //notesAPI Testing
+  window.fetchNotes = NotesActions.fetchNotes;
+  window.fetchNote = NotesActions.fetchNote;
+  window.createNote = NotesActions.createNote;
+  window.updateNote = NotesActions.updateNote;
+  window.deleteNote = NotesActions.deleteNote;
 
     //store
     let store;
