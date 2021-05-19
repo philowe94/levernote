@@ -694,7 +694,7 @@ var NoteShow = function (_React$Component) {
                     _this3.props.history.push('' + nextNoteId);
                 });
             } else {
-                debugger;
+
                 this.props.deleteNote(this.state.id);
             }
         }

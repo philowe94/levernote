@@ -45523,3 +45523,240 @@ Processing by Api::NotebooksController#index as JSON
 Completed 200 OK in 5ms (Views: 2.9ms | ActiveRecord: 0.5ms)
 
 
+Started DELETE "/api/session" for 127.0.0.1 at 2021-05-19 14:59:05 -0400
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  ↳ /home/philowe2001/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0/gems/activerecord-5.2.6/lib/active_record/log_subscriber.rb:98
+Processing by Api::SessionsController#destroy as JSON
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."session_token" = $1 LIMIT $2[0m  [["session_token", "1ooM-xDUlnpH_nBVSgHILA"], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:8
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/models/user.rb:38
+  [1m[36mUser Exists (0.3ms)[0m  [1m[34mSELECT  1 AS one FROM "users" WHERE "users"."email" = $1 AND "users"."id" != $2 LIMIT $3[0m  [["email", "demo"], ["id", 1], ["LIMIT", 1]]
+  ↳ app/models/user.rb:38
+  [1m[36mUser Update (0.5ms)[0m  [1m[33mUPDATE "users" SET "session_token" = $1, "updated_at" = $2 WHERE "users"."id" = $3[0m  [["session_token", "HLfx8qLJayyPJm4JXhcJ3A"], ["updated_at", "2021-05-19 18:59:06.044813"], ["id", 1]]
+  ↳ app/models/user.rb:38
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/models/user.rb:38
+  Rendering api/users/show.json.jbuilder
+  Rendered api/users/_user.json.jbuilder (0.2ms)
+  Rendered api/users/show.json.jbuilder (0.7ms)
+Completed 200 OK in 43ms (Views: 3.4ms | ActiveRecord: 6.4ms)
+
+
+Started GET "/" for 127.0.0.1 at 2021-05-19 14:59:07 -0400
+Processing by StaticPagesController#root as HTML
+  Rendering static_pages/root.html.erb within layouts/application
+  Rendered static_pages/root.html.erb within layouts/application (1006.4ms)
+Completed 200 OK in 1047ms (Views: 1045.6ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/api/session" for 127.0.0.1 at 2021-05-19 14:59:11 -0400
+Processing by Api::SessionsController#create as JSON
+  Parameters: {"user"=>{"email"=>"philip.lowe94@gmail.com", "password"=>"[FILTERED]", "redirectToHome"=>"false"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "philip.lowe94@gmail.com"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/models/user.rb:38
+  [1m[36mUser Exists (0.4ms)[0m  [1m[34mSELECT  1 AS one FROM "users" WHERE "users"."email" = $1 AND "users"."id" != $2 LIMIT $3[0m  [["email", "philip.lowe94@gmail.com"], ["id", 2], ["LIMIT", 1]]
+  ↳ app/models/user.rb:38
+  [1m[36mUser Update (0.5ms)[0m  [1m[33mUPDATE "users" SET "session_token" = $1, "updated_at" = $2 WHERE "users"."id" = $3[0m  [["session_token", "KOq2qpEerEqEiottt2VIZA"], ["updated_at", "2021-05-19 18:59:11.478329"], ["id", 2]]
+  ↳ app/models/user.rb:38
+  [1m[35m (1.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/models/user.rb:38
+  Rendering api/users/show.json.jbuilder
+  Rendered api/users/_user.json.jbuilder (0.2ms)
+  Rendered api/users/show.json.jbuilder (0.8ms)
+Completed 200 OK in 194ms (Views: 2.3ms | ActiveRecord: 2.8ms)
+
+
+Started GET "/api/notes" for 127.0.0.1 at 2021-05-19 14:59:11 -0400
+Processing by Api::NotesController#index as JSON
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."session_token" = $1 LIMIT $2[0m  [["session_token", "KOq2qpEerEqEiottt2VIZA"], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:8
+  Rendering api/notes/index.json.jbuilder
+  [1m[36mNote Load (0.2ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."author_id" = $1[0m  [["author_id", 2]]
+  ↳ app/views/api/notes/index.json.jbuilder:1
+  Rendered api/notes/_note.json.jbuilder (0.4ms)
+  Rendered api/notes/_note.json.jbuilder (0.1ms)
+  Rendered api/notes/_note.json.jbuilder (0.1ms)
+  Rendered api/notes/_note.json.jbuilder (0.1ms)
+  Rendered api/notes/_note.json.jbuilder (0.1ms)
+  Rendered api/notes/_note.json.jbuilder (0.1ms)
+  Rendered api/notes/index.json.jbuilder (12.8ms)
+Completed 200 OK in 21ms (Views: 10.5ms | ActiveRecord: 3.9ms)
+
+
+Started POST "/api/notes" for 127.0.0.1 at 2021-05-19 14:59:14 -0400
+Processing by Api::NotesController#create as JSON
+  Parameters: {"note"=>{"title"=>"New Note", "body"=>"", "author_id"=>"2", "notebook_id"=>""}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."session_token" = $1 LIMIT $2[0m  [["session_token", "KOq2qpEerEqEiottt2VIZA"], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:8
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notes_controller.rb:19
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/api/notes_controller.rb:19
+  [1m[36mNote Create (1.3ms)[0m  [1m[32mINSERT INTO "notes" ("title", "body", "author_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["title", "New Note"], ["body", ""], ["author_id", 2], ["created_at", "2021-05-19 18:59:14.526449"], ["updated_at", "2021-05-19 18:59:14.526449"]]
+  ↳ app/controllers/api/notes_controller.rb:19
+  [1m[35m (2.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notes_controller.rb:19
+  Rendering api/notes/show.json.jbuilder
+  Rendered api/notes/_note.json.jbuilder (0.2ms)
+  Rendered api/notes/show.json.jbuilder (0.9ms)
+Completed 200 OK in 12ms (Views: 2.3ms | ActiveRecord: 4.4ms)
+
+
+Started POST "/api/notes" for 127.0.0.1 at 2021-05-19 14:59:14 -0400
+Processing by Api::NotesController#create as JSON
+  Parameters: {"note"=>{"title"=>"New Note", "body"=>"", "author_id"=>"2", "notebook_id"=>""}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."session_token" = $1 LIMIT $2[0m  [["session_token", "KOq2qpEerEqEiottt2VIZA"], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:8
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notes_controller.rb:19
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/api/notes_controller.rb:19
+  [1m[36mNote Create (0.3ms)[0m  [1m[32mINSERT INTO "notes" ("title", "body", "author_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["title", "New Note"], ["body", ""], ["author_id", 2], ["created_at", "2021-05-19 18:59:14.955513"], ["updated_at", "2021-05-19 18:59:14.955513"]]
+  ↳ app/controllers/api/notes_controller.rb:19
+  [1m[35m (2.6ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notes_controller.rb:19
+  Rendering api/notes/show.json.jbuilder
+  Rendered api/notes/_note.json.jbuilder (0.2ms)
+  Rendered api/notes/show.json.jbuilder (0.9ms)
+Completed 200 OK in 10ms (Views: 2.2ms | ActiveRecord: 3.6ms)
+
+
+Started DELETE "/api/notes/82" for 127.0.0.1 at 2021-05-19 14:59:15 -0400
+Processing by Api::NotesController#destroy as JSON
+  Parameters: {"id"=>"82"}
+  [1m[36mNote Load (0.2ms)[0m  [1m[34mSELECT  "notes".* FROM "notes" WHERE "notes"."id" = $1 LIMIT $2[0m  [["id", 82], ["LIMIT", 1]]
+  ↳ app/controllers/api/notes_controller.rb:37
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[36mNote Destroy (0.3ms)[0m  [1m[31mDELETE FROM "notes" WHERE "notes"."id" = $1[0m  [["id", 82]]
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[35m (1.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  Rendering api/notes/show.json.jbuilder
+  Rendered api/notes/_note.json.jbuilder (0.3ms)
+  Rendered api/notes/show.json.jbuilder (0.9ms)
+Completed 200 OK in 6ms (Views: 2.0ms | ActiveRecord: 1.8ms)
+
+
+Started DELETE "/api/notes/81" for 127.0.0.1 at 2021-05-19 14:59:16 -0400
+Processing by Api::NotesController#destroy as JSON
+  Parameters: {"id"=>"81"}
+  [1m[36mNote Load (0.2ms)[0m  [1m[34mSELECT  "notes".* FROM "notes" WHERE "notes"."id" = $1 LIMIT $2[0m  [["id", 81], ["LIMIT", 1]]
+  ↳ app/controllers/api/notes_controller.rb:37
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[36mNote Destroy (0.2ms)[0m  [1m[31mDELETE FROM "notes" WHERE "notes"."id" = $1[0m  [["id", 81]]
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[35m (1.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  Rendering api/notes/show.json.jbuilder
+  Rendered api/notes/_note.json.jbuilder (0.3ms)
+  Rendered api/notes/show.json.jbuilder (0.9ms)
+Completed 200 OK in 6ms (Views: 2.1ms | ActiveRecord: 1.7ms)
+
+
+Started DELETE "/api/notes/79" for 127.0.0.1 at 2021-05-19 14:59:16 -0400
+Processing by Api::NotesController#destroy as JSON
+  Parameters: {"id"=>"79"}
+  [1m[36mNote Load (0.2ms)[0m  [1m[34mSELECT  "notes".* FROM "notes" WHERE "notes"."id" = $1 LIMIT $2[0m  [["id", 79], ["LIMIT", 1]]
+  ↳ app/controllers/api/notes_controller.rb:37
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[36mNote Destroy (0.3ms)[0m  [1m[31mDELETE FROM "notes" WHERE "notes"."id" = $1[0m  [["id", 79]]
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[35m (1.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  Rendering api/notes/show.json.jbuilder
+  Rendered api/notes/_note.json.jbuilder (0.3ms)
+  Rendered api/notes/show.json.jbuilder (1.0ms)
+Completed 200 OK in 7ms (Views: 2.1ms | ActiveRecord: 1.8ms)
+
+
+Started DELETE "/api/notes/78" for 127.0.0.1 at 2021-05-19 14:59:16 -0400
+Processing by Api::NotesController#destroy as JSON
+  Parameters: {"id"=>"78"}
+  [1m[36mNote Load (0.2ms)[0m  [1m[34mSELECT  "notes".* FROM "notes" WHERE "notes"."id" = $1 LIMIT $2[0m  [["id", 78], ["LIMIT", 1]]
+  ↳ app/controllers/api/notes_controller.rb:37
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[36mNote Destroy (0.2ms)[0m  [1m[31mDELETE FROM "notes" WHERE "notes"."id" = $1[0m  [["id", 78]]
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[35m (1.7ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  Rendering api/notes/show.json.jbuilder
+  Rendered api/notes/_note.json.jbuilder (0.3ms)
+  Rendered api/notes/show.json.jbuilder (0.9ms)
+Completed 200 OK in 7ms (Views: 2.1ms | ActiveRecord: 2.4ms)
+
+
+Started DELETE "/api/notes/77" for 127.0.0.1 at 2021-05-19 14:59:17 -0400
+Processing by Api::NotesController#destroy as JSON
+  Parameters: {"id"=>"77"}
+  [1m[36mNote Load (0.3ms)[0m  [1m[34mSELECT  "notes".* FROM "notes" WHERE "notes"."id" = $1 LIMIT $2[0m  [["id", 77], ["LIMIT", 1]]
+  ↳ app/controllers/api/notes_controller.rb:37
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[36mNote Destroy (0.4ms)[0m  [1m[31mDELETE FROM "notes" WHERE "notes"."id" = $1[0m  [["id", 77]]
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[35m (1.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  Rendering api/notes/show.json.jbuilder
+  Rendered api/notes/_note.json.jbuilder (0.4ms)
+  Rendered api/notes/show.json.jbuilder (1.1ms)
+Completed 200 OK in 7ms (Views: 2.2ms | ActiveRecord: 2.0ms)
+
+
+Started DELETE "/api/notes/76" for 127.0.0.1 at 2021-05-19 14:59:17 -0400
+Processing by Api::NotesController#destroy as JSON
+  Parameters: {"id"=>"76"}
+  [1m[36mNote Load (0.2ms)[0m  [1m[34mSELECT  "notes".* FROM "notes" WHERE "notes"."id" = $1 LIMIT $2[0m  [["id", 76], ["LIMIT", 1]]
+  ↳ app/controllers/api/notes_controller.rb:37
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[36mNote Destroy (0.5ms)[0m  [1m[31mDELETE FROM "notes" WHERE "notes"."id" = $1[0m  [["id", 76]]
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[35m (2.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  Rendering api/notes/show.json.jbuilder
+  Rendered api/notes/_note.json.jbuilder (0.3ms)
+  Rendered api/notes/show.json.jbuilder (1.0ms)
+Completed 200 OK in 8ms (Views: 2.2ms | ActiveRecord: 3.2ms)
+
+
+Started DELETE "/api/notes/75" for 127.0.0.1 at 2021-05-19 14:59:17 -0400
+Processing by Api::NotesController#destroy as JSON
+  Parameters: {"id"=>"75"}
+  [1m[36mNote Load (0.2ms)[0m  [1m[34mSELECT  "notes".* FROM "notes" WHERE "notes"."id" = $1 LIMIT $2[0m  [["id", 75], ["LIMIT", 1]]
+  ↳ app/controllers/api/notes_controller.rb:37
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[36mNote Destroy (0.2ms)[0m  [1m[31mDELETE FROM "notes" WHERE "notes"."id" = $1[0m  [["id", 75]]
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[35m (1.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  Rendering api/notes/show.json.jbuilder
+  Rendered api/notes/_note.json.jbuilder (0.4ms)
+  Rendered api/notes/show.json.jbuilder (1.0ms)
+Completed 200 OK in 6ms (Views: 2.1ms | ActiveRecord: 1.8ms)
+
+
+Started DELETE "/api/notes/69" for 127.0.0.1 at 2021-05-19 14:59:21 -0400
+Processing by Api::NotesController#destroy as JSON
+  Parameters: {"id"=>"69"}
+  [1m[36mNote Load (0.2ms)[0m  [1m[34mSELECT  "notes".* FROM "notes" WHERE "notes"."id" = $1 LIMIT $2[0m  [["id", 69], ["LIMIT", 1]]
+  ↳ app/controllers/api/notes_controller.rb:37
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[36mNote Destroy (0.2ms)[0m  [1m[31mDELETE FROM "notes" WHERE "notes"."id" = $1[0m  [["id", 69]]
+  ↳ app/controllers/api/notes_controller.rb:39
+  [1m[35m (1.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/notes_controller.rb:39
+  Rendering api/notes/show.json.jbuilder
+  Rendered api/notes/_note.json.jbuilder (0.3ms)
+  Rendered api/notes/show.json.jbuilder (1.1ms)
+Completed 200 OK in 6ms (Views: 2.4ms | ActiveRecord: 1.8ms)
+
+

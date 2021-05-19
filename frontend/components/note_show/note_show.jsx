@@ -44,7 +44,7 @@ class NoteShow extends React.Component {
                 this.props.history.push(`${nextNoteId}`);
             });
         } else {
-            debugger
+            
             this.props.deleteNote(this.state.id);
          
         }
