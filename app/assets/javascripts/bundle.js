@@ -629,6 +629,8 @@ var _reactQuill2 = _interopRequireDefault(_reactQuill);
 
 var _note_actions = __webpack_require__(/*! ../../actions/note_actions */ "./frontend/actions/note_actions.js");
 
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -682,11 +684,19 @@ var NoteShow = function (_React$Component) {
             var _this3 = this;
 
             var notesArr = Object.values(this.props.notes);
-            var nextNoteId = notesArr[notesArr.length - 2].id;
-            debugger;
-            this.props.deleteNote(this.state.id).then(function () {
-                _this3.props.history.push('' + nextNoteId);
-            });
+            var nextNoteId = null;
+            if (notesArr.length >= 2) {
+                nextNoteId = notesArr[notesArr.length - 2].id;
+            }
+
+            if (nextNoteId) {
+                this.props.deleteNote(this.state.id).then(function () {
+                    _this3.props.history.push('' + nextNoteId);
+                });
+            } else {
+                debugger;
+                this.props.deleteNote(this.state.id);
+            }
         }
     }, {
         key: 'componentDidMount',
@@ -1392,13 +1402,19 @@ var SideNav = function (_React$Component) {
     _createClass(SideNav, [{
         key: 'handleNewNote',
         value: function handleNewNote() {
+            var _this2 = this;
+
+            var noteId = void 0;
             var newnote = {
                 title: 'New Note',
                 body: '',
                 author_id: this.props.currentUser.id,
                 notebook_id: null
             };
-            this.props.createNote(newnote);
+
+            this.props.createNote(newnote).then(function (res) {
+                return _this2.props.history.push('/notes/' + res.note.id);
+            });
         }
     }, {
         key: 'render',
@@ -1516,6 +1532,8 @@ var _sidenav2 = _interopRequireDefault(_sidenav);
 
 var _note_actions = __webpack_require__(/*! ../../actions/note_actions */ "./frontend/actions/note_actions.js");
 
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(_ref) {
@@ -1538,7 +1556,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     };
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_sidenav2.default);
+exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_sidenav2.default));
 
 /***/ }),
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ReactQuill from 'react-quill';
 import { fetchNotes } from '../../actions/note_actions';
+import { Redirect } from 'react-router-dom'
 
 class NoteShow extends React.Component {
     constructor(props) {
@@ -32,12 +33,21 @@ class NoteShow extends React.Component {
 
     handleDelete() {
         let notesArr = Object.values(this.props.notes);
-        let nextNoteId = notesArr[notesArr.length -2].id;
-        debugger
-        this.props.deleteNote(this.state.id)
-        .then(() => {
-            this.props.history.push(`${nextNoteId}`);
-        });
+        let nextNoteId = null
+        if (notesArr.length >= 2) {
+            nextNoteId = notesArr[notesArr.length -2].id;
+        }
+        
+        if (nextNoteId) {
+            this.props.deleteNote(this.state.id)
+            .then(() => {
+                this.props.history.push(`${nextNoteId}`);
+            });
+        } else {
+            debugger
+            this.props.deleteNote(this.state.id);
+         
+        }
 
     }
 

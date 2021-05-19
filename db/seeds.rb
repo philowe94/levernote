@@ -10,28 +10,33 @@
 udemo = User.create!(email: 'demo', password: 'password')
 uphil = User.create!(email: 'philip.lowe94@gmail.com', password: 'password')
 
-note1 = Note.create!(title: 'Grocery Shopping List', 
+note1 = Note.create!(
+    title: 'Grocery Shopping List', 
     body: '1. Eggs 2. Milk', 
     author_id: udemo.id,
     notebook_id: 1    
 )
 
-note2 = Note.create!(title: 'Mothers Day Shopping List', 
+note2 = Note.create!(
+    title: 'Mothers Day Shopping List', 
     body: '1. Flowers 2. ???', 
     author_id: udemo.id,
     notebook_id: 1    
 )
 
-note3 = Note.create!(title: 'Games to play after graduating aA',
+note3 = Note.create!(
+    title: 'Games to play after graduating aA',
     body: '1. Resident Evil 8',
     author_id: uphil.id
 )
 
-note4 = Note.create!(title: 'Second note for phil',
+note4 = Note.create!(
+    title: 'Second note for phil',
     body: 'This is the content of the second note for phil',
     author_id: uphil.id
 )
 
-notebook1 = Notebook.create!(name: 'Shopping Lists',
+notebook1 = Notebook.create!(
+    name: 'Shopping Lists',
     author_id: udemo.id
 )

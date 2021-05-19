@@ -8,13 +8,17 @@ class SideNav extends React.Component {
     }
 
     handleNewNote() {
+        let noteId;
         let newnote = {
             title: 'New Note',
             body: '',
             author_id: this.props.currentUser.id,
             notebook_id: null
         }
-        this.props.createNote(newnote);
+
+        this.props.createNote(newnote)
+            .then((res) => this.props.history.push(`/notes/${res.note.id}`));        
+       
     }
 
     render() {
