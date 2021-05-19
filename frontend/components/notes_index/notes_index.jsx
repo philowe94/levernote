@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { fetchNotes } from '../../actions/note_actions';
 import NotesIndexItem from './notes_index_item'
 
 class NotesIndex extends React.Component {
@@ -9,7 +8,7 @@ class NotesIndex extends React.Component {
     }
 
     componentDidMount() {
-        fetchNotes();
+        this.props.fetchNotes();
     }
 
     render() {
@@ -20,7 +19,7 @@ class NotesIndex extends React.Component {
         return(
             <div className="notes-index">
                 <ul className="notes-index-list">
-                    {notes.map(note => (
+                    {notes.reverse().map(note => (
                         <NotesIndexItem note={note} key={note.id} />
                     ))}
                 </ul>

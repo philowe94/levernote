@@ -4,6 +4,17 @@ import { Link } from 'react-router-dom';
 class SideNav extends React.Component {
     constructor(props) {
         super(props);
+        this.handleNewNote = this.handleNewNote.bind(this);
+    }
+
+    handleNewNote() {
+        let newnote = {
+            title: 'New Note',
+            body: '',
+            author_id: this.props.currentUser.id,
+            notebook_id: null
+        }
+        this.props.createNote(newnote);
     }
 
     render() {
@@ -31,8 +42,8 @@ class SideNav extends React.Component {
                     <li>
                         <Link to="/" onClick={logout}>Sign out {currentUser.name}</Link>
                     </li>
-                    <li className="new-note">
-                        <a href="#">New Note</a>
+                    <li>
+                        <button onClick={this.handleNewNote} className="new-note">New Note</button>
                     </li>
                     <li>
                         <Link to="/notes"><i className="fas fa-sticky-note"></i> Notes</Link>

@@ -6,6 +6,9 @@
 
 .note-show{
     height:100vh;
+    display:flex;
+    flex-direction: column;
+
 }
 
 .quill {
@@ -21,8 +24,12 @@
 
 .ql-container{
     max-height: auto;
-    flex: 1;
+    flex-grow: 1;
+    border: none;
+
 }
 .ql-editor{
-    height: 100%;
+    height: auto;
+    border: none;
+
 }

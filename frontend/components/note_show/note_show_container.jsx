@@ -1,17 +1,24 @@
 import { connect } from 'react-redux';
-import { fetchNote } from '../../actions/note_actions';
+import { fetchNotes, fetchNote, updateNote, deleteNote } from '../../actions/note_actions';
 import NoteShow from './note_show';
 
-const mapStateToProps = ({entities: { notes }}, ownProps) => ({
-    notes: Object.values(notes),
-
-    note: notes[ownProps.match.params.noteId],
-    noteId: ownProps.match.params.noteId
-});
+const mapStateToProps = ({entities: { notes }}, ownProps) => {
+    const note = notes[ownProps.match.params.noteId];
+    return {
+        notes: notes,
+        note: note,
+        noteId: ownProps.match.params.noteId,
+    }
+}
     
 
-const mapDispatchToProps = dispatch => ({
-    fetchNote: noteId => dispatch(fetchNote(noteId))
-});
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchNotes: () => dispatch(fetchNotes()),
+        fetchNote: noteId => dispatch(fetchNote(noteId)),
+        updateNote: note => dispatch(updateNote(note)),
+        deleteNote: noteId => dispatch(deleteNote(noteId))
+    }
+};
 
-export default connect(mapStateToProps,mapDispatchToProps)(NoteShow);
+export default connect(mapStateToProps, mapDispatchToProps)(NoteShow);

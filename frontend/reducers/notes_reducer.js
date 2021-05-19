@@ -10,15 +10,13 @@ const notesReducer = (oldState = {}, action) => {
     
     switch (action.type) {
         case RECEIVE_NOTES:
-            
             return action.notes;
         case RECEIVE_NOTE:
-            
             newState[action.note.id] = action.note;
-            
             return newState;
         case REMOVE_NOTE:
-            delete newState[action.note.id];
+            delete newState[action.noteId];
+            return newState;
         default:
             return oldState;
     }

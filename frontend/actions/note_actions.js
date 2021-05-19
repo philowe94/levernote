@@ -17,7 +17,7 @@ const receiveNote = (note) => ({
     note
 });
 
-const removeNote = ({note}) => ({
+const removeNote = (noteId) => ({
     type: REMOVE_NOTE,
     noteId
 })
@@ -28,30 +28,28 @@ const removeNote = ({note}) => ({
 //createNote
 //updateNote
 //deleteNote
-export const fetchNotes = () => {
-    return NoteApiUtil.fetchNotes()
-    .then(notes => {
-        return dispatch(receiveNotes(notes));
-    })
-}
+export const fetchNotes = () => dispatch => (
+    NoteApiUtil.fetchNotes()
+    .then(notes => dispatch(receiveNotes(notes)))
+);
 
-export const fetchNote = (noteId) => (
+export const fetchNote = (noteId) => dispatch => (
     NoteApiUtil.fetchNote(noteId)
     .then(note => dispatch(receiveNote(note)))
 );
 
 
-export const createNote = (note) => {
+export const createNote = (note) => dispatch =>  {
     return NoteApiUtil.createNote(note)
     .then(note => dispatch(receiveNote(note)))
 }
 
-export const updateNote = (note) => {
+export const updateNote = (note) => dispatch => {
     return NoteApiUtil.updateNote(note)
     .then(note => dispatch(receiveNote(note)))
 }
 
-export const deleteNote = (noteId) => (
+export const deleteNote = (noteId) => dispatch => (
     NoteApiUtil.deleteNote(noteId)
     .then(() => dispatch(removeNote(noteId)))
 )

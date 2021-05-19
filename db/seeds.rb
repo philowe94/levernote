@@ -27,3 +27,11 @@ note3 = Note.create!(title: 'Games to play after graduating aA',
     author_id: uphil.id
 )
 
+note4 = Note.create!(title: 'Second note for phil',
+    body: 'This is the content of the second note for phil',
+    author_id: uphil.id
+)
+
+notebook1 = Notebook.create!(name: 'Shopping Lists',
+    author_id: udemo.id
+)
