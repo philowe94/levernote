@@ -4,6 +4,8 @@ import {
     REMOVE_NOTE
 } from '../actions/note_actions';
 
+import { RECEIVE_NOTEBOOK } from '../actions/notebook_actions'
+
 const notesReducer = (oldState = {}, action) => {
     Object.freeze(oldState);
     let newState = Object.assign({}, oldState);
@@ -17,6 +19,8 @@ const notesReducer = (oldState = {}, action) => {
         case REMOVE_NOTE:
             delete newState[action.noteId];
             return newState;
+        case RECEIVE_NOTEBOOK:
+            return action.notes;
         default:
             return oldState;
     }

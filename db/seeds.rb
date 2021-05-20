@@ -30,56 +30,56 @@ note1 = Note.create!(
     title: 'Grocery Shopping List', 
     body: '1. Eggs 2. Milk', 
     author_id: udemo.id,
-    notebook_id: 1    
+    notebook_id: notebook1.id    
 )
 
 note2 = Note.create!(
     title: 'Mothers Day Shopping List', 
     body: '1. Flowers 2. ???', 
     author_id: udemo.id,
-    notebook_id: 1    
+    notebook_id: notebook1.id    
 )
 
 note3 = Note.create!(
     title: 'Test note', 
     body: '1. Eggs 2. Milk', 
     author_id: udemo.id,
-    notebook_id: 1    
+    notebook_id: notebook1.id    
 )
 
 note4 = Note.create!(
     title: 'Test note 2', 
     body: '1. Flowers 2. ???', 
     author_id: udemo.id,
-    notebook_id: 1    
+    notebook_id: notebook2.id   
 )
 
 note5 = Note.create!(
     title: 'Test note 3', 
     body: '1. Eggs 2. Milk', 
     author_id: udemo.id,
-    notebook_id: 2    
+    notebook_id: notebook2.id    
 )
 
 note6 = Note.create!(
     title: 'Test note 4', 
     body: '1. Flowers 2. ???', 
     author_id: udemo.id,
-    notebook_id: 2    
+    notebook_id: notebook1.id     
 )
 
 note7 = Note.create!(
     title: 'Test note 7', 
     body: '1. Eggs 2. Milk', 
     author_id: udemo.id,
-    notebook_id: notebook1.id    
+    notebook_id: notebook3.id    
 )
 
 note8 = Note.create!(
     title: 'Test note 8', 
     body: '1. Flowers 2. ???', 
     author_id: udemo.id,
-    notebook_id: notebook1.id    
+    notebook_id: notebook3.id    
 )
 
 note9 = Note.create!(

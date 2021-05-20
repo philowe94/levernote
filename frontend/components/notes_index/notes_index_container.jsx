@@ -7,7 +7,8 @@ import { fetchNotes } from '../../actions/note_actions';
 const mapStateToProps = ({ session, entities: { users, notes }} ) => {
     return {
         currentUser: users[session.id],
-        notes: Object.values(notes).reverse()
+        notes: Object.values(notes).reverse(),
+        url: `/notes/`
     }
 }
 

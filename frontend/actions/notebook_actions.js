@@ -12,18 +12,14 @@ const receiveNotebooks = (notebooks) => ({
     notebooks
 })
 
-// const receiveNotebook = (notebook, notes = {}) => ({
-//     type: RECEIVE_NOTEBOOK,
-//     notebook,
-//     notes
-// });
-
-const receiveNotebook = (notebook) => ({
+const receiveNotebook = (notebook, notes = {}) => ({
     type: RECEIVE_NOTEBOOK,
-    notebook
+    notebook,
+    notes
 });
 
-const removeNote = (notebookId) => ({
+
+const removeNotebook = (notebookId) => ({
     type: REMOVE_NOTEBOOK,
     notebookId
 })

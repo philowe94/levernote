@@ -4,6 +4,7 @@ import NoteShow from './note_show';
 
 const mapStateToProps = ({entities: { notes }}, ownProps) => {
     const note = notes[ownProps.match.params.noteId];
+    debugger
     return {
         notes: notes,
         note: note,

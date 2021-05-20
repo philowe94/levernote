@@ -5,7 +5,7 @@ const NotesIndexItem = props => {
     
     return(
         <li>
-            <Link to={`/notes/${props.note.id}`}>
+            <Link to={`${props.url}${props.note.id}`} >
                 <div>
                     {props.note.title}
                 </div>

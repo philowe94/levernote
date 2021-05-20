@@ -218,20 +218,16 @@ var receiveNotebooks = function receiveNotebooks(notebooks) {
     };
 };
 
-// const receiveNotebook = (notebook, notes = {}) => ({
-//     type: RECEIVE_NOTEBOOK,
-//     notebook,
-//     notes
-// });
-
 var receiveNotebook = function receiveNotebook(notebook) {
+    var notes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     return {
         type: RECEIVE_NOTEBOOK,
-        notebook: notebook
+        notebook: notebook,
+        notes: notes
     };
 };
 
-var removeNote = function removeNote(notebookId) {
+var removeNotebook = function removeNotebook(notebookId) {
     return {
         type: REMOVE_NOTEBOOK,
         notebookId: notebookId
@@ -463,6 +459,10 @@ var _notebooks_index_container = __webpack_require__(/*! ../notebooks_index/note
 
 var _notebooks_index_container2 = _interopRequireDefault(_notebooks_index_container);
 
+var _notebook_show_container = __webpack_require__(/*! ../notebook_show/notebook_show_container */ "./frontend/components/notebook_show/notebook_show_container.jsx");
+
+var _notebook_show_container2 = _interopRequireDefault(_notebook_show_container);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Main = function Main() {
@@ -471,8 +471,10 @@ var Main = function Main() {
         { className: 'main' },
         _react2.default.createElement(_sidenav_container2.default, null),
         _react2.default.createElement(_reactRouterDom.Route, { path: '/notes/', component: _notes_index_container2.default }),
-        _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/notes/:noteId', component: _note_show_container2.default }),
-        _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/notebooks/', component: _notebooks_index_container2.default })
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/notes/:noteId', component: _note_show_container2.default }),
+        _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/notebooks/', component: _notebooks_index_container2.default }),
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/notebooks/:notebookId/', component: _notebook_show_container2.default }),
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/notebooks/:notebookId/notes/:noteId', component: _note_show_container2.default })
     );
 };
 
@@ -737,10 +739,6 @@ var _reactQuill = __webpack_require__(/*! react-quill */ "./node_modules/react-q
 
 var _reactQuill2 = _interopRequireDefault(_reactQuill);
 
-var _note_actions = __webpack_require__(/*! ../../actions/note_actions */ "./frontend/actions/note_actions.js");
-
-var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -886,6 +884,7 @@ var mapStateToProps = function mapStateToProps(_ref, ownProps) {
     var notes = _ref.entities.notes;
 
     var note = notes[ownProps.match.params.noteId];
+    debugger;
     return {
         notes: notes,
         note: note,
@@ -914,6 +913,49 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 
 /***/ }),
 
+/***/ "./frontend/components/notebook_show/notebook_show_container.jsx":
+/*!***********************************************************************!*\
+  !*** ./frontend/components/notebook_show/notebook_show_container.jsx ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var _notes_index = __webpack_require__(/*! ../notes_index/notes_index */ "./frontend/components/notes_index/notes_index.jsx");
+
+var _notes_index2 = _interopRequireDefault(_notes_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+    var notebook = state.entities.notebooks[ownProps.match.params.notebookId];
+    return {
+        notebook: notebook,
+        notes: state.entities.notes,
+        url: '/notebooks/' + ownProps.match.params.notebookId + '/notes/'
+    };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+    return {
+        fetchNotes: function fetchNotes() {
+            return dispatch(fetchNotebook(ownProps.match.params.notebookId));
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_notes_index2.default);
+
+/***/ }),
+
 /***/ "./frontend/components/notebooks_index/notebooks_index.jsx":
 /*!*****************************************************************!*\
   !*** ./frontend/components/notebooks_index/notebooks_index.jsx ***!
@@ -934,6 +976,8 @@ var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -952,29 +996,54 @@ var NotebooksIndex = function (_React$Component) {
     }
 
     _createClass(NotebooksIndex, [{
-        key: "componentDidMount",
+        key: 'componentDidMount',
         value: function componentDidMount() {
             this.props.fetchNotebooks();
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
             return _react2.default.createElement(
-                "div",
-                { className: "notebooks-index" },
+                'div',
+                { className: 'notebooks-index' },
                 _react2.default.createElement(
-                    "div",
-                    { className: "notebooks-index-header" },
+                    'div',
+                    { className: 'notebooks-index-header' },
                     _react2.default.createElement(
-                        "h1",
+                        'h1',
                         null,
-                        "Notebooks"
+                        'Notebooks'
                     )
                 ),
                 _react2.default.createElement(
-                    "div",
-                    { className: "notebooks-index-subheader" },
-                    _react2.default.createElement("h2", null)
+                    'div',
+                    { className: 'notebooks-index-subheader' },
+                    _react2.default.createElement(
+                        'h2',
+                        null,
+                        this.props.notebooks.length,
+                        ' notebooks'
+                    ),
+                    _react2.default.createElement(
+                        'button',
+                        null,
+                        'New Notebook'
+                    )
+                ),
+                _react2.default.createElement(
+                    'ul',
+                    { className: 'notebooks-index-list' },
+                    this.props.notebooks.map(function (notebook) {
+                        return _react2.default.createElement(
+                            'li',
+                            null,
+                            _react2.default.createElement(
+                                _reactRouterDom.Link,
+                                { to: '/notebooks/' + notebook.id + '/notes' },
+                                notebook.name
+                            )
+                        );
+                    })
                 )
             );
         }
@@ -1057,6 +1126,10 @@ var _notes_index_item = __webpack_require__(/*! ./notes_index_item */ "./fronten
 
 var _notes_index_item2 = _interopRequireDefault(_notes_index_item);
 
+var _notes_list = __webpack_require__(/*! ./notes_list */ "./frontend/components/notes_index/notes_list.jsx");
+
+var _notes_list2 = _interopRequireDefault(_notes_list);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1082,21 +1155,13 @@ var NotesIndex = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _props = this.props,
-                currentUser = _props.currentUser,
-                logout = _props.logout;
             var notes = this.props.notes;
+
 
             return _react2.default.createElement(
                 'div',
                 { className: 'notes-index' },
-                _react2.default.createElement(
-                    'ul',
-                    { className: 'notes-index-list' },
-                    notes.map(function (note) {
-                        return _react2.default.createElement(_notes_index_item2.default, { note: note, key: note.id });
-                    })
-                )
+                _react2.default.createElement(_notes_list2.default, { notes: notes, url: this.props.url })
             );
         }
     }]);
@@ -1142,7 +1207,8 @@ var mapStateToProps = function mapStateToProps(_ref) {
 
     return {
         currentUser: users[session.id],
-        notes: Object.values(notes).reverse()
+        notes: Object.values(notes).reverse(),
+        url: '/notes/'
     };
 };
 
@@ -1190,7 +1256,7 @@ var NotesIndexItem = function NotesIndexItem(props) {
         null,
         _react2.default.createElement(
             _reactRouterDom.Link,
-            { to: '/notes/' + props.note.id },
+            { to: '' + props.url + props.note.id },
             _react2.default.createElement(
                 'div',
                 null,
@@ -1211,6 +1277,76 @@ var NotesIndexItem = function NotesIndexItem(props) {
 };
 
 exports.default = NotesIndexItem;
+
+/***/ }),
+
+/***/ "./frontend/components/notes_index/notes_list.jsx":
+/*!********************************************************!*\
+  !*** ./frontend/components/notes_index/notes_list.jsx ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
+var _notes_index_item = __webpack_require__(/*! ./notes_index_item */ "./frontend/components/notes_index/notes_index_item.jsx");
+
+var _notes_index_item2 = _interopRequireDefault(_notes_index_item);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var NotesList = function (_React$Component) {
+    _inherits(NotesList, _React$Component);
+
+    function NotesList(props) {
+        _classCallCheck(this, NotesList);
+
+        return _possibleConstructorReturn(this, (NotesList.__proto__ || Object.getPrototypeOf(NotesList)).call(this, props));
+    }
+
+    _createClass(NotesList, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {}
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            var notes = Object.values(this.props.notes);
+
+            return _react2.default.createElement(
+                'ul',
+                { className: 'notes-index-list' },
+                notes.map(function (note) {
+                    return _react2.default.createElement(_notes_index_item2.default, { note: note, key: note.id, url: _this2.props.url });
+                })
+            );
+        }
+    }]);
+
+    return NotesList;
+}(_react2.default.Component);
+
+exports.default = NotesList;
 
 /***/ }),
 
@@ -2048,6 +2184,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _note_actions = __webpack_require__(/*! ../actions/note_actions */ "./frontend/actions/note_actions.js");
 
+var _notebook_actions = __webpack_require__(/*! ../actions/notebook_actions */ "./frontend/actions/notebook_actions.js");
+
 var notesReducer = function notesReducer() {
     var oldState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
@@ -2064,6 +2202,8 @@ var notesReducer = function notesReducer() {
         case _note_actions.REMOVE_NOTE:
             delete newState[action.noteId];
             return newState;
+        case _notebook_actions.RECEIVE_NOTEBOOK:
+            return action.notes;
         default:
             return oldState;
     }

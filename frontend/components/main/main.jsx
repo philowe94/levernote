@@ -4,14 +4,17 @@ import NotesIndexContainer from '../notes_index/notes_index_container';
 import {Route, Switch, Link} from 'react-router-dom';
 import NoteShowContainer from '../note_show/note_show_container'
 import NotebookIndexContainer from '../notebooks_index/notebooks_index_container'
+import NotebookShowContainer from '../notebook_show/notebook_show_container'
 
 const Main = () => {
     return (
         <div className="main">
             <SideNavContainer />
             <Route path="/notes/" component={NotesIndexContainer} />
-            <Route exact path="/notes/:noteId" component={NoteShowContainer} />
+            <Route path="/notes/:noteId" component={NoteShowContainer} />
             <Route exact path="/notebooks/" component={NotebookIndexContainer} />
+            <Route path="/notebooks/:notebookId/" component={NotebookShowContainer} />
+            <Route path="/notebooks/:notebookId/notes/:noteId" component={NoteShowContainer} />
         </div>
     )
 }

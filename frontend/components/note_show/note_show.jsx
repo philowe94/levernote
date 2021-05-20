@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import ReactQuill from 'react-quill';
-import { fetchNotes } from '../../actions/note_actions';
-import { Redirect } from 'react-router-dom'
 
 class NoteShow extends React.Component {
     constructor(props) {
