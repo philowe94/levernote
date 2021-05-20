@@ -53,7 +53,7 @@ class SideNav extends React.Component {
                         <Link to="/notes"><i className="fas fa-sticky-note"></i> Notes</Link>
                     </li>
                     <li>
-                        <a href="#"><i className="fas fa-book-open"></i> Notebooks</a>
+                        <Link to="/notebooks"><i className="fas fa-book-open"></i> Notebooks</Link>
                     </li>
                     <li>
                         <a href="#"><i className="fas fa-tag"></i> Tags</a>

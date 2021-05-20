@@ -19,7 +19,7 @@ class NotesIndex extends React.Component {
         return(
             <div className="notes-index">
                 <ul className="notes-index-list">
-                    {notes.reverse().map(note => (
+                    {notes.map(note => (
                         <NotesIndexItem note={note} key={note.id} />
                     ))}
                 </ul>

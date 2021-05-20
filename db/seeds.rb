@@ -10,6 +10,22 @@
 udemo = User.create!(email: 'demo', password: 'password')
 uphil = User.create!(email: 'philip.lowe94@gmail.com', password: 'password')
 
+
+notebook1 = Notebook.create!(
+    name: 'Shopping Lists',
+    author_id: udemo.id
+)
+
+notebook2 = Notebook.create!(
+    name: 'Test notebook 1',
+    author_id: udemo.id
+)
+
+notebook3 = Notebook.create!(
+    name: 'Test notebook 2',
+    author_id: udemo.id
+)
+
 note1 = Note.create!(
     title: 'Grocery Shopping List', 
     body: '1. Eggs 2. Milk', 
@@ -25,18 +41,55 @@ note2 = Note.create!(
 )
 
 note3 = Note.create!(
-    title: 'Games to play after graduating aA',
-    body: '1. Resident Evil 8',
-    author_id: uphil.id
+    title: 'Test note', 
+    body: '1. Eggs 2. Milk', 
+    author_id: udemo.id,
+    notebook_id: 1    
 )
 
 note4 = Note.create!(
-    title: 'Second note for phil',
-    body: 'This is the content of the second note for phil',
-    author_id: uphil.id
+    title: 'Test note 2', 
+    body: '1. Flowers 2. ???', 
+    author_id: udemo.id,
+    notebook_id: 1    
 )
 
-notebook1 = Notebook.create!(
-    name: 'Shopping Lists',
-    author_id: udemo.id
+note5 = Note.create!(
+    title: 'Test note 3', 
+    body: '1. Eggs 2. Milk', 
+    author_id: udemo.id,
+    notebook_id: 2    
+)
+
+note6 = Note.create!(
+    title: 'Test note 4', 
+    body: '1. Flowers 2. ???', 
+    author_id: udemo.id,
+    notebook_id: 2    
+)
+
+note7 = Note.create!(
+    title: 'Test note 7', 
+    body: '1. Eggs 2. Milk', 
+    author_id: udemo.id,
+    notebook_id: notebook1.id    
+)
+
+note8 = Note.create!(
+    title: 'Test note 8', 
+    body: '1. Flowers 2. ???', 
+    author_id: udemo.id,
+    notebook_id: notebook1.id    
+)
+
+note9 = Note.create!(
+    title: 'Games to play after graduating aA',
+    body: '1. Resident Evil 8',
+    author_id: 2
+)
+
+note10 = Note.create!(
+    title: 'Second note for phil',
+    body: 'This is the content of the second note for phil',
+    author_id: 2
 )

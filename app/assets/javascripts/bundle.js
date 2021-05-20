@@ -183,6 +183,110 @@ var deleteNote = exports.deleteNote = function deleteNote(noteId) {
 
 /***/ }),
 
+/***/ "./frontend/actions/notebook_actions.js":
+/*!**********************************************!*\
+  !*** ./frontend/actions/notebook_actions.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.deleteNotebook = exports.updateNotebook = exports.createNotebook = exports.fetchNotebook = exports.fetchNotebooks = exports.REMOVE_NOTEBOOK = exports.RECEIVE_NOTEBOOK = exports.RECEIVE_NOTEBOOKS = undefined;
+
+var _notebook_api_util = __webpack_require__(/*! ../util/notebook_api_util */ "./frontend/util/notebook_api_util.js");
+
+var NotebookApiUtil = _interopRequireWildcard(_notebook_api_util);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+//Export constants
+
+var RECEIVE_NOTEBOOKS = exports.RECEIVE_NOTEBOOKS = 'RECEIVE_NOTEBOOKS';
+var RECEIVE_NOTEBOOK = exports.RECEIVE_NOTEBOOK = 'RECEIVE_NOTEBOOK';
+var REMOVE_NOTEBOOK = exports.REMOVE_NOTEBOOK = 'REMOVE_NOTEBOOK';
+
+//action creators
+var receiveNotebooks = function receiveNotebooks(notebooks) {
+    return {
+        type: RECEIVE_NOTEBOOKS,
+        notebooks: notebooks
+    };
+};
+
+// const receiveNotebook = (notebook, notes = {}) => ({
+//     type: RECEIVE_NOTEBOOK,
+//     notebook,
+//     notes
+// });
+
+var receiveNotebook = function receiveNotebook(notebook) {
+    return {
+        type: RECEIVE_NOTEBOOK,
+        notebook: notebook
+    };
+};
+
+var removeNote = function removeNote(notebookId) {
+    return {
+        type: REMOVE_NOTEBOOK,
+        notebookId: notebookId
+    };
+};
+
+//thunk actions
+var fetchNotebooks = exports.fetchNotebooks = function fetchNotebooks() {
+    return function (dispatch) {
+        return NotebookApiUtil.fetchNotebooks().then(function (notebooks) {
+            return dispatch(receiveNotebooks(notebooks));
+        });
+    };
+};
+
+var fetchNotebook = exports.fetchNotebook = function fetchNotebook(notebookId) {
+    return function (dispatch) {
+        return NotebookApiUtil.fetchNotebook(notebookId).then(function (_ref) {
+            var notebook = _ref.notebook,
+                notes = _ref.notes;
+            return dispatch(receiveNotebook(notebook, notes));
+        });
+    };
+};
+
+var createNotebook = exports.createNotebook = function createNotebook(notebook) {
+    return function (dispatch) {
+        return NotebookApiUtil.createNotebook(notebook).then(function (_ref2) {
+            var notebook = _ref2.notebook,
+                notes = _ref2.notes;
+            return dispatch(receiveNotebook(notebook, notes));
+        });
+    };
+};
+
+var updateNotebook = exports.updateNotebook = function updateNotebook(notebook) {
+    return function (dispatch) {
+        return NotebookApiUtil.updateNotebook(notebook).then(function (_ref3) {
+            var notebook = _ref3.notebook,
+                notes = _ref3.notes;
+            return dispatch(receiveNotebook(notebook, notes));
+        });
+    };
+};
+
+var deleteNotebook = exports.deleteNotebook = function deleteNotebook(notebookId) {
+    return function (dispatch) {
+        return NotebookApiUtil.deleteNotebook(notebookId).then(function () {
+            return dispatch(removeNotebook(notebookId));
+        });
+    };
+};
+
+/***/ }),
+
 /***/ "./frontend/actions/session_actions.js":
 /*!*********************************************!*\
   !*** ./frontend/actions/session_actions.js ***!
@@ -314,7 +418,8 @@ var App = function App() {
         _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _splash_content2.default }),
         _react2.default.createElement(_route_util.AuthRoute, { path: '/login', component: _login_form_container2.default }),
         _react2.default.createElement(_route_util.AuthRoute, { path: '/signup', component: _signup_form_container2.default }),
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/notes', component: _main2.default })
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/notes', component: _main2.default }),
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/notebooks', component: _main2.default })
     );
 };
 
@@ -354,6 +459,10 @@ var _note_show_container = __webpack_require__(/*! ../note_show/note_show_contai
 
 var _note_show_container2 = _interopRequireDefault(_note_show_container);
 
+var _notebooks_index_container = __webpack_require__(/*! ../notebooks_index/notebooks_index_container */ "./frontend/components/notebooks_index/notebooks_index_container.jsx");
+
+var _notebooks_index_container2 = _interopRequireDefault(_notebooks_index_container);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Main = function Main() {
@@ -361,8 +470,9 @@ var Main = function Main() {
         'div',
         { className: 'main' },
         _react2.default.createElement(_sidenav_container2.default, null),
-        _react2.default.createElement(_notes_index_container2.default, null),
-        _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/notes/:noteId', component: _note_show_container2.default })
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/notes/', component: _notes_index_container2.default }),
+        _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/notes/:noteId', component: _note_show_container2.default }),
+        _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/notebooks/', component: _notebooks_index_container2.default })
     );
 };
 
@@ -804,6 +914,123 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 
 /***/ }),
 
+/***/ "./frontend/components/notebooks_index/notebooks_index.jsx":
+/*!*****************************************************************!*\
+  !*** ./frontend/components/notebooks_index/notebooks_index.jsx ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var NotebooksIndex = function (_React$Component) {
+    _inherits(NotebooksIndex, _React$Component);
+
+    function NotebooksIndex(props) {
+        _classCallCheck(this, NotebooksIndex);
+
+        return _possibleConstructorReturn(this, (NotebooksIndex.__proto__ || Object.getPrototypeOf(NotebooksIndex)).call(this, props));
+    }
+
+    _createClass(NotebooksIndex, [{
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            this.props.fetchNotebooks();
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return _react2.default.createElement(
+                "div",
+                { className: "notebooks-index" },
+                _react2.default.createElement(
+                    "div",
+                    { className: "notebooks-index-header" },
+                    _react2.default.createElement(
+                        "h1",
+                        null,
+                        "Notebooks"
+                    )
+                ),
+                _react2.default.createElement(
+                    "div",
+                    { className: "notebooks-index-subheader" },
+                    _react2.default.createElement("h2", null)
+                )
+            );
+        }
+    }]);
+
+    return NotebooksIndex;
+}(_react2.default.Component);
+
+exports.default = NotebooksIndex;
+
+/***/ }),
+
+/***/ "./frontend/components/notebooks_index/notebooks_index_container.jsx":
+/*!***************************************************************************!*\
+  !*** ./frontend/components/notebooks_index/notebooks_index_container.jsx ***!
+  \***************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var _notebook_actions = __webpack_require__(/*! ../../actions/notebook_actions */ "./frontend/actions/notebook_actions.js");
+
+var _notebooks_index = __webpack_require__(/*! ./notebooks_index */ "./frontend/components/notebooks_index/notebooks_index.jsx");
+
+var _notebooks_index2 = _interopRequireDefault(_notebooks_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(_ref) {
+    var notebooks = _ref.entities.notebooks;
+
+    return {
+        notebooks: Object.values(notebooks)
+    };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        fetchNotebooks: function fetchNotebooks() {
+            return dispatch((0, _notebook_actions.fetchNotebooks)());
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_notebooks_index2.default);
+
+/***/ }),
+
 /***/ "./frontend/components/notes_index/notes_index.jsx":
 /*!*********************************************************!*\
   !*** ./frontend/components/notes_index/notes_index.jsx ***!
@@ -866,7 +1093,7 @@ var NotesIndex = function (_React$Component) {
                 _react2.default.createElement(
                     'ul',
                     { className: 'notes-index-list' },
-                    notes.reverse().map(function (note) {
+                    notes.map(function (note) {
                         return _react2.default.createElement(_notes_index_item2.default, { note: note, key: note.id });
                     })
                 )
@@ -915,7 +1142,7 @@ var mapStateToProps = function mapStateToProps(_ref) {
 
     return {
         currentUser: users[session.id],
-        notes: Object.values(notes)
+        notes: Object.values(notes).reverse()
     };
 };
 
@@ -1480,8 +1707,8 @@ var SideNav = function (_React$Component) {
                         'li',
                         null,
                         _react2.default.createElement(
-                            'a',
-                            { href: '#' },
+                            _reactRouterDom.Link,
+                            { to: '/notebooks' },
                             _react2.default.createElement('i', { className: 'fas fa-book-open' }),
                             ' Notebooks'
                         )
@@ -1631,9 +1858,9 @@ var _session_api_util = __webpack_require__(/*! ./util/session_api_util */ "./fr
 
 var SessionAPIUtil = _interopRequireWildcard(_session_api_util);
 
-var _note_actions = __webpack_require__(/*! ./actions/note_actions */ "./frontend/actions/note_actions.js");
+var _notebook_actions = __webpack_require__(/*! ./actions/notebook_actions */ "./frontend/actions/notebook_actions.js");
 
-var NotesActions = _interopRequireWildcard(_note_actions);
+var NotebookActions = _interopRequireWildcard(_notebook_actions);
 
 var _session_actions = __webpack_require__(/*! ./actions/session_actions */ "./frontend/actions/session_actions.js");
 
@@ -1665,11 +1892,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 document.addEventListener("DOMContentLoaded", function () {
 
   //notesAPI Testing
-  window.fetchNotes = NotesActions.fetchNotes;
-  window.fetchNote = NotesActions.fetchNote;
-  window.createNote = NotesActions.createNote;
-  window.updateNote = NotesActions.updateNote;
-  window.deleteNote = NotesActions.deleteNote;
+  window.fetchNotebooks = NotebookActions.fetchNotebooks;
+  window.fetchNotebook = NotebookActions.fetchNotebook;
+  window.createNotebook = NotebookActions.createNotebook;
+  window.updateNotebook = NotebookActions.updateNotebook;
+  window.deleteNotebook = NotebookActions.deleteNotebook;
 
   //store
   var store = void 0;
@@ -1718,11 +1945,16 @@ var _notes_reducer = __webpack_require__(/*! ./notes_reducer */ "./frontend/redu
 
 var _notes_reducer2 = _interopRequireDefault(_notes_reducer);
 
+var _notebooks_reducer = __webpack_require__(/*! ./notebooks_reducer */ "./frontend/reducers/notebooks_reducer.js");
+
+var _notebooks_reducer2 = _interopRequireDefault(_notebooks_reducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var entitiesReducer = (0, _redux.combineReducers)({
     users: _users_reducer2.default,
-    notes: _notes_reducer2.default
+    notes: _notes_reducer2.default,
+    notebooks: _notebooks_reducer2.default
 });
 
 exports.default = entitiesReducer;
@@ -1756,6 +1988,47 @@ var errorsReducer = (0, _redux.combineReducers)({
 });
 
 exports.default = errorsReducer;
+
+/***/ }),
+
+/***/ "./frontend/reducers/notebooks_reducer.js":
+/*!************************************************!*\
+  !*** ./frontend/reducers/notebooks_reducer.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _notebook_actions = __webpack_require__(/*! ../actions/notebook_actions */ "./frontend/actions/notebook_actions.js");
+
+var notebooksReducer = function notebooksReducer() {
+    var oldState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    Object.freeze(oldState);
+    var newState = Object.assign({}, oldState);
+
+    switch (action.type) {
+        case _notebook_actions.RECEIVE_NOTEBOOKS:
+            return action.notebooks;
+        case _notebook_actions.RECEIVE_NOTEBOOK:
+            newState[action.notebook.id] = action.notebook;
+            return newState;
+        case _notebook_actions.REMOVE_NOTEBOOK:
+            delete newState[action.notebookId];
+            return newState;
+        default:
+            return oldState;
+    }
+};
+
+exports.default = notebooksReducer;
 
 /***/ }),
 
@@ -2039,6 +2312,58 @@ var deleteNote = exports.deleteNote = function deleteNote(noteId) {
     return $.ajax({
         method: 'DELETE',
         url: 'api/notes/' + noteId
+    });
+};
+
+/***/ }),
+
+/***/ "./frontend/util/notebook_api_util.js":
+/*!********************************************!*\
+  !*** ./frontend/util/notebook_api_util.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var fetchNotebooks = exports.fetchNotebooks = function fetchNotebooks() {
+    return $.ajax({
+        method: "GET",
+        url: "api/notebooks"
+    });
+};
+
+var fetchNotebook = exports.fetchNotebook = function fetchNotebook(notebookId) {
+    return $.ajax({
+        method: "GET",
+        url: "api/notebooks/" + notebookId
+    });
+};
+
+var createNotebook = exports.createNotebook = function createNotebook(notebook) {
+    return $.ajax({
+        method: "POST",
+        url: "api/notebooks",
+        data: { notebook: notebook }
+    });
+};
+
+var updateNotebook = exports.updateNotebook = function updateNotebook(notebook) {
+    return $.ajax({
+        method: "PATCH",
+        url: "api/notebook/" + notebook.id,
+        data: { notebook: notebook }
+    });
+};
+
+var deleteNotebook = exports.deleteNotebook = function deleteNotebook(notebookId) {
+    return $.ajax({
+        method: "DELETE",
+        url: "api/notebook/" + notebookId
     });
 };
 

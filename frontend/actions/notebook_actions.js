@@ -2,54 +2,55 @@ import * as NotebookApiUtil from '../util/notebook_api_util';
 
 //Export constants
 
-export const RECEIVE_NOTES = 'RECEIVE_NOTES';
-export const RECEIVE_NOTE = 'RECEIVE_NOTE';
-export const REMOVE_NOTE = 'REMOVE_NOTE';
+export const RECEIVE_NOTEBOOKS = 'RECEIVE_NOTEBOOKS';
+export const RECEIVE_NOTEBOOK = 'RECEIVE_NOTEBOOK';
+export const REMOVE_NOTEBOOK = 'REMOVE_NOTEBOOK';
 
 //action creators
-const receiveNotes = (notes) => ({
-    type: RECEIVE_NOTES, 
-    notes
+const receiveNotebooks = (notebooks) => ({
+    type: RECEIVE_NOTEBOOKS, 
+    notebooks
 })
 
-const receiveNote = (note) => ({
-    type: RECEIVE_NOTE,
-    note
+// const receiveNotebook = (notebook, notes = {}) => ({
+//     type: RECEIVE_NOTEBOOK,
+//     notebook,
+//     notes
+// });
+
+const receiveNotebook = (notebook) => ({
+    type: RECEIVE_NOTEBOOK,
+    notebook
 });
 
-const removeNote = (noteId) => ({
-    type: REMOVE_NOTE,
-    noteId
+const removeNote = (notebookId) => ({
+    type: REMOVE_NOTEBOOK,
+    notebookId
 })
 
-//thunk action creators
-//fetchNotes
-//fetchNote
-//createNote
-//updateNote
-//deleteNote
-export const fetchNotes = () => dispatch => (
-    NoteApiUtil.fetchNotes()
-    .then(notes => dispatch(receiveNotes(notes)))
+//thunk actions
+export const fetchNotebooks = () => dispatch => (
+    NotebookApiUtil.fetchNotebooks()
+    .then(notebooks => dispatch(receiveNotebooks(notebooks)))
 );
 
-export const fetchNote = (noteId) => dispatch => (
-    NoteApiUtil.fetchNote(noteId)
-    .then(note => dispatch(receiveNote(note)))
+export const fetchNotebook = (notebookId) => dispatch => (
+    NotebookApiUtil.fetchNotebook(notebookId)
+    .then(({ notebook, notes }) => dispatch(receiveNotebook(notebook, notes)))
 );
 
 
-export const createNote = (note) => dispatch =>  {
-    return NoteApiUtil.createNote(note)
-    .then(note => dispatch(receiveNote(note)))
+export const createNotebook = (notebook) => dispatch =>  {
+    return NotebookApiUtil.createNotebook(notebook)
+    .then(({ notebook, notes }) => dispatch(receiveNotebook(notebook, notes)))
 }
 
-export const updateNote = (note) => dispatch => {
-    return NoteApiUtil.updateNote(note)
-    .then(note => dispatch(receiveNote(note)))
+export const updateNotebook = (notebook) => dispatch => {
+    return NotebookApiUtil.updateNotebook(notebook)
+    .then(({ notebook, notes }) => dispatch(receiveNotebook(notebook, notes)))
 }
 
-export const deleteNote = (noteId) => dispatch => (
-    NoteApiUtil.deleteNote(noteId)
-    .then(() => dispatch(removeNote(noteId)))
+export const deleteNotebook = (notebookId) => dispatch => (
+    NotebookApiUtil.deleteNotebook(notebookId)
+    .then(() => dispatch(removeNotebook(notebookId)))
 )

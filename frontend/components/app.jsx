@@ -20,6 +20,8 @@ const App = () => (
         <AuthRoute path="/login" component={LoginFormContainer} />
         <AuthRoute path="/signup" component={SignupFormContainer} />
         <Route path="/notes" component={Main} />
+        <Route path="/notebooks" component={Main} />
+
 
     </div>
 )

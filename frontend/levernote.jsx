@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 //testing
 import * as SessionAPIUtil from './util/session_api_util'
 
-import * as NotesActions from './actions/note_actions'
+import * as NotebookActions from './actions/notebook_actions'
 
 import * as SessionActions from './actions/session_actions'
 
@@ -18,11 +18,11 @@ import Root from "./components/root";
 document.addEventListener("DOMContentLoaded", () => {
 
   //notesAPI Testing
-  window.fetchNotes = NotesActions.fetchNotes;
-  window.fetchNote = NotesActions.fetchNote;
-  window.createNote = NotesActions.createNote;
-  window.updateNote = NotesActions.updateNote;
-  window.deleteNote = NotesActions.deleteNote;
+  window.fetchNotebooks = NotebookActions.fetchNotebooks;
+  window.fetchNotebook = NotebookActions.fetchNotebook;
+  window.createNotebook = NotebookActions.createNotebook;
+  window.updateNotebook = NotebookActions.updateNotebook;
+  window.deleteNotebook = NotebookActions.deleteNotebook;
 
     //store
     let store;
