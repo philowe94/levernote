@@ -72,6 +72,27 @@
 
             .list-header-updated {
                 width: 20%;
+                display: flex;
+
+                div {
+                    flex-grow: 5;
+                }
+
+                .delete-button {
+                    background: lightcoral;
+                    border-radius: 3px;
+                    border: none;
+                    color: white;
+                    height: 25px;
+                    padding: 5px 10px 5px 12px;
+                    
+                    
+            
+                    &:hover {
+                        
+                        background: red;
+                    }
+                }
             }
 
             a {
@@ -80,4 +101,6 @@
             }
         }
     }
+
+   
 }

@@ -98,8 +98,17 @@ class NotebooksIndex extends React.Component {
                                     {this.props.currentUser.email}
                                 </div>
                                 <div className="list-header-updated">
-                                    {this.convertDate(notebook.updated_at)}
+                                    <div>
+                                        {this.convertDate(notebook.updated_at)}
+                                    </div>
+                                    <button
+                                        className="delete-button"
+                                        onClick={this.handleDelete}>
+                                            Delete
+                                    </button>
+                                     
                                 </div>
+                                
                             </li>
                         ))
                     }

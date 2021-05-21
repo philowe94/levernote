@@ -1144,7 +1144,18 @@ var NotebooksIndex = function (_React$Component) {
                             _react2.default.createElement(
                                 'div',
                                 { className: 'list-header-updated' },
-                                _this3.convertDate(notebook.updated_at)
+                                _react2.default.createElement(
+                                    'div',
+                                    null,
+                                    _this3.convertDate(notebook.updated_at)
+                                ),
+                                _react2.default.createElement(
+                                    'button',
+                                    {
+                                        className: 'delete-button',
+                                        onClick: _this3.handleDelete },
+                                    'Delete'
+                                )
                             )
                         );
                     })
@@ -1203,6 +1214,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         },
         createNotebook: function createNotebook(notebook) {
             return dispatch((0, _notebook_actions.createNotebook)(notebook));
+        },
+        deleteNotebook: function deleteNotebook(notebookId) {
+            return dispatch((0, _notebook_actions.deleteNotebook)(notebookId));
         }
     };
 };
