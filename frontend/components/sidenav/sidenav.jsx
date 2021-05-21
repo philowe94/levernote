@@ -8,17 +8,28 @@ class SideNav extends React.Component {
     }
 
     handleNewNote() {
-        let noteId;
+        let notebookId;
+        if (this.props.match.params.notebookId) {
+            notebookId = this.props.match.params.notebookId;
+        } else {
+            notebookId = null;
+        }
+
         let newnote = {
             title: 'New Note',
             body: '',
             author_id: this.props.currentUser.id,
-            notebook_id: null
+            notebook_id: notebookId
         }
 
         this.props.createNote(newnote)
-            .then((res) => this.props.history.push(`/notes/${res.note.id}`));        
-       
+            .then((res) => {
+                if (this.props.match.params.notebookId) {
+                    this.props.history.push(`/notebooks/${this.props.match.params.notebookId}/notes/${res.note.id}`);        
+                } else {
+                    this.props.history.push(`/notes/${res.note.id}`);        
+                }
+            })
     }
 
     render() {
@@ -39,24 +50,31 @@ class SideNav extends React.Component {
         //"Trash"
         return(
             <div className="side-nav">
-                <ul className="side-nav-list">
-                    <li>
+                <div className="side-nav-user">
+                    <div className="side-nav-user-icon">
+
+                        {currentUser.email[0]}
+                    </div>
+                    <div className="side-nav-user-email">
                         {currentUser.email}
+                    </div>
+                </div>
+                <button onClick={this.handleNewNote} className="new-note">
+                    <div className="plus-icon">+</div><div>New Note</div>
+                </button>
+                <ul className="side-nav-list">
+                    
+                    <li>
+                        <Link to="/notes"><i className="fas fa-sticky-note fa-fw"></i> Notes</Link>
+                    </li>
+                    <li>
+                        <Link to="/notebooks"><i className="fas fa-book fa-fw"></i> Notebooks</Link>
+                    </li>
+                    <li>
+                        <a href="#"><i className="fas fa-tag fa-fw"></i> Tags</a>
                     </li>
                     <li>
                         <Link to="/" onClick={logout}>Sign out {currentUser.name}</Link>
-                    </li>
-                    <li>
-                        <button onClick={this.handleNewNote} className="new-note">New Note</button>
-                    </li>
-                    <li>
-                        <Link to="/notes"><i className="fas fa-sticky-note"></i> Notes</Link>
-                    </li>
-                    <li>
-                        <Link to="/notebooks"><i className="fas fa-book-open"></i> Notebooks</Link>
-                    </li>
-                    <li>
-                        <a href="#"><i className="fas fa-tag"></i> Tags</a>
                     </li>
                 </ul>
             </div>

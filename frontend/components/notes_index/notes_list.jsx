@@ -12,7 +12,7 @@ class NotesList extends React.Component {
     }
 
     render() {
-        let notes = Object.values(this.props.notes);
+        let notes = Object.values(this.props.notes).reverse();
         
         return(
             <ul className="notes-index-list">

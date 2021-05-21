@@ -1,18 +1,62 @@
 .notes-index {
     background-color: #f8f8f8;
-    width: 250px;
     color: #333333;
     text-decoration: none;
-    height: 100vh;
+    height: 100%;
+    width: 325px;
+    overflow-y:auto;
+
+    .notes-index-header {
+        border-bottom: 1px solid #e6e6e6;
+        height: 100px;
+        
+        .notes-index-header-section-1 {
+            padding: 22px 22px 22px 0px;
+            display: flex;
+            align-items: center;
+
+            .notes-index-header-notebook-name {
+                padding-left: 5px;
+                font-size: 20px;
+                letter-spacing: 2px;
+            }
+        }
+
+        .notes-index-header-2 {
+            padding-left:25px;
+            font-size: 14px;
+            color: #666666;
+
+        }
+    }
 
     ul {
         list-style-type: none;
         li{
+            display: flex;
+            flex-direction: column;
+            height: 125px;
             padding: 20px;
+            border-bottom: 1px solid #e6e6e6;
 
-            border-bottom: 1px solid grey;
+            .notes-index-item-title {
+                color: #666666;
+                padding-bottom: 5px;
+            }
+
+            .notes-index-item-body {
+                color: #666666;
+                font-size: 14px;
+                flex-grow: 3;
+
+            }
+            .notes-index-item-time {
+                color: #666666;
+                font-size: 12px;
+            }
 
         }
+        
 
     }
 

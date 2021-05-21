@@ -17,3 +17,7 @@
                 </div>
             </Link>
         </li>
+
+// Stuff I have to do for Friday
+// Move existing note to notebook (ehh)
+// Styling

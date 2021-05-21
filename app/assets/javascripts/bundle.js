@@ -469,7 +469,12 @@ var Main = function Main() {
     return _react2.default.createElement(
         'div',
         { className: 'main' },
-        _react2.default.createElement(_sidenav_container2.default, null),
+        _react2.default.createElement(
+            _reactRouterDom.Switch,
+            null,
+            _react2.default.createElement(_reactRouterDom.Route, { path: '/notebooks/:notebookId', component: _sidenav_container2.default }),
+            _react2.default.createElement(_reactRouterDom.Route, { component: _sidenav_container2.default })
+        ),
         _react2.default.createElement(_reactRouterDom.Route, { path: '/notes/', component: _notes_index_container2.default }),
         _react2.default.createElement(_reactRouterDom.Route, { path: '/notes/:noteId', component: _note_show_container2.default }),
         _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/notebooks/', component: _notebooks_index_container2.default }),
@@ -827,18 +832,23 @@ var NoteShow = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 { className: 'note-show' },
-                _react2.default.createElement('input', {
-                    className: 'note-show-title',
-                    type: 'text',
-                    placeholder: 'Title',
-                    value: this.state.title,
-                    onChange: this.update('title')
-                }),
                 _react2.default.createElement(
-                    'button',
-                    {
-                        onClick: this.handleDelete },
-                    'Delete Note'
+                    'div',
+                    { className: 'note-show-header' },
+                    _react2.default.createElement('input', {
+                        className: 'note-show-title',
+                        type: 'text',
+                        placeholder: 'Title',
+                        value: this.state.title,
+                        onChange: this.update('title')
+                    }),
+                    _react2.default.createElement(
+                        'button',
+                        {
+                            className: 'delete-button',
+                            onClick: this.handleDelete },
+                        'Delete'
+                    )
                 ),
                 _react2.default.createElement(_reactQuill2.default, { theme: 'snow',
                     value: this.state.body,
@@ -884,7 +894,7 @@ var mapStateToProps = function mapStateToProps(_ref, ownProps) {
     var notes = _ref.entities.notes;
 
     var note = notes[ownProps.match.params.noteId];
-    debugger;
+
     return {
         notes: notes,
         note: note,
@@ -940,7 +950,8 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
     return {
         notebook: notebook,
         notes: state.entities.notes,
-        url: '/notebooks/' + ownProps.match.params.notebookId + '/notes/'
+        url: '/notebooks/' + ownProps.match.params.notebookId + '/notes/',
+        notebookName: notebook.name
     };
 };
 
@@ -980,6 +991,8 @@ var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_module
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -992,10 +1005,56 @@ var NotebooksIndex = function (_React$Component) {
     function NotebooksIndex(props) {
         _classCallCheck(this, NotebooksIndex);
 
-        return _possibleConstructorReturn(this, (NotebooksIndex.__proto__ || Object.getPrototypeOf(NotebooksIndex)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (NotebooksIndex.__proto__ || Object.getPrototypeOf(NotebooksIndex)).call(this, props));
+
+        _this.state = {
+            newNotebookName: ''
+        };
+        _this.handleNewNotebook = _this.handleNewNotebook.bind(_this);
+        return _this;
     }
 
     _createClass(NotebooksIndex, [{
+        key: 'handleNewNotebook',
+        value: function handleNewNotebook() {
+            var newNotebook = {
+                name: this.state.newNotebookName,
+                author_id: this.props.currentUser.id
+            };
+            this.props.createNotebook(newNotebook);
+        }
+    }, {
+        key: 'update',
+        value: function update(field) {
+            var _this2 = this;
+
+            return function (e) {
+                _this2.setState(_defineProperty({}, field, e.currentTarget.value));
+                _this2.props.updateNote(_this2.state);
+            };
+        }
+    }, {
+        key: 'convertDate',
+        value: function convertDate(dateTime) {
+            var dateObject = new Date(dateTime);
+
+            var dateOptions = { month: 'numeric', day: 'numeric', year: 'numeric' };
+            var date = dateObject.toLocaleDateString('en-US', dateOptions);
+
+            var now = new Date();
+            var dateObj = new Date(date);
+
+            if (now.getDate() === dateObj.getDate() && now.getMonth() === dateObj.getMonth() && now.getYear() === dateObj.getFullYear()) {
+                return 'Today';
+            }
+
+            if (now.getDate() - dateObj.getDate() === 1 || now.getMonth() - dateObj.getMonth() === 1 || now.getYear() - dateObj.getFullYear() === 1) {
+                return 'Yesterday';
+            }
+
+            return date;
+        }
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             this.props.fetchNotebooks();
@@ -1003,6 +1062,8 @@ var NotebooksIndex = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
+            var _this3 = this;
+
             return _react2.default.createElement(
                 'div',
                 { className: 'notebooks-index' },
@@ -1024,23 +1085,66 @@ var NotebooksIndex = function (_React$Component) {
                         this.props.notebooks.length,
                         ' notebooks'
                     ),
+                    _react2.default.createElement('input', {
+                        className: 'new-notebook-input',
+                        type: 'text',
+                        placeholder: 'New notebook name',
+                        value: this.props.newNotebookName,
+                        onChange: this.update('newNotebookName') }),
                     _react2.default.createElement(
                         'button',
-                        null,
-                        'New Notebook'
+                        {
+                            onClick: this.handleNewNotebook,
+                            className: 'new-notebook-button' },
+                        _react2.default.createElement('i', { className: 'fas fa-book fa-fw' }),
+                        ' New Notebook'
                     )
                 ),
                 _react2.default.createElement(
                     'ul',
                     { className: 'notebooks-index-list' },
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'list-header-title' },
+                            'TITLE'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'list-header-created-by' },
+                            'CREATED BY'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'list-header-updated' },
+                            'UPDATED'
+                        )
+                    ),
                     this.props.notebooks.map(function (notebook) {
                         return _react2.default.createElement(
                             'li',
                             null,
                             _react2.default.createElement(
-                                _reactRouterDom.Link,
-                                { to: '/notebooks/' + notebook.id + '/notes' },
-                                notebook.name
+                                'div',
+                                { className: 'list-header-title' },
+                                _react2.default.createElement('i', { className: 'fas fa-book fa-fw' }),
+                                _react2.default.createElement(
+                                    _reactRouterDom.Link,
+                                    { to: '/notebooks/' + notebook.id + '/notes' },
+                                    notebook.name
+                                )
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'list-header-created-by' },
+                                _this3.props.currentUser.email
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'list-header-updated' },
+                                _this3.convertDate(notebook.updated_at)
                             )
                         );
                     })
@@ -1081,10 +1185,14 @@ var _notebooks_index2 = _interopRequireDefault(_notebooks_index);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(_ref) {
-    var notebooks = _ref.entities.notebooks;
+    var session = _ref.session,
+        _ref$entities = _ref.entities,
+        notebooks = _ref$entities.notebooks,
+        users = _ref$entities.users;
 
     return {
-        notebooks: Object.values(notebooks)
+        notebooks: Object.values(notebooks),
+        currentUser: users[session.id]
     };
 };
 
@@ -1092,6 +1200,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
         fetchNotebooks: function fetchNotebooks() {
             return dispatch((0, _notebook_actions.fetchNotebooks)());
+        },
+        createNotebook: function createNotebook(notebook) {
+            return dispatch((0, _notebook_actions.createNotebook)(notebook));
         }
     };
 };
@@ -1161,6 +1272,26 @@ var NotesIndex = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 { className: 'notes-index' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'notes-index-header' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'notes-index-header-section-1' },
+                        _react2.default.createElement('i', { className: '-open fa-fw' }),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'notes-index-header-notebook-name' },
+                            this.props.notebookName
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'notes-index-header-2' },
+                        Object.values(notes).length,
+                        ' notes'
+                    )
+                ),
                 _react2.default.createElement(_notes_list2.default, { notes: notes, url: this.props.url })
             );
         }
@@ -1207,8 +1338,9 @@ var mapStateToProps = function mapStateToProps(_ref) {
 
     return {
         currentUser: users[session.id],
-        notes: Object.values(notes).reverse(),
-        url: '/notes/'
+        notes: notes,
+        url: '/notes/',
+        notebookName: "Notes"
     };
 };
 
@@ -1249,28 +1381,50 @@ var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_module
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var convertDate = function convertDate(dateTime) {
+    var dateObject = new Date(dateTime);
+
+    var dateOptions = { month: 'numeric', day: 'numeric', year: 'numeric' };
+    var date = dateObject.toLocaleDateString('en-US', dateOptions);
+
+    var now = new Date();
+    var dateObj = new Date(date);
+
+    if (now.getDate() === dateObj.getDate() && now.getMonth() === dateObj.getMonth() && now.getYear() === dateObj.getFullYear()) {
+        return 'Today';
+    }
+
+    if (now.getDate() - dateObj.getDate() === 1 || now.getMonth() - dateObj.getMonth() === 1 || now.getYear() - dateObj.getFullYear() === 1) {
+        return 'Yesterday';
+    }
+
+    return date;
+};
+
 var NotesIndexItem = function NotesIndexItem(props) {
+    var strippedbody = props.note.body.replace(/(<([^>]+)>)/gi, "").substring(0, 80);
 
     return _react2.default.createElement(
-        'li',
-        null,
+        _reactRouterDom.Link,
+        { to: '' + props.url + props.note.id },
         _react2.default.createElement(
-            _reactRouterDom.Link,
-            { to: '' + props.url + props.note.id },
+            'li',
+            null,
             _react2.default.createElement(
                 'div',
-                null,
+                { className: 'notes-index-item-title' },
                 props.note.title
             ),
             _react2.default.createElement(
                 'div',
-                null,
-                props.note.body
+                { className: 'notes-index-item-body' },
+                strippedbody,
+                '...'
             ),
             _react2.default.createElement(
                 'div',
-                null,
-                props.note.updated_at
+                { className: 'notes-index-item-time' },
+                convertDate(props.note.updated_at)
             )
         )
     );
@@ -1331,7 +1485,7 @@ var NotesList = function (_React$Component) {
         value: function render() {
             var _this2 = this;
 
-            var notes = Object.values(this.props.notes);
+            var notes = Object.values(this.props.notes).reverse();
 
             return _react2.default.createElement(
                 'ul',
@@ -1767,16 +1921,26 @@ var SideNav = function (_React$Component) {
         value: function handleNewNote() {
             var _this2 = this;
 
-            var noteId = void 0;
+            var notebookId = void 0;
+            if (this.props.match.params.notebookId) {
+                notebookId = this.props.match.params.notebookId;
+            } else {
+                notebookId = null;
+            }
+
             var newnote = {
                 title: 'New Note',
                 body: '',
                 author_id: this.props.currentUser.id,
-                notebook_id: null
+                notebook_id: notebookId
             };
 
             this.props.createNote(newnote).then(function (res) {
-                return _this2.props.history.push('/notes/' + res.note.id);
+                if (_this2.props.match.params.notebookId) {
+                    _this2.props.history.push('/notebooks/' + _this2.props.match.params.notebookId + '/notes/' + res.note.id);
+                } else {
+                    _this2.props.history.push('/notes/' + res.note.id);
+                }
             });
         }
     }, {
@@ -1803,39 +1967,43 @@ var SideNav = function (_React$Component) {
                 'div',
                 { className: 'side-nav' },
                 _react2.default.createElement(
+                    'div',
+                    { className: 'side-nav-user' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'side-nav-user-icon' },
+                        currentUser.email[0]
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'side-nav-user-email' },
+                        currentUser.email
+                    )
+                ),
+                _react2.default.createElement(
+                    'button',
+                    { onClick: this.handleNewNote, className: 'new-note' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'plus-icon' },
+                        '+'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        'New Note'
+                    )
+                ),
+                _react2.default.createElement(
                     'ul',
                     { className: 'side-nav-list' },
-                    _react2.default.createElement(
-                        'li',
-                        null,
-                        currentUser.email
-                    ),
-                    _react2.default.createElement(
-                        'li',
-                        null,
-                        _react2.default.createElement(
-                            _reactRouterDom.Link,
-                            { to: '/', onClick: logout },
-                            'Sign out ',
-                            currentUser.name
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'li',
-                        null,
-                        _react2.default.createElement(
-                            'button',
-                            { onClick: this.handleNewNote, className: 'new-note' },
-                            'New Note'
-                        )
-                    ),
                     _react2.default.createElement(
                         'li',
                         null,
                         _react2.default.createElement(
                             _reactRouterDom.Link,
                             { to: '/notes' },
-                            _react2.default.createElement('i', { className: 'fas fa-sticky-note' }),
+                            _react2.default.createElement('i', { className: 'fas fa-sticky-note fa-fw' }),
                             ' Notes'
                         )
                     ),
@@ -1845,7 +2013,7 @@ var SideNav = function (_React$Component) {
                         _react2.default.createElement(
                             _reactRouterDom.Link,
                             { to: '/notebooks' },
-                            _react2.default.createElement('i', { className: 'fas fa-book-open' }),
+                            _react2.default.createElement('i', { className: 'fas fa-book fa-fw' }),
                             ' Notebooks'
                         )
                     ),
@@ -1855,8 +2023,18 @@ var SideNav = function (_React$Component) {
                         _react2.default.createElement(
                             'a',
                             { href: '#' },
-                            _react2.default.createElement('i', { className: 'fas fa-tag' }),
+                            _react2.default.createElement('i', { className: 'fas fa-tag fa-fw' }),
                             ' Tags'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        _react2.default.createElement(
+                            _reactRouterDom.Link,
+                            { to: '/', onClick: logout },
+                            'Sign out ',
+                            currentUser.name
                         )
                     )
                 )
@@ -1899,9 +2077,10 @@ var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_module
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var mapStateToProps = function mapStateToProps(_ref) {
+var mapStateToProps = function mapStateToProps(_ref, ownProps) {
     var session = _ref.session,
         users = _ref.entities.users;
+
 
     return {
         currentUser: users[session.id]

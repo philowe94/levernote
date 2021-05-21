@@ -9,7 +9,10 @@ import NotebookShowContainer from '../notebook_show/notebook_show_container'
 const Main = () => {
     return (
         <div className="main">
-            <SideNavContainer />
+            <Switch>
+                <Route path="/notebooks/:notebookId" component={SideNavContainer} />
+                <Route component={SideNavContainer} />
+            </Switch> 
             <Route path="/notes/" component={NotesIndexContainer} />
             <Route path="/notes/:noteId" component={NoteShowContainer} />
             <Route exact path="/notebooks/" component={NotebookIndexContainer} />

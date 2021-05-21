@@ -17,6 +17,18 @@ class NotesIndex extends React.Component {
         
         return(
             <div className="notes-index">
+                <div className="notes-index-header">
+                    <div className="notes-index-header-section-1" >
+                        <i className="-open fa-fw"></i>
+                        <div className="notes-index-header-notebook-name">
+                            {this.props.notebookName}
+                        </div>
+                    </div>
+                    <div className="notes-index-header-2">
+                        {Object.values(notes).length} notes
+                    </div>
+                </div>
+                
                 <NotesList notes={notes} url={this.props.url}/>
             </div>
         )

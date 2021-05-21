@@ -65,17 +65,21 @@ class NoteShow extends React.Component {
         
         return(
             <div className="note-show">
-                <input 
-                    className="note-show-title"
-                    type="text"
-                    placeholder="Title"
-                    value={this.state.title}
-                    onChange={this.update('title')}
-                    />
-                <button
-                    onClick={this.handleDelete}>
-                        Delete Note
-                </button> 
+                <div className="note-show-header">
+                    <input 
+                        className="note-show-title"
+                        type="text"
+                        placeholder="Title"
+                        value={this.state.title}
+                        onChange={this.update('title')}
+                        />
+                    <button
+                        className="delete-button"
+                        onClick={this.handleDelete}>
+                            Delete
+                    </button> 
+                </div>
+                
                 
                 <ReactQuill theme="snow" 
                     value={this.state.body}

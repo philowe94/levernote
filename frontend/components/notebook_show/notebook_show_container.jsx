@@ -6,7 +6,8 @@ const mapStateToProps = (state, ownProps) => {
     return {
         notebook: notebook,
         notes: state.entities.notes,
-        url: `/notebooks/${ownProps.match.params.notebookId}/notes/`
+        url: `/notebooks/${ownProps.match.params.notebookId}/notes/`,
+        notebookName: notebook.name,
     }
 }
 

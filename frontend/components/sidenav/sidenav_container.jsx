@@ -5,7 +5,8 @@ import SideNav from './sidenav'
 import { createNote } from '../../actions/note_actions';
 import { withRouter } from 'react-router-dom'
 
-const mapStateToProps = ({ session, entities: { users }} ) => {
+const mapStateToProps = ({ session, entities: { users }}, ownProps ) => {
+    
     return {
         currentUser: users[session.id]
     }
