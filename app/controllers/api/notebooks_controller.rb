@@ -32,12 +32,12 @@ class Api::NotebooksController < ApplicationController
     end
 
     def destroy
-        @note = Note.find(params[:id])
+        @notebook = Notebook.find(params[:id])
 
-        if @note.destroy
+        if @notebook.destroy
             render :show
         else
-            render json: @note.errors.full_messages, status: 422
+            render json: @notebook.errors.full_messages, status: 422
         end
     end
 

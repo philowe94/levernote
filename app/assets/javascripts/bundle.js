@@ -1011,10 +1011,16 @@ var NotebooksIndex = function (_React$Component) {
             newNotebookName: ''
         };
         _this.handleNewNotebook = _this.handleNewNotebook.bind(_this);
+        _this.handleDelete = _this.handleDelete.bind(_this);
         return _this;
     }
 
     _createClass(NotebooksIndex, [{
+        key: 'handleDelete',
+        value: function handleDelete(notebookId) {
+            this.props.deleteNotebook(notebookId);
+        }
+    }, {
         key: 'handleNewNotebook',
         value: function handleNewNotebook() {
             var newNotebook = {
@@ -1153,7 +1159,9 @@ var NotebooksIndex = function (_React$Component) {
                                     'button',
                                     {
                                         className: 'delete-button',
-                                        onClick: _this3.handleDelete },
+                                        onClick: function onClick() {
+                                            _this3.handleDelete(notebook.id);
+                                        } },
                                     'Delete'
                                 )
                             )
@@ -2688,7 +2696,7 @@ var createNotebook = exports.createNotebook = function createNotebook(notebook) 
 var updateNotebook = exports.updateNotebook = function updateNotebook(notebook) {
     return $.ajax({
         method: "PATCH",
-        url: "api/notebook/" + notebook.id,
+        url: "api/notebooks/" + notebook.id,
         data: { notebook: notebook }
     });
 };
@@ -2696,7 +2704,7 @@ var updateNotebook = exports.updateNotebook = function updateNotebook(notebook) 
 var deleteNotebook = exports.deleteNotebook = function deleteNotebook(notebookId) {
     return $.ajax({
         method: "DELETE",
-        url: "api/notebook/" + notebookId
+        url: "api/notebooks/" + notebookId
     });
 };
 

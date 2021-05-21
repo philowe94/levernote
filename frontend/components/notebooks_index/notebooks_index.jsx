@@ -8,6 +8,11 @@ class NotebooksIndex extends React.Component {
             newNotebookName: ''
         }
         this.handleNewNotebook = this.handleNewNotebook.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+    }
+
+    handleDelete(notebookId) {
+        this.props.deleteNotebook(notebookId)
     }
     
     handleNewNotebook() {
@@ -103,7 +108,9 @@ class NotebooksIndex extends React.Component {
                                     </div>
                                     <button
                                         className="delete-button"
-                                        onClick={this.handleDelete}>
+                                        onClick={() => {
+                                            this.handleDelete(notebook.id);
+                                        }}>
                                             Delete
                                     </button>
                                      

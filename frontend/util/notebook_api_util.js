@@ -23,7 +23,7 @@ export const createNotebook = (notebook) => {
 export const updateNotebook = (notebook) => {
     return $.ajax({
         method: "PATCH",
-        url: `api/notebook/${notebook.id}`,
+        url: `api/notebooks/${notebook.id}`,
         data: { notebook }
     })
 }
@@ -31,6 +31,6 @@ export const updateNotebook = (notebook) => {
 export const deleteNotebook = (notebookId) => {
     return $.ajax({
         method: "DELETE",
-        url: `api/notebook/${notebookId}`
+        url: `api/notebooks/${notebookId}`
     })
 }
