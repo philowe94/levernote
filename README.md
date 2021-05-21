@@ -1,24 +1,109 @@
-# README
+# Levernote
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Levernote is a clone of Evernote, a popular note taking web app. Levernote allows you to leverage the power of notes, and then organize your notes into collections called notebooks.
 
-Things you may want to cover:
+[Levernote](https://levernote.herokuapp.com/)
 
-* Ruby version
+Notes            |  Notebooks
+:-------------------------:|:-------------------------:
+![Screenshot of the Notes view](./app/assets/images/screenshot1.png) | ![Screenshot of the Notebooks view](./app/assets/images/screenshot2.png)
 
-* System dependencies
+## Deployment
 
-* Configuration
+Initialize the database with `rails db:reset`. You must be running PostgreSQL.
 
-* Database creation
+Start the server with `rails s`
 
-* Database initialization
+Compile the javascript with `npm run webpack`
 
-* How to run the test suite
+Navigate your broswer to `localhost:3000`
 
-* Services (job queues, cache servers, search engines, etc.)
+## Techologies Used
 
-* Deployment instructions
+Levernote is built with PostgreSQL, Rails, React, and Redux
 
-* ...
+PostgreSQL is used to store the users, notes, and notebooks in a database. 
+
+Rails is used to create an API interface for the back end. Rails performs SQL queries and outputs data from the database in the form of JSON objects.
+
+React is used to create a front-end for the information output by the API. Thunk actions perform API calls and then send the response to a Reducer which populates the Redux store. Then the React components use information from the store, such as the current user or some subset of notes, to present information.
+
+## Features
+
+### Notes
+
+Notes are a table in the database with columns for title, body, notebook_id, and author_id.
+
+Users are able to create, view, update, and delete notes.
+
+Users see their notes after logging in and clicking Notes on the left sidebar. This will then display a notes list where the user can pick a note to view.
+
+A challenging aspect of implementing the notes feature was creating a way to edit them. This was done by implementing a rich text editor library called React-Quill, and synchronizing the value of that component with the state of its container component. Then the database was updated based on the state change.
+
+```Javascript
+
+class NotesList extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        
+    }
+
+    render() {
+        let notes = Object.values(this.props.notes).reverse();
+        
+        return(
+            <ul className="notes-index-list">
+                {notes.map(note => (
+                    <NotesIndexItem note={note} key={note.id} url={this.props.url} />
+                ))}
+            </ul>
+        )
+    }
+}
+```
+
+### Notebooks
+
+Notebooks are a table in the database with columns for name and author_id. They have many notes through database associations.
+
+Users are able to create, view, and delete notebooks.
+
+Userse see their notebooks after logging in and clicking Notebooks on the left sidebar. This will then display a list of notebooks where the user can pick a notebook. Selecting a notebook then displays a list of the notes in that notebook utilizing components built for the Notes feature.
+
+Implementing Notebooks required figuring out how to reuse existing components for new functionality. This was mostly done by wrapping them in new Redux Container components, and then utilizing the react router to use these new containers based on the url. It required some work to make the existing components fit a more general case.
+
+```Javascript
+import { connect } from 'react-redux';
+import NotesIndex from '../notes_index/notes_index';
+
+const mapStateToProps = (state, ownProps) => {
+    let notebook = state.entities.notebooks[ownProps.match.params.notebookId];
+    return {
+        notebook: notebook,
+        notes: state.entities.notes,
+        url: `/notebooks/${ownProps.match.params.notebookId}/notes/`,
+        notebookName: notebook.name,
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        fetchNotes: () => dispatch(fetchNotebook(ownProps.match.params.notebookId)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NotesIndex);
+```
+
+## Future
+
+Implement tagging feature to allow users to assign tags to notes. Notes should be able to have many tags, and users should be able to filter notes based on tags.
+
+Implement search feature to allow users to filter notes based on a string.
+
+Implement note templates to give users preset suggestions for different kinds of notes.
+
+
