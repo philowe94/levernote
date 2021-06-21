@@ -51,54 +51,8 @@ h5 {
     font-family: "Times New Roman";
 }
 
-.navbar {
-    display:flex;
-    align-items:center;
-    height: 80px;
-    padding: 0 40px;
-    position: relative;
-    max-width: 1220px;
-    margin: 0 auto;
-}
 
-.logo {
-    width: 41px;
-    height: 35px;
-}
-.top-level-nav {
-    display:inline-block;
-    margin-top: 24px;
-    margin-left: 50px;
-    list-style-type: none;
-}
-.top-level-nav li {
-    float:left;
-    
-    text-transform: uppercase;
-    letter-spacing: .5px;
-}
-.top-level-nav a {
-    color: black;
-    font-family: "Soleil_Bold",Helvetica,Arial,sans-serif;
-    text-decoration: none;
-    padding: 16px;
-    font-size: 14px;
-    font-weight: 700;
-}
 
-.session-nav {
-    display:inline-block;
-    margin-left: auto;
-}
-
-.session-nav a {
-    color: black;
-    font-family: "Soleil_Bold",Helvetica,Arial,sans-serif;
-    text-decoration: none;
-    padding: 16px;
-    font-size: 16px;
-    transition: .1s color ease-in-out;
-}
 
 /* Splash Content */
 .splash-content {

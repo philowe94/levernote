@@ -524,9 +524,12 @@ var Navbar = function Navbar(_ref) {
         _react2.default.createElement(
             _reactRouterDom.Link,
             { to: '/', className: 'logo-link' },
-            ' ',
             _react2.default.createElement('img', { src: window.logoURL, className: 'logo' }),
-            'Levernote'
+            _react2.default.createElement(
+                'p',
+                null,
+                'Levernote'
+            )
         ),
         _react2.default.createElement(
             'ul',
@@ -537,7 +540,7 @@ var Navbar = function Navbar(_ref) {
                 _react2.default.createElement(
                     'a',
                     { href: '#' },
-                    'Why Levernote'
+                    'About Levernote'
                 )
             ),
             _react2.default.createElement(
