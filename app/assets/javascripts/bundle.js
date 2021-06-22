@@ -2166,6 +2166,71 @@ var SplashContent = function SplashContent() {
                 null,
                 'Levernote helps you do more with less force'
             )
+        ),
+        _react2.default.createElement(
+            'div',
+            { className: 'preview-content' },
+            _react2.default.createElement('img', { className: 'preview-image', src: window.splashImage }),
+            _react2.default.createElement(
+                'div',
+                { className: 'splash-texts' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'splash-text' },
+                    _react2.default.createElement(
+                        'h3',
+                        null,
+                        'WORK ANYWHERE'
+                    ),
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        'Log in to your levernote account from any web browser'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'splash-text' },
+                    _react2.default.createElement(
+                        'h3',
+                        null,
+                        'ORGANIZE YOUR WORK'
+                    ),
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        'Categorize your notes into notebooks and add tags'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'splash-text' },
+                    _react2.default.createElement(
+                        'h3',
+                        null,
+                        'EXPRESS YOURSELF'
+                    ),
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        'Add style to your notes with rich text editing from React-Quill'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'splash-text' },
+                    _react2.default.createElement(
+                        'h3',
+                        null,
+                        'FIND WHAT YOU NEED'
+                    ),
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        'Easily sort through your content with tag filtering'
+                    )
+                )
+            )
         )
     );
 };

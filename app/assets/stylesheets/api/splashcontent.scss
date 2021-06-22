@@ -1,0 +1,35 @@
+.splash-content {
+    display:flex;
+    flex-direction: column;
+    max-width: 1220px;
+    margin: auto;
+
+
+    .preview-content {
+        display: flex;
+
+        .preview-image {
+            padding: 20px;
+            object-fit: contain ;
+            width: 100%;
+            height: 800px;
+        }
+
+        .splash-texts {
+            padding: 20px;
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+
+            h3 {
+                line-height: 2.5;
+            }
+
+            p {
+                line-height: 1.6;
+            }
+        }
+    }
+
+}
