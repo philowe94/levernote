@@ -93,3 +93,57 @@ note10 = Note.create!(
     body: 'This is the content of the second note for phil',
     author_id: 2
 )
+
+note11 = Note.create!(
+    title: 'Favorite Programming Languages', 
+    body: '1. Ruby 2. Javascript', 
+    author_id: udemo.id, 
+)
+
+note11 = Note.create!(
+    title: 'Javascript Notes', 
+    body: 'Arrow functions capture the scope of where they were defined', 
+    author_id: udemo.id, 
+)
+
+# Add tags
+tag1 = Tag.create!(
+    name: 'Shopping',
+    author_id: udemo.id
+)
+
+tag2 = Tag.create!(
+    name: 'Test',
+    author_id: udemo.id
+)
+
+tag3 = Tag.create!(
+    name: 'Programming',
+    author_id: udemo.id
+)
+
+# Add notetags
+notetag1 = NoteTag.create!(
+    note_id: note1.id,
+    tag_id: tag1.id
+)
+
+notetag2 = NoteTag.create!(
+    note_id: note2.id,
+    tag_id: tag1.id
+)
+
+notetag3 = NoteTag.create!(
+    note_id: note1.id,
+    tag_id: tag2.id
+)
+
+notetag4 = NoteTag.create!(
+    note_id: note10.id,
+    tag_id: tag3.id
+)
+
+notetag4 = NoteTag.create!(
+    note_id: note11.id,
+    tag_id: tag3.id
+)

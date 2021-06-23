@@ -5,6 +5,7 @@ import {Route, Switch, Link} from 'react-router-dom';
 import NoteShowContainer from '../note_show/note_show_container'
 import NotebookIndexContainer from '../notebooks_index/notebooks_index_container'
 import NotebookShowContainer from '../notebook_show/notebook_show_container'
+import TagsIndexContainer from '../tags/tags_index_container'
 
 const Main = () => {
     return (
@@ -18,6 +19,7 @@ const Main = () => {
             <Route exact path="/notebooks/" component={NotebookIndexContainer} />
             <Route path="/notebooks/:notebookId/" component={NotebookShowContainer} />
             <Route path="/notebooks/:notebookId/notes/:noteId" component={NoteShowContainer} />
+            <Route path="/tags/" component={TagsIndexContainer} />
         </div>
     )
 }

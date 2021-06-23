@@ -415,7 +415,8 @@ var App = function App() {
         _react2.default.createElement(_route_util.AuthRoute, { path: '/login', component: _login_form_container2.default }),
         _react2.default.createElement(_route_util.AuthRoute, { path: '/signup', component: _signup_form_container2.default }),
         _react2.default.createElement(_reactRouterDom.Route, { path: '/notes', component: _main2.default }),
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/notebooks', component: _main2.default })
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/notebooks', component: _main2.default }),
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/tags', component: _main2.default })
     );
 };
 
@@ -463,6 +464,10 @@ var _notebook_show_container = __webpack_require__(/*! ../notebook_show/notebook
 
 var _notebook_show_container2 = _interopRequireDefault(_notebook_show_container);
 
+var _tags_index_container = __webpack_require__(/*! ../tags/tags_index_container */ "./frontend/components/tags/tags_index_container.jsx");
+
+var _tags_index_container2 = _interopRequireDefault(_tags_index_container);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Main = function Main() {
@@ -479,7 +484,8 @@ var Main = function Main() {
         _react2.default.createElement(_reactRouterDom.Route, { path: '/notes/:noteId', component: _note_show_container2.default }),
         _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/notebooks/', component: _notebooks_index_container2.default }),
         _react2.default.createElement(_reactRouterDom.Route, { path: '/notebooks/:notebookId/', component: _notebook_show_container2.default }),
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/notebooks/:notebookId/notes/:noteId', component: _note_show_container2.default })
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/notebooks/:notebookId/notes/:noteId', component: _note_show_container2.default }),
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/tags/', component: _tags_index_container2.default })
     );
 };
 
@@ -2046,8 +2052,8 @@ var SideNav = function (_React$Component) {
                         'li',
                         null,
                         _react2.default.createElement(
-                            'a',
-                            { href: '#' },
+                            _reactRouterDom.Link,
+                            { to: '/Tags' },
                             _react2.default.createElement('i', { className: 'fas fa-tag fa-fw' }),
                             ' Tags'
                         )
@@ -2236,6 +2242,95 @@ var SplashContent = function SplashContent() {
 };
 
 exports.default = SplashContent;
+
+/***/ }),
+
+/***/ "./frontend/components/tags/tags_index.jsx":
+/*!*************************************************!*\
+  !*** ./frontend/components/tags/tags_index.jsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var TagsIndex = function (_React$Component) {
+    _inherits(TagsIndex, _React$Component);
+
+    function TagsIndex(props) {
+        _classCallCheck(this, TagsIndex);
+
+        return _possibleConstructorReturn(this, (TagsIndex.__proto__ || Object.getPrototypeOf(TagsIndex)).call(this, props));
+    }
+
+    _createClass(TagsIndex, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                'Tags Index'
+            );
+        }
+    }]);
+
+    return TagsIndex;
+}(_react2.default.Component);
+
+exports.default = TagsIndex;
+
+/***/ }),
+
+/***/ "./frontend/components/tags/tags_index_container.jsx":
+/*!***********************************************************!*\
+  !*** ./frontend/components/tags/tags_index_container.jsx ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var _tags_index = __webpack_require__(/*! ./tags_index */ "./frontend/components/tags/tags_index.jsx");
+
+var _tags_index2 = _interopRequireDefault(_tags_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps() {
+    return {};
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {};
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_tags_index2.default);
 
 /***/ }),
 

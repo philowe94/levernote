@@ -21,7 +21,7 @@ const App = () => (
         <AuthRoute path="/signup" component={SignupFormContainer} />
         <Route path="/notes" component={Main} />
         <Route path="/notebooks" component={Main} />
-
+        <Route path="/tags" component={Main} />
 
     </div>
 )

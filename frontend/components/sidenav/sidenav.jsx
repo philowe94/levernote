@@ -71,7 +71,7 @@ class SideNav extends React.Component {
                         <Link to="/notebooks"><i className="fas fa-book fa-fw"></i> Notebooks</Link>
                     </li>
                     <li>
-                        <a href="#"><i className="fas fa-tag fa-fw"></i> Tags</a>
+                        <Link to="/Tags"><i className="fas fa-tag fa-fw"></i> Tags</Link>
                     </li>
                     <li>
                         <Link to="/" onClick={logout}>Sign out {currentUser.name}</Link>
