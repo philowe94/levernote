@@ -15,6 +15,10 @@ class User < ApplicationRecord
         foreign_key: :author_id,
         class_name: "Notebook"
 
+    has_many :tags,
+        foreign_key: :author_id,
+        class_name: "Tag"
+
     def self.find_by_credentials(email, password)
         user = User.find_by(email: email)
         if user
