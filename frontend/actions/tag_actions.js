@@ -7,7 +7,7 @@ export const RECEIVE_TAG = 'RECEIVE_TAG';
 export const REMOVE_TAG = 'REMOVE_TAG';
 
 //action creators
-const receiveTags = (tag) => ({
+const receiveTags = (tags) => ({
     type: RECEIVE_TAGS,
     tags
 })

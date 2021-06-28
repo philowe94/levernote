@@ -5,11 +5,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 //testing
-import * as SessionAPIUtil from './util/session_api_util'
-
-import * as NotebookActions from './actions/notebook_actions'
-
-import * as SessionActions from './actions/session_actions'
+import * as SessionAPIUtil from './util/session_api_util';
+import * as NotebookActions from './actions/notebook_actions';
+import * as SessionActions from './actions/session_actions';
+import * as TagActions from './actions/tag_actions';
 
 //components
 import configureStore from './store/store';
@@ -17,12 +16,12 @@ import Root from "./components/root";
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  //notesAPI Testing
-  window.fetchNotebooks = NotebookActions.fetchNotebooks;
-  window.fetchNotebook = NotebookActions.fetchNotebook;
-  window.createNotebook = NotebookActions.createNotebook;
-  window.updateNotebook = NotebookActions.updateNotebook;
-  window.deleteNotebook = NotebookActions.deleteNotebook;
+  //tags actions Testing
+  window.fetchTags = TagActions.fetchTags;
+  window.fetchTag = TagActions.fetchTag;
+  window.createTag = TagActions.createTag;
+  window.updateTag = TagActions.updateTag;
+  window.deleteTag = TagActions.deleteTag;
 
     //store
     let store;

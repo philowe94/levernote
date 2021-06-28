@@ -5,6 +5,10 @@ import NotesIndexItem from './notes_index_item'
 class NotesList extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            tags: [],
+        }
     }
 
     componentDidMount() {

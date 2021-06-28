@@ -5,9 +5,22 @@ class TagsIndex extends React.Component {
         super(props);
     }
 
+    componentDidMount() {
+        this.props.fetchTags();
+    }
+
     render () {
+        let tagDivs = Object.values(this.props.tags).map((tag) => (
+            <div>
+                <p>{tag.name}</p>
+            </div>
+        ))
+
         return (
-            <div>Tags Index</div> 
+            <div>
+                <h1>Tags Index</h1>
+                {tagDivs}
+            </div> 
         )
     }
 }

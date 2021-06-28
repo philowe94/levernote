@@ -358,6 +358,98 @@ var logout = exports.logout = function logout() {
 
 /***/ }),
 
+/***/ "./frontend/actions/tag_actions.js":
+/*!*****************************************!*\
+  !*** ./frontend/actions/tag_actions.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.deleteTag = exports.updateTag = exports.createTag = exports.fetchTag = exports.fetchTags = exports.REMOVE_TAG = exports.RECEIVE_TAG = exports.RECEIVE_TAGS = undefined;
+
+var _tag_api_util = __webpack_require__(/*! ../util/tag_api_util */ "./frontend/util/tag_api_util.js");
+
+var TagApiUtil = _interopRequireWildcard(_tag_api_util);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+//Export constants
+
+var RECEIVE_TAGS = exports.RECEIVE_TAGS = 'RECEIVE_TAGS';
+var RECEIVE_TAG = exports.RECEIVE_TAG = 'RECEIVE_TAG';
+var REMOVE_TAG = exports.REMOVE_TAG = 'REMOVE_TAG';
+
+//action creators
+var receiveTags = function receiveTags(tags) {
+    return {
+        type: RECEIVE_TAGS,
+        tags: tags
+    };
+};
+
+var receiveTag = function receiveTag(tag) {
+    return {
+        type: RECEIVE_TAG,
+        tag: tag
+    };
+};
+
+var removeTag = function removeTag(tagId) {
+    return {
+        type: REMOVE_TAG,
+        tagId: tagId
+    };
+};
+
+//thunk action creators
+var fetchTags = exports.fetchTags = function fetchTags() {
+    return function (dispatch) {
+        return TagApiUtil.fetchTags().then(function (tags) {
+            return dispatch(receiveTags(tags));
+        });
+    };
+};
+
+var fetchTag = exports.fetchTag = function fetchTag(tagId) {
+    return function (dispatch) {
+        return TagApiUtil.fetchTag(tagId).then(function (tag) {
+            return dispatch(receiveTag(tag));
+        });
+    };
+};
+
+var createTag = exports.createTag = function createTag(tag) {
+    return function (dispatch) {
+        return TagApiUtil.createTag(tag).then(function (tag) {
+            return dispatch(receiveTag(tag));
+        });
+    };
+};
+
+var updateTag = exports.updateTag = function updateTag(tag) {
+    return function (dispatch) {
+        return TagApiUtil.updateTag(tag).then(function (tag) {
+            return dispatch(receiveTag(tag));
+        });
+    };
+};
+
+var deleteTag = exports.deleteTag = function deleteTag(tagId) {
+    return function (dispatch) {
+        return TagApiUtil.deleteTag(tagId).then(function () {
+            return dispatch(removeTag(tagId));
+        });
+    };
+};
+
+/***/ }),
+
 /***/ "./frontend/components/app.jsx":
 /*!*************************************!*\
   !*** ./frontend/components/app.jsx ***!
@@ -952,9 +1044,12 @@ var _notes_index = __webpack_require__(/*! ../notes_index/notes_index */ "./fron
 
 var _notes_index2 = _interopRequireDefault(_notes_index);
 
+var _notebook_actions = __webpack_require__(/*! ../../actions/notebook_actions */ "./frontend/actions/notebook_actions.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state, ownProps) {
+
     var notebook = state.entities.notebooks[ownProps.match.params.notebookId];
     return {
         notebook: notebook,
@@ -967,7 +1062,7 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
 var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
     return {
         fetchNotes: function fetchNotes() {
-            return dispatch(fetchNotebook(ownProps.match.params.notebookId));
+            return dispatch((0, _notebook_actions.fetchNotebook)(ownProps.match.params.notebookId));
         }
     };
 };
@@ -1286,19 +1381,113 @@ var NotesIndex = function (_React$Component) {
     function NotesIndex(props) {
         _classCallCheck(this, NotesIndex);
 
-        return _possibleConstructorReturn(this, (NotesIndex.__proto__ || Object.getPrototypeOf(NotesIndex)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (NotesIndex.__proto__ || Object.getPrototypeOf(NotesIndex)).call(this, props));
+
+        _this.state = {
+            notes: Object.values(_this.props.notes),
+            filterTags: [],
+            filteredNotes: []
+        };
+
+        _this.toggleFilterTag = _this.toggleFilterTag.bind(_this);
+        return _this;
     }
 
+    //given a tag object, add the tag object to the state filterTags
+
+
     _createClass(NotesIndex, [{
+        key: 'toggleFilterTag',
+        value: function toggleFilterTag(tag) {
+            var _this2 = this;
+
+            if (!this.state.filterTags.includes(tag)) {
+                var tagsList = this.state.filterTags.concat(tag);
+                this.setState({
+                    filterTags: tagsList
+                }, function () {
+                    console.log(_this2.state.filterTags);
+                    _this2.filterNotes();
+                });
+            } else {
+                var _tagsList = this.state.filterTags.filter(function (tag2) {
+                    return tag != tag2;
+                });
+                this.setState({
+                    filterTags: _tagsList
+                }, function () {
+                    console.log(_this2.state.filterTags);
+                    _this2.filterNotes();
+                });
+            }
+        }
+    }, {
+        key: 'filterNotes',
+        value: function filterNotes() {
+            var _this3 = this;
+
+            var filteredNotes = this.state.notes.filter(function (note) {
+                //get all tag ids from the note
+                var tagIds = [];
+                note.tags.forEach(function (tag) {
+                    tagIds.push(tag.id);
+                });
+
+                //if all of the filtertags are found in the note tags
+                return _this3.state.filterTags.every(function (tag) {
+                    return tagIds.includes(tag.id);
+                });
+            });
+
+            this.setState({
+                filteredNotes: filteredNotes
+            }, function () {});
+        }
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             this.props.fetchNotes();
+            this.props.fetchTags();
+        }
+    }, {
+        key: 'renderTags',
+        value: function renderTags() {
+            var _this4 = this;
+
+            if (this.props.tags == []) {
+                return _react2.default.createElement('div', null);
+            } else {
+                return _react2.default.createElement(
+                    'div',
+                    null,
+                    Object.values(this.props.tags).map(function (tag) {
+                        return _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(
+                                'button',
+                                { onClick: function onClick() {
+                                        return _this4.toggleFilterTag(tag);
+                                    } },
+                                tag.name
+                            )
+                        );
+                    })
+                );
+            }
         }
     }, {
         key: 'render',
         value: function render() {
-            var notes = this.props.notes;
 
+            var notes = [];
+
+            if (this.state.filteredNotes.length > 0) {
+                debugger;
+                notes = this.state.filteredNotes;
+            } else {
+                notes = this.state.notes;
+            }
 
             return _react2.default.createElement(
                 'div',
@@ -1319,10 +1508,11 @@ var NotesIndex = function (_React$Component) {
                     _react2.default.createElement(
                         'div',
                         { className: 'notes-index-header-2' },
-                        Object.values(notes).length,
+                        Object.values(this.state.notes).length,
                         ' notes'
                     )
                 ),
+                this.renderTags(),
                 _react2.default.createElement(_notes_list2.default, { notes: notes, url: this.props.url })
             );
         }
@@ -1364,14 +1554,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var mapStateToProps = function mapStateToProps(_ref) {
     var session = _ref.session,
         _ref$entities = _ref.entities,
-        users = _ref$entities.users,
-        notes = _ref$entities.notes;
+        notes = _ref$entities.notes,
+        tags = _ref$entities.tags;
 
     return {
-        currentUser: users[session.id],
         notes: notes,
         url: '/notes/',
-        notebookName: "Notes"
+        notebookName: "Notes",
+        tags: tags
     };
 };
 
@@ -1382,7 +1572,20 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         },
         fetchNotes: function fetchNotes() {
             return dispatch((0, _note_actions.fetchNotes)());
-        }
+        },
+        fetchTags: function (_fetchTags) {
+            function fetchTags() {
+                return _fetchTags.apply(this, arguments);
+            }
+
+            fetchTags.toString = function () {
+                return _fetchTags.toString();
+            };
+
+            return fetchTags;
+        }(function () {
+            return dispatch(fetchTags());
+        })
     };
 };
 
@@ -1505,7 +1708,12 @@ var NotesList = function (_React$Component) {
     function NotesList(props) {
         _classCallCheck(this, NotesList);
 
-        return _possibleConstructorReturn(this, (NotesList.__proto__ || Object.getPrototypeOf(NotesList)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (NotesList.__proto__ || Object.getPrototypeOf(NotesList)).call(this, props));
+
+        _this.state = {
+            tags: []
+        };
+        return _this;
     }
 
     _createClass(NotesList, [{
@@ -2283,12 +2491,34 @@ var TagsIndex = function (_React$Component) {
     }
 
     _createClass(TagsIndex, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.props.fetchTags();
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var tagDivs = Object.values(this.props.tags).map(function (tag) {
+                return _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        tag.name
+                    )
+                );
+            });
+
             return _react2.default.createElement(
                 'div',
                 null,
-                'Tags Index'
+                _react2.default.createElement(
+                    'h1',
+                    null,
+                    'Tags Index'
+                ),
+                tagDivs
             );
         }
     }]);
@@ -2322,12 +2552,30 @@ var _tags_index2 = _interopRequireDefault(_tags_index);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var mapStateToProps = function mapStateToProps() {
-    return {};
+var mapStateToProps = function mapStateToProps(state) {
+
+    return {
+        tags: state.entities.tags
+    };
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-    return {};
+
+    return {
+        fetchTags: function (_fetchTags) {
+            function fetchTags() {
+                return _fetchTags.apply(this, arguments);
+            }
+
+            fetchTags.toString = function () {
+                return _fetchTags.toString();
+            };
+
+            return fetchTags;
+        }(function () {
+            return dispatch(fetchTags());
+        })
+    };
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_tags_index2.default);
@@ -2366,6 +2614,10 @@ var _session_actions = __webpack_require__(/*! ./actions/session_actions */ "./f
 
 var SessionActions = _interopRequireWildcard(_session_actions);
 
+var _tag_actions = __webpack_require__(/*! ./actions/tag_actions */ "./frontend/actions/tag_actions.js");
+
+var TagActions = _interopRequireWildcard(_tag_actions);
+
 var _store = __webpack_require__(/*! ./store/store */ "./frontend/store/store.js");
 
 var _store2 = _interopRequireDefault(_store);
@@ -2391,12 +2643,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 document.addEventListener("DOMContentLoaded", function () {
 
-  //notesAPI Testing
-  window.fetchNotebooks = NotebookActions.fetchNotebooks;
-  window.fetchNotebook = NotebookActions.fetchNotebook;
-  window.createNotebook = NotebookActions.createNotebook;
-  window.updateNotebook = NotebookActions.updateNotebook;
-  window.deleteNotebook = NotebookActions.deleteNotebook;
+  //tags actions Testing
+  window.fetchTags = TagActions.fetchTags;
+  window.fetchTag = TagActions.fetchTag;
+  window.createTag = TagActions.createTag;
+  window.updateTag = TagActions.updateTag;
+  window.deleteTag = TagActions.deleteTag;
 
   //store
   var store = void 0;
@@ -2449,12 +2701,17 @@ var _notebooks_reducer = __webpack_require__(/*! ./notebooks_reducer */ "./front
 
 var _notebooks_reducer2 = _interopRequireDefault(_notebooks_reducer);
 
+var _tags_reducer = __webpack_require__(/*! ./tags_reducer */ "./frontend/reducers/tags_reducer.js");
+
+var _tags_reducer2 = _interopRequireDefault(_tags_reducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var entitiesReducer = (0, _redux.combineReducers)({
     users: _users_reducer2.default,
     notes: _notes_reducer2.default,
-    notebooks: _notebooks_reducer2.default
+    notebooks: _notebooks_reducer2.default,
+    tags: _tags_reducer2.default
 });
 
 exports.default = entitiesReducer;
@@ -2692,6 +2949,47 @@ var sessionReducer = function sessionReducer() {
 };
 
 exports.default = sessionReducer;
+
+/***/ }),
+
+/***/ "./frontend/reducers/tags_reducer.js":
+/*!*******************************************!*\
+  !*** ./frontend/reducers/tags_reducer.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _tag_actions = __webpack_require__(/*! ../actions/tag_actions */ "./frontend/actions/tag_actions.js");
+
+var tagsReducer = function tagsReducer() {
+    var oldState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    Object.freeze(oldState);
+    var newState = Object.assign({}, oldState);
+
+    switch (action.type) {
+        case _tag_actions.RECEIVE_TAGS:
+            return action.tags;
+        case _tag_actions.RECEIVE_TAG:
+            newState[action.tag.id] = action.tag;
+            return newState;
+        case _tag_actions.REMOVE_TAG:
+            delete newState[action.tagId];
+            return newState;
+        default:
+            return oldState;
+    }
+};
+
+exports.default = tagsReducer;
 
 /***/ }),
 
@@ -2955,6 +3253,58 @@ var logout = exports.logout = function logout() {
     return $.ajax({
         url: '/api/session',
         method: 'DELETE'
+    });
+};
+
+/***/ }),
+
+/***/ "./frontend/util/tag_api_util.js":
+/*!***************************************!*\
+  !*** ./frontend/util/tag_api_util.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var fetchTags = exports.fetchTags = function fetchTags() {
+    return $.ajax({
+        method: 'GET',
+        url: 'api/tags'
+    });
+};
+
+var fetchTag = exports.fetchTag = function fetchTag(tagId) {
+    return $.ajax({
+        method: 'GET',
+        url: 'api/tags/' + tagId + '/'
+    });
+};
+
+var createTag = exports.createTag = function createTag(tag) {
+    return $.ajax({
+        method: 'POST',
+        url: 'api/tags',
+        data: { tag: tag }
+    });
+};
+
+var updateTag = exports.updateTag = function updateTag(tag) {
+    return $.ajax({
+        method: 'PATCH',
+        url: 'api/tags/' + tag.id,
+        data: { tag: tag }
+    });
+};
+
+var deleteTag = exports.deleteTag = function deleteTag(tagId) {
+    return $.ajax({
+        method: 'DELETE',
+        url: 'api/tags/' + tagId
     });
 };
 
