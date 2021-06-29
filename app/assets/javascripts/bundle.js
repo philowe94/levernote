@@ -1482,8 +1482,7 @@ var NotesIndex = function (_React$Component) {
 
             var notes = [];
 
-            if (this.state.filteredNotes.length > 0) {
-                debugger;
+            if (this.state.filterTags.length > 0) {
                 notes = this.state.filteredNotes;
             } else {
                 notes = this.state.notes;
@@ -2748,6 +2747,41 @@ exports.default = errorsReducer;
 
 /***/ }),
 
+/***/ "./frontend/reducers/filter_tags_reducer.js":
+/*!**************************************************!*\
+  !*** ./frontend/reducers/filter_tags_reducer.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _filter_tags_actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module '../actions/filter_tags_actions'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+var filterTagsReducer = function filterTagsReducer() {
+    var oldState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    Object.freeze(oldState);
+    var newState = Object.assign({}, oldState);
+
+    switch (action.type) {
+        case _filter_tags_actions.RECEIVE_FILTER_TAGS:
+            return action.filtertags;
+        default:
+            return oldState;
+    }
+};
+
+exports.default = filterTagsReducer;
+
+/***/ }),
+
 /***/ "./frontend/reducers/notebooks_reducer.js":
 /*!************************************************!*\
   !*** ./frontend/reducers/notebooks_reducer.js ***!
@@ -2862,12 +2896,17 @@ var _errors_reducer = __webpack_require__(/*! ./errors_reducer */ "./frontend/re
 
 var _errors_reducer2 = _interopRequireDefault(_errors_reducer);
 
+var _ui_reducer = __webpack_require__(/*! ./ui_reducer */ "./frontend/reducers/ui_reducer.js");
+
+var _ui_reducer2 = _interopRequireDefault(_ui_reducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootReducer = (0, _redux.combineReducers)({
     entities: _entities_reducer2.default,
     session: _session_reducer2.default,
-    errors: _errors_reducer2.default
+    errors: _errors_reducer2.default,
+    ui: _ui_reducer2.default
 });
 
 exports.default = rootReducer;
@@ -2990,6 +3029,37 @@ var tagsReducer = function tagsReducer() {
 };
 
 exports.default = tagsReducer;
+
+/***/ }),
+
+/***/ "./frontend/reducers/ui_reducer.js":
+/*!*****************************************!*\
+  !*** ./frontend/reducers/ui_reducer.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _redux = __webpack_require__(/*! redux */ "./node_modules/redux/es/index.js");
+
+var _filter_tags_reducer = __webpack_require__(/*! ./filter_tags_reducer */ "./frontend/reducers/filter_tags_reducer.js");
+
+var _filter_tags_reducer2 = _interopRequireDefault(_filter_tags_reducer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var uiReducer = (0, _redux.combineReducers)({
+    filterTags: _filter_tags_reducer2.default
+
+});
+
+exports.default = uiReducer;
 
 /***/ }),
 

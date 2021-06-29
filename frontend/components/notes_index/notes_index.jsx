@@ -86,8 +86,7 @@ class NotesIndex extends React.Component {
 
         let notes = [];
 
-        if (this.state.filteredNotes.length > 0) {
-            debugger
+        if (this.state.filterTags.length > 0) {
             notes = this.state.filteredNotes;
         } else {
             notes = this.state.notes;
