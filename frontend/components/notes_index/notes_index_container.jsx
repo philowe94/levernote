@@ -7,7 +7,7 @@ import { updateFilterTags } from '../../actions/filter_tags_actions';
 
 const mapStateToProps = ({ session, entities: { notes, tags }, ui: { filterTags }} ) => {
     return {
-        notes: notes,
+        notes: Object.values(notes),
         url: `/notes/`,
         notebookName: "Notes",
         tags: tags,

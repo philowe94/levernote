@@ -7,7 +7,6 @@ class NotesIndex extends React.Component {
     constructor(props) {
         super(props); 
         this.state = {
-            notes: Object.values(this.props.notes),
             filteredNotes: [],
         }
 
@@ -42,7 +41,7 @@ class NotesIndex extends React.Component {
     }
 
     filterNotes() {
-        let filteredNotes = this.state.notes.filter((note) => {
+        let filteredNotes = this.props.notes.filter((note) => {
             //get all tag ids from the note
             let tagIds = []
             note.tags.forEach((tag) => {
@@ -64,7 +63,7 @@ class NotesIndex extends React.Component {
     componentDidMount() {
         this.props.fetchNotes();
         this.props.fetchTags();
-
+        this.filterNotes();
     }
 
     renderTags() {
@@ -93,7 +92,7 @@ class NotesIndex extends React.Component {
         if (this.props.filterTags.length > 0) {
             notes = this.state.filteredNotes;
         } else {
-            notes = this.state.notes;
+            notes = this.props.notes;
         }
 
         return(
@@ -106,7 +105,7 @@ class NotesIndex extends React.Component {
                         </div>
                     </div>
                     <div className="notes-index-header-2">
-                        {Object.values(this.state.notes).length} notes
+                        {this.props.notes.length} notes
                     </div>
                 </div>
                 {this.renderTags()}

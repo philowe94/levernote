@@ -1414,7 +1414,6 @@ var NotesIndex = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (NotesIndex.__proto__ || Object.getPrototypeOf(NotesIndex)).call(this, props));
 
         _this.state = {
-            notes: Object.values(_this.props.notes),
             filteredNotes: []
         };
 
@@ -1459,7 +1458,7 @@ var NotesIndex = function (_React$Component) {
         value: function filterNotes() {
             var _this3 = this;
 
-            var filteredNotes = this.state.notes.filter(function (note) {
+            var filteredNotes = this.props.notes.filter(function (note) {
                 //get all tag ids from the note
                 var tagIds = [];
                 note.tags.forEach(function (tag) {
@@ -1481,6 +1480,7 @@ var NotesIndex = function (_React$Component) {
         value: function componentDidMount() {
             this.props.fetchNotes();
             this.props.fetchTags();
+            this.filterNotes();
         }
     }, {
         key: 'renderTags',
@@ -1518,7 +1518,7 @@ var NotesIndex = function (_React$Component) {
             if (this.props.filterTags.length > 0) {
                 notes = this.state.filteredNotes;
             } else {
-                notes = this.state.notes;
+                notes = this.props.notes;
             }
 
             return _react2.default.createElement(
@@ -1540,7 +1540,7 @@ var NotesIndex = function (_React$Component) {
                     _react2.default.createElement(
                         'div',
                         { className: 'notes-index-header-2' },
-                        Object.values(this.state.notes).length,
+                        this.props.notes.length,
                         ' notes'
                     )
                 ),
@@ -1593,7 +1593,7 @@ var mapStateToProps = function mapStateToProps(_ref) {
         filterTags = _ref.ui.filterTags;
 
     return {
-        notes: notes,
+        notes: Object.values(notes),
         url: '/notes/',
         notebookName: "Notes",
         tags: tags,
@@ -2512,6 +2512,8 @@ var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2526,10 +2528,18 @@ var TagsIndex = function (_React$Component) {
     function TagsIndex(props) {
         _classCallCheck(this, TagsIndex);
 
-        return _possibleConstructorReturn(this, (TagsIndex.__proto__ || Object.getPrototypeOf(TagsIndex)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (TagsIndex.__proto__ || Object.getPrototypeOf(TagsIndex)).call(this, props));
+
+        _this.handleTagLink = _this.handleTagLink.bind(_this);
+        return _this;
     }
 
     _createClass(TagsIndex, [{
+        key: 'handleTagLink',
+        value: function handleTagLink(tag) {
+            this.props.updateFilterTags([tag]);
+        }
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             this.props.fetchTags();
@@ -2537,13 +2547,17 @@ var TagsIndex = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
             var tagDivs = Object.values(this.props.tags).map(function (tag) {
                 return _react2.default.createElement(
                     'div',
                     null,
                     _react2.default.createElement(
-                        'p',
-                        null,
+                        _reactRouterDom.Link,
+                        { to: '/notes', onClick: function onClick() {
+                                return _this2.handleTagLink(tag);
+                            } },
                         tag.name
                     )
                 );
@@ -2589,6 +2603,8 @@ var _tags_index = __webpack_require__(/*! ./tags_index */ "./frontend/components
 
 var _tags_index2 = _interopRequireDefault(_tags_index);
 
+var _filter_tags_actions = __webpack_require__(/*! ../../actions/filter_tags_actions */ "./frontend/actions/filter_tags_actions.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -2613,7 +2629,10 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
             return fetchTags;
         }(function () {
             return dispatch(fetchTags());
-        })
+        }),
+        updateFilterTags: function updateFilterTags(tags) {
+            return dispatch((0, _filter_tags_actions.updateFilterTags)(tags));
+        }
     };
 };
 

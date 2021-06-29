@@ -1,8 +1,15 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 class TagsIndex extends React.Component {
     constructor(props) {
         super(props);
+
+        this.handleTagLink = this.handleTagLink.bind(this);
+    }
+
+    handleTagLink(tag) {
+        this.props.updateFilterTags([tag]);
     }
 
     componentDidMount() {
@@ -12,7 +19,9 @@ class TagsIndex extends React.Component {
     render () {
         let tagDivs = Object.values(this.props.tags).map((tag) => (
             <div>
-                <p>{tag.name}</p>
+                <Link to="/notes" onClick={() => this.handleTagLink(tag)}>
+                    {tag.name}
+                </Link>
             </div>
         ))
 
