@@ -9,3 +9,12 @@
     height: 100vh;
     min-width: 100%;
 }
+
+.errors {
+
+    ul {
+        list-style-type: none;
+        color: red;
+        padding-bottom: 10px;
+    }
+}

@@ -40,26 +40,18 @@ h5 {
     background: #fff;
     z-index: 999;
     transition: all 0.5s;
+    box-shadow: 3px 3px 3px 2px #ccc;
+    position: fixed;
 }
-
-.logo-link {
-    font-size: 37px;
-    font-weight: 700;
-    text-decoration: none;
-    color: black;
-    letter-spacing: -1px;
-    font-family: "Times New Roman";
-}
-
-
 
 
 /* Splash Content */
 .splash-content {
-
+    
 }
 
 .splash-content .value-prop {
+    padding-top: 60px;
     text-align: center;
     max-width: 80%;
     margin: 0 auto;

@@ -326,7 +326,7 @@ var deleteNotebook = exports.deleteNotebook = function deleteNotebook(notebookId
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.logout = exports.login = exports.signup = exports.RECEIVE_SESSION_ERRORS = exports.LOGOUT_CURRENT_USER = exports.RECEIVE_CURRENT_USER = undefined;
+exports.logout = exports.login = exports.signup = exports.clearSessionErrors = exports.CLEAR_SESSION_ERRORS = exports.RECEIVE_SESSION_ERRORS = exports.LOGOUT_CURRENT_USER = exports.RECEIVE_CURRENT_USER = undefined;
 
 var _session_api_util = __webpack_require__(/*! ../util/session_api_util */ "./frontend/util/session_api_util.js");
 
@@ -337,6 +337,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 var RECEIVE_CURRENT_USER = exports.RECEIVE_CURRENT_USER = "RECEIVE_CURRENT_USER";
 var LOGOUT_CURRENT_USER = exports.LOGOUT_CURRENT_USER = 'LOGOUT_CURRENT_USER';
 var RECEIVE_SESSION_ERRORS = exports.RECEIVE_SESSION_ERRORS = 'RECEIVE_SESSION_ERRORS';
+var CLEAR_SESSION_ERRORS = exports.CLEAR_SESSION_ERRORS = 'CLEAR_SESSION_ERRORS';
 
 var receiveCurrentUser = function receiveCurrentUser(user) {
     return {
@@ -355,6 +356,18 @@ var receiveErrors = function receiveErrors(errors) {
     return {
         type: RECEIVE_SESSION_ERRORS,
         errors: errors
+    };
+};
+
+var clearErrors = function clearErrors() {
+    return {
+        type: CLEAR_SESSION_ERRORS
+    };
+};
+
+var clearSessionErrors = exports.clearSessionErrors = function clearSessionErrors() {
+    return function (dispatch) {
+        dispatch(clearErrors());
     };
 };
 
@@ -528,17 +541,13 @@ var App = function App() {
     return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(
-            'header',
-            { className: 'header' },
-            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _navbar_container2.default })
-        ),
-        _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _splash_content2.default }),
+        _react2.default.createElement(_route_util.AuthRoute, { exact: true, path: '/', component: _navbar_container2.default }),
+        _react2.default.createElement(_route_util.AuthRoute, { exact: true, path: '/', component: _splash_content2.default }),
         _react2.default.createElement(_route_util.AuthRoute, { path: '/login', component: _login_form_container2.default }),
         _react2.default.createElement(_route_util.AuthRoute, { path: '/signup', component: _signup_form_container2.default }),
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/notes', component: _main2.default }),
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/notebooks', component: _main2.default }),
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/tags', component: _main2.default })
+        _react2.default.createElement(_route_util.ProtectedRoute, { path: '/notes', component: _main2.default }),
+        _react2.default.createElement(_route_util.ProtectedRoute, { path: '/notebooks', component: _main2.default }),
+        _react2.default.createElement(_route_util.ProtectedRoute, { path: '/tags', component: _main2.default })
     );
 };
 
@@ -647,50 +656,45 @@ var Navbar = function Navbar(_ref) {
 
 
     return _react2.default.createElement(
-        'div',
-        { className: 'navbar' },
+        'header',
+        { className: 'header' },
         _react2.default.createElement(
-            _reactRouterDom.Link,
-            { to: '/', className: 'logo-link' },
-            _react2.default.createElement('img', { src: window.logoURL, className: 'logo' }),
+            'div',
+            { className: 'navbar' },
             _react2.default.createElement(
-                'p',
-                null,
-                'Levernote'
-            )
-        ),
-        _react2.default.createElement(
-            'ul',
-            { className: 'top-level-nav' },
-            _react2.default.createElement(
-                'li',
-                null,
+                _reactRouterDom.Link,
+                { to: '/', className: 'logo-link-navbar' },
+                _react2.default.createElement('img', { src: window.logoURL, className: 'logo' }),
                 _react2.default.createElement(
-                    'a',
-                    { href: '#' },
-                    'About Levernote'
+                    'p',
+                    null,
+                    'Levernote'
                 )
             ),
             _react2.default.createElement(
-                'li',
-                null,
+                'ul',
+                { className: 'top-level-nav' },
                 _react2.default.createElement(
-                    'a',
-                    { href: 'https://github.com/philowe94/' },
-                    'Github'
+                    'li',
+                    null,
+                    _react2.default.createElement(
+                        'a',
+                        { href: 'https://github.com/philowe94/' },
+                        'Github'
+                    )
+                ),
+                _react2.default.createElement(
+                    'li',
+                    null,
+                    _react2.default.createElement(
+                        'a',
+                        { href: 'https://www.linkedin.com/in/philip-lowe-274b9a9a/' },
+                        'Linkedin'
+                    )
                 )
             ),
-            _react2.default.createElement(
-                'li',
-                null,
-                _react2.default.createElement(
-                    'a',
-                    { href: 'https://www.linkedin.com/in/philip-lowe-274b9a9a/' },
-                    'Linkedin'
-                )
-            )
-        ),
-        _react2.default.createElement(_navbar_session_links_container2.default, null)
+            _react2.default.createElement(_navbar_session_links_container2.default, null)
+        )
     );
 };
 
@@ -1882,6 +1886,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
         processForm: function processForm(user) {
             return dispatch((0, _session_actions.login)(user));
+        },
+        clearSessionErrors: function clearSessionErrors() {
+            return dispatch((0, _session_actions.clearSessionErrors)());
         }
     };
 };
@@ -1987,6 +1994,11 @@ var SessionForm = function (_React$Component) {
                     );
                 })
             );
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.props.clearSessionErrors();
         }
     }, {
         key: 'render',
@@ -2144,7 +2156,11 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
         processForm: function processForm(user) {
             return dispatch((0, _session_actions.signup)(user));
+        },
+        clearSessionErrors: function clearSessionErrors() {
+            return dispatch((0, _session_actions.clearSessionErrors)());
         }
+
     };
 };
 
@@ -2481,6 +2497,73 @@ var SplashContent = function SplashContent() {
                         'p',
                         null,
                         'Easily sort through your content with tag filtering'
+                    )
+                )
+            )
+        ),
+        _react2.default.createElement('hr', null),
+        _react2.default.createElement(
+            'div',
+            { className: 'splash-footer' },
+            _react2.default.createElement(
+                'div',
+                { className: 'splash-about' },
+                _react2.default.createElement(
+                    'h3',
+                    null,
+                    'About'
+                ),
+                _react2.default.createElement(
+                    'ul',
+                    null,
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { href: 'https://github.com/philowe94/' },
+                            'Github'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { href: 'https://www.linkedin.com/in/philip-lowe-274b9a9a/' },
+                            'Linkedin'
+                        )
+                    )
+                )
+            ),
+            _react2.default.createElement(
+                'div',
+                { className: 'splash-more' },
+                _react2.default.createElement(
+                    'h3',
+                    null,
+                    'More From Phil'
+                ),
+                _react2.default.createElement(
+                    'ul',
+                    null,
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { href: 'https://netzero-application.herokuapp.com/' },
+                            'Net Zero'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { href: 'https://philowe94.github.io/heiankyo-alien/' },
+                            'Heiankyo Alien'
+                        )
                     )
                 )
             )
@@ -3000,6 +3083,8 @@ exports.default = function () {
     switch (action.type) {
         case _session_actions.RECEIVE_SESSION_ERRORS:
             return action.errors;
+        case _session_actions.CLEAR_SESSION_ERRORS:
+            return [];
         case _session_actions.RECEIVE_CURRENT_USER:
             return [];
         default:
@@ -3311,9 +3396,9 @@ var deleteNotebook = exports.deleteNotebook = function deleteNotebook(notebookId
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
-exports.AuthRoute = undefined;
+exports.ProtectedRoute = exports.AuthRoute = undefined;
 
 var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
@@ -3328,24 +3413,45 @@ var _reactRouter = __webpack_require__(/*! react-router */ "./node_modules/react
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Auth = function Auth(_ref) {
-    var Component = _ref.component,
-        path = _ref.path,
-        loggedIn = _ref.loggedIn,
-        exact = _ref.exact;
-    return _react2.default.createElement(_reactRouterDom.Route, {
-        path: path,
-        exact: exact,
-        render: function render(props) {
-            return !loggedIn ? _react2.default.createElement(Component, props) : _react2.default.createElement(_reactRouterDom.Redirect, { to: '/' });
-        }
-    });
+  var Component = _ref.component,
+      path = _ref.path,
+      loggedIn = _ref.loggedIn,
+      exact = _ref.exact;
+  return (
+    // Redirect to the notes page if the user is authenticated
+    _react2.default.createElement(_reactRouterDom.Route, {
+      path: path,
+      exact: exact,
+      render: function render(props) {
+        return !loggedIn ? _react2.default.createElement(Component, props) : _react2.default.createElement(_reactRouterDom.Redirect, { to: '/notes' });
+      }
+    })
+  );
+};
+
+var Protected = function Protected(_ref2) {
+  var Component = _ref2.component,
+      path = _ref2.path,
+      loggedIn = _ref2.loggedIn,
+      exact = _ref2.exact;
+  return _react2.default.createElement(_reactRouterDom.Route, {
+    path: path,
+    exact: exact,
+    render: function render(props) {
+      return loggedIn ? _react2.default.createElement(Component, props) :
+      // Redirect to the login page if the user is already authenticated
+      _react2.default.createElement(_reactRouterDom.Redirect, { to: '/' });
+    }
+  });
 };
 
 var mapStateToProps = function mapStateToProps(state) {
-    return { loggedIn: Boolean(state.session.id) };
+  return { loggedIn: Boolean(state.session.id) };
 };
 
 var AuthRoute = exports.AuthRoute = (0, _reactRouter.withRouter)((0, _reactRedux.connect)(mapStateToProps, null)(Auth));
+
+var ProtectedRoute = exports.ProtectedRoute = (0, _reactRouter.withRouter)((0, _reactRedux.connect)(mapStateToProps)(Protected));
 
 /***/ }),
 

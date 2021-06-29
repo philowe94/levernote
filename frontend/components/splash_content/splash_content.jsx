@@ -29,6 +29,25 @@ const SplashContent = () => {
                     </div>
                 </div>
             </div>
+            <hr></hr>
+
+            <div className="splash-footer">
+                <div className="splash-about">
+                    <h3>About</h3>
+                    <ul>
+                        <li><a href="https://github.com/philowe94/">Github</a></li>
+                        <li><a href="https://www.linkedin.com/in/philip-lowe-274b9a9a/">Linkedin</a></li>
+                    </ul>
+                </div>
+                <div className="splash-more">
+                    <h3>More From Phil</h3>
+                    <ul>
+                        <li><a href="https://netzero-application.herokuapp.com/">Net Zero</a></li>
+                        <li><a href="https://philowe94.github.io/heiankyo-alien/">Heiankyo Alien</a></li>
+                    </ul>
+                </div>
+                
+            </div>
         </div>
     )
 }

@@ -47,6 +47,10 @@ class SessionForm extends React.Component {
         )
     }
 
+    componentDidMount() {
+        this.props.clearSessionErrors();
+    }
+
     render(){
         return(
             <div className="session-form-background">

@@ -5,14 +5,29 @@
     padding: 0 40px;
     position: relative;
     max-width: 1220px;
+    min-width: 800px;
     margin: 0 auto;
     align-items: center;
 
 }
 
+.logo-link-navbar {
+    display:flex;
+    align-items:center;
+    font-size: 37px;
+    font-weight: 700;
+    text-decoration: none;
+    color: black;
+    letter-spacing: -1px;
+}
+
 .logo-link {
-    display: flex;
-    align-items: center;
+    font-size: 37px;
+    font-weight: 700;
+    text-decoration: none;
+    color: black;
+    letter-spacing: -1px;
+    margin: auto;
 }
 
 .logo {
