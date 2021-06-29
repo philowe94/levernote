@@ -86,6 +86,36 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./frontend/actions/filter_tags_actions.js":
+/*!*************************************************!*\
+  !*** ./frontend/actions/filter_tags_actions.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var RECEIVE_FILTER_TAGS = exports.RECEIVE_FILTER_TAGS = 'RECEIVE_FILTER_TAGS';
+
+var receiveFilterTags = exports.receiveFilterTags = function receiveFilterTags(tags) {
+    return {
+        type: RECEIVE_FILTER_TAGS,
+        tags: tags
+    };
+};
+
+var updateFilterTags = exports.updateFilterTags = function updateFilterTags(tags) {
+    return function (dispatch) {
+        dispatch(receiveFilterTags(tags));
+    };
+};
+
+/***/ }),
+
 /***/ "./frontend/actions/note_actions.js":
 /*!******************************************!*\
   !*** ./frontend/actions/note_actions.js ***!
@@ -1385,7 +1415,6 @@ var NotesIndex = function (_React$Component) {
 
         _this.state = {
             notes: Object.values(_this.props.notes),
-            filterTags: [],
             filteredNotes: []
         };
 
@@ -1401,18 +1430,22 @@ var NotesIndex = function (_React$Component) {
         value: function toggleFilterTag(tag) {
             var _this2 = this;
 
-            if (!this.state.filterTags.includes(tag)) {
-                var tagsList = this.state.filterTags.concat(tag);
+            if (!this.props.filterTags.includes(tag)) {
+                var tagsList = this.props.filterTags.concat(tag);
+                this.props.updateFilterTags(tagsList);
+
                 this.setState({
                     filterTags: tagsList
                 }, function () {
-                    console.log(_this2.state.filterTags);
+                    console.log(_this2.props.filterTags);
                     _this2.filterNotes();
                 });
             } else {
-                var _tagsList = this.state.filterTags.filter(function (tag2) {
+                var _tagsList = this.props.filterTags.filter(function (tag2) {
                     return tag != tag2;
                 });
+                this.props.updateFilterTags(_tagsList);
+
                 this.setState({
                     filterTags: _tagsList
                 }, function () {
@@ -1434,7 +1467,7 @@ var NotesIndex = function (_React$Component) {
                 });
 
                 //if all of the filtertags are found in the note tags
-                return _this3.state.filterTags.every(function (tag) {
+                return _this3.props.filterTags.every(function (tag) {
                     return tagIds.includes(tag.id);
                 });
             });
@@ -1482,7 +1515,7 @@ var NotesIndex = function (_React$Component) {
 
             var notes = [];
 
-            if (this.state.filterTags.length > 0) {
+            if (this.props.filterTags.length > 0) {
                 notes = this.state.filteredNotes;
             } else {
                 notes = this.state.notes;
@@ -1548,19 +1581,23 @@ var _notes_index2 = _interopRequireDefault(_notes_index);
 
 var _note_actions = __webpack_require__(/*! ../../actions/note_actions */ "./frontend/actions/note_actions.js");
 
+var _filter_tags_actions = __webpack_require__(/*! ../../actions/filter_tags_actions */ "./frontend/actions/filter_tags_actions.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(_ref) {
     var session = _ref.session,
         _ref$entities = _ref.entities,
         notes = _ref$entities.notes,
-        tags = _ref$entities.tags;
+        tags = _ref$entities.tags,
+        filterTags = _ref.ui.filterTags;
 
     return {
         notes: notes,
         url: '/notes/',
         notebookName: "Notes",
-        tags: tags
+        tags: tags,
+        filterTags: filterTags
     };
 };
 
@@ -1584,7 +1621,10 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
             return fetchTags;
         }(function () {
             return dispatch(fetchTags());
-        })
+        }),
+        updateFilterTags: function updateFilterTags(tags) {
+            return dispatch((0, _filter_tags_actions.updateFilterTags)(tags));
+        }
     };
 };
 
@@ -2761,18 +2801,18 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _filter_tags_actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module '../actions/filter_tags_actions'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+var _filter_tags_actions = __webpack_require__(/*! ../actions/filter_tags_actions */ "./frontend/actions/filter_tags_actions.js");
 
 var filterTagsReducer = function filterTagsReducer() {
-    var oldState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var oldState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     var action = arguments[1];
 
     Object.freeze(oldState);
-    var newState = Object.assign({}, oldState);
+    var newState = Object.assign([], oldState);
 
     switch (action.type) {
         case _filter_tags_actions.RECEIVE_FILTER_TAGS:
-            return action.filtertags;
+            return action.tags;
         default:
             return oldState;
     }

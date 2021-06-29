@@ -8,7 +8,6 @@ class NotesIndex extends React.Component {
         super(props); 
         this.state = {
             notes: Object.values(this.props.notes),
-            filterTags: [],
             filteredNotes: [],
         }
 
@@ -17,16 +16,21 @@ class NotesIndex extends React.Component {
 
     //given a tag object, add the tag object to the state filterTags
     toggleFilterTag(tag) {
-        if (!this.state.filterTags.includes(tag)) {
-            let tagsList = this.state.filterTags.concat(tag);
+        if (!this.props.filterTags.includes(tag)) {
+            let tagsList = this.props.filterTags.concat(tag);
+            this.props.updateFilterTags(tagsList);
+
             this.setState({
                 filterTags: tagsList,
             }, () => {
-                console.log(this.state.filterTags);
+                console.log(this.props.filterTags);
                 this.filterNotes();
             })
         } else {
-            let tagsList = this.state.filterTags.filter((tag2) => tag != tag2 );
+            let tagsList = this.props.filterTags.filter((tag2) => tag != tag2 );
+            this.props.updateFilterTags(tagsList);
+
+            
             this.setState({
                 filterTags: tagsList,
             }, () => {
@@ -46,7 +50,7 @@ class NotesIndex extends React.Component {
             })
 
             //if all of the filtertags are found in the note tags
-            return this.state.filterTags.every((tag) => {
+            return this.props.filterTags.every((tag) => {
                 return tagIds.includes(tag.id);                
             })
         })
@@ -86,7 +90,7 @@ class NotesIndex extends React.Component {
 
         let notes = [];
 
-        if (this.state.filterTags.length > 0) {
+        if (this.props.filterTags.length > 0) {
             notes = this.state.filteredNotes;
         } else {
             notes = this.state.notes;
