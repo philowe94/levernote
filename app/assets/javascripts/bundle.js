@@ -1080,6 +1080,10 @@ var _notes_index2 = _interopRequireDefault(_notes_index);
 
 var _notebook_actions = __webpack_require__(/*! ../../actions/notebook_actions */ "./frontend/actions/notebook_actions.js");
 
+var _filter_tags_actions = __webpack_require__(/*! ../../actions/filter_tags_actions */ "./frontend/actions/filter_tags_actions.js");
+
+var _tag_actions = __webpack_require__(/*! ../../actions/tag_actions */ "./frontend/actions/tag_actions.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state, ownProps) {
@@ -1087,9 +1091,11 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
     var notebook = state.entities.notebooks[ownProps.match.params.notebookId];
     return {
         notebook: notebook,
-        notes: state.entities.notes,
+        notes: Object.values(state.entities.notes),
         url: '/notebooks/' + ownProps.match.params.notebookId + '/notes/',
-        notebookName: notebook.name
+        notebookName: notebook.name,
+        tags: state.entities.tags,
+        filterTags: state.ui.filterTags
     };
 };
 
@@ -1097,6 +1103,12 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
     return {
         fetchNotes: function fetchNotes() {
             return dispatch((0, _notebook_actions.fetchNotebook)(ownProps.match.params.notebookId));
+        },
+        fetchTags: function fetchTags() {
+            return dispatch((0, _tag_actions.fetchTags)());
+        },
+        updateFilterTags: function updateFilterTags(tags) {
+            return dispatch((0, _filter_tags_actions.updateFilterTags)(tags));
         }
     };
 };
@@ -1585,6 +1597,8 @@ var _notes_index2 = _interopRequireDefault(_notes_index);
 
 var _note_actions = __webpack_require__(/*! ../../actions/note_actions */ "./frontend/actions/note_actions.js");
 
+var _tag_actions = __webpack_require__(/*! ../../actions/tag_actions */ "./frontend/actions/tag_actions.js");
+
 var _filter_tags_actions = __webpack_require__(/*! ../../actions/filter_tags_actions */ "./frontend/actions/filter_tags_actions.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -1613,19 +1627,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         fetchNotes: function fetchNotes() {
             return dispatch((0, _note_actions.fetchNotes)());
         },
-        fetchTags: function (_fetchTags) {
-            function fetchTags() {
-                return _fetchTags.apply(this, arguments);
-            }
-
-            fetchTags.toString = function () {
-                return _fetchTags.toString();
-            };
-
-            return fetchTags;
-        }(function () {
-            return dispatch(fetchTags());
-        }),
+        fetchTags: function fetchTags() {
+            return dispatch((0, _tag_actions.fetchTags)());
+        },
         updateFilterTags: function updateFilterTags(tags) {
             return dispatch((0, _filter_tags_actions.updateFilterTags)(tags));
         }
@@ -1700,8 +1704,23 @@ var NotesIndexItem = function NotesIndexItem(props) {
             ),
             _react2.default.createElement(
                 'div',
-                { className: 'notes-index-item-time' },
-                convertDate(props.note.updated_at)
+                { className: 'notes-index-item-footer' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'notes-index-item-time' },
+                    convertDate(props.note.updated_at)
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'notes-index-item-tags' },
+                    Object.values(props.note.tags).map(function (tag) {
+                        return _react2.default.createElement(
+                            'div',
+                            { className: 'notes-index-item-tag' },
+                            tag.name
+                        );
+                    })
+                )
             )
         )
     );

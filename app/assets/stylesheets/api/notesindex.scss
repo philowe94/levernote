@@ -50,12 +50,28 @@
                 flex-grow: 3;
 
             }
-            .notes-index-item-time {
-                color: #666666;
-                font-size: 12px;
-            }
 
-            
+            .notes-index-item-footer {
+                display:flex;
+                align-items: center;
+
+                .notes-index-item-time {
+                    color: #666666;
+                    font-size: 12px;
+                }
+
+                .notes-index-item-tags {
+                    display:flex;
+
+                    .notes-index-item-tag {
+                        font-size: 12px;
+                        background-color: lightgray;
+                        border-radius: 10px;
+                        padding: 0px 5px 0px 5px;
+                        margin: 0px 5px 0px 5px;
+                    }
+                }
+            }
         }
 
         li:hover {

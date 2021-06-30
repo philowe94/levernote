@@ -35,8 +35,17 @@ const NotesIndexItem = props => {
                 <div className="notes-index-item-body">
                     {strippedbody}...
                 </div>
-                <div className="notes-index-item-time">
-                    {convertDate(props.note.updated_at)}
+                <div className="notes-index-item-footer">
+                    <div className="notes-index-item-time">
+                        {convertDate(props.note.updated_at)}
+                    </div>
+                    <div className="notes-index-item-tags">
+                        {Object.values(props.note.tags).map((tag) => (
+                            <div className="notes-index-item-tag">
+                                {tag.name}
+                            </div>
+                        ))}
+                    </div>
                 </div>
         </li>
         </Link>
