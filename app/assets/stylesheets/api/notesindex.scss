@@ -30,6 +30,25 @@
         }
     }
 
+    .notes-index-tags {
+        display: flex;
+        flex-wrap: wrap;
+
+        .notes-index-tag {
+            button{
+                border-radius: 20px;
+                padding: 5px;
+                margin: 5px;
+            }
+        }
+
+        .notes-index-tag.selected{
+            button{
+                background-color: lightblue;
+            }
+        }
+    }
+
     ul {
         list-style-type: none;
         li{

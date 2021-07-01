@@ -1,19 +1,14 @@
 .main {
     display: grid;
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: auto auto minmax(0, 1fr);
     height: 100vh;
-}
-
-.note-show{
-    height:100vh;
-    display:flex;
-    flex-direction: column;
-
+    max-width: 100vw;
 }
 
 .quill {
     display:flex;
     height: 100%;
+    width: 100%;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;

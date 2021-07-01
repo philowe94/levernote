@@ -100,7 +100,7 @@ note11 = Note.create!(
     author_id: udemo.id, 
 )
 
-note11 = Note.create!(
+note12 = Note.create!(
     title: 'Javascript Notes', 
     body: 'Arrow functions capture the scope of where they were defined', 
     author_id: udemo.id, 
@@ -125,25 +125,30 @@ tag3 = Tag.create!(
 # Add notetags
 notetag1 = NoteTag.create!(
     note_id: note1.id,
-    tag_id: tag1.id
+    tag_id: tag1.id,
+    author_id: udemo.id,
 )
 
 notetag2 = NoteTag.create!(
     note_id: note2.id,
-    tag_id: tag1.id
+    tag_id: tag1.id,
+    author_id: udemo.id,
 )
 
 notetag3 = NoteTag.create!(
     note_id: note1.id,
-    tag_id: tag2.id
+    tag_id: tag2.id,
+    author_id: udemo.id,
 )
 
 notetag4 = NoteTag.create!(
-    note_id: note10.id,
-    tag_id: tag3.id
+    note_id: note12.id,
+    tag_id: tag3.id,
+    author_id: udemo.id,
 )
 
 notetag4 = NoteTag.create!(
     note_id: note11.id,
-    tag_id: tag3.id
+    tag_id: tag3.id,
+    author_id: udemo.id,
 )

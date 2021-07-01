@@ -1437,7 +1437,7 @@ var NotesIndex = function (_React$Component) {
         return _this;
     }
 
-    //given a tag object, add the tag object to the state filterTags
+    //given a tag object, add the tag object to the store filterTags
 
 
     _createClass(NotesIndex, [{
@@ -1508,16 +1508,27 @@ var NotesIndex = function (_React$Component) {
             } else {
                 return _react2.default.createElement(
                     'div',
-                    null,
+                    { className: 'notes-index-tags' },
                     Object.values(this.props.tags).map(function (tag) {
+                        var classname = "notes-index-tag";
+                        var tagIds = [];
+                        _this4.props.filterTags.forEach(function (tag) {
+                            tagIds.push(tag.id);
+                        });
+
+                        if (tagIds.includes(tag.id)) {
+                            classname = "notes-index-tag selected";
+                        }
+
                         return _react2.default.createElement(
                             'div',
-                            null,
+                            { className: classname },
                             _react2.default.createElement(
                                 'button',
                                 { onClick: function onClick() {
                                         return _this4.toggleFilterTag(tag);
                                     } },
+                                _react2.default.createElement('i', { className: 'fas fa-tag fa-fw' }),
                                 tag.name
                             )
                         );

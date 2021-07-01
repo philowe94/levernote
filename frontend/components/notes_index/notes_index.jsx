@@ -13,7 +13,7 @@ class NotesIndex extends React.Component {
         this.toggleFilterTag = this.toggleFilterTag.bind(this);
     }
 
-    //given a tag object, add the tag object to the state filterTags
+    //given a tag object, add the tag object to the store filterTags
     toggleFilterTag(tag) {
         if (!this.props.filterTags.includes(tag)) {
             let tagsList = this.props.filterTags.concat(tag);
@@ -74,12 +74,26 @@ class NotesIndex extends React.Component {
             )
         } else {
             return (
-                <div>
-                    {Object.values(this.props.tags).map((tag) => (
-                        <div>
-                            <button onClick={() => this.toggleFilterTag(tag)}>{tag.name}</button>
-                        </div>
-                    ))}
+                <div className="notes-index-tags">
+                    {Object.values(this.props.tags).map((tag) => {
+                        let classname = "notes-index-tag";
+                        let tagIds = []
+                        this.props.filterTags.forEach((tag) => {
+                            tagIds.push(tag.id);
+                        })
+
+                        if (tagIds.includes(tag.id)) {
+                            classname = "notes-index-tag selected";
+                        }
+
+                        return (
+                            <div className={classname}>
+                                <button onClick={() => this.toggleFilterTag(tag)}>
+                                    <i className="fas fa-tag fa-fw"></i>{tag.name}
+                                </button>
+                            </div>
+                        )
+                    })}
                 </div>
             )
         }
