@@ -15,7 +15,12 @@ class NotesIndex extends React.Component {
 
     //given a tag object, add the tag object to the store filterTags
     toggleFilterTag(tag) {
-        if (!this.props.filterTags.includes(tag)) {
+        let tagIds = []
+        this.props.filterTags.forEach((tag) => {
+            tagIds.push(tag.id);
+        })
+
+        if (!tagIds.includes(tag.id)) {
             let tagsList = this.props.filterTags.concat(tag);
             this.props.updateFilterTags(tagsList);
 
@@ -26,7 +31,7 @@ class NotesIndex extends React.Component {
                 this.filterNotes();
             })
         } else {
-            let tagsList = this.props.filterTags.filter((tag2) => tag != tag2 );
+            let tagsList = this.props.filterTags.filter((tag2) => tag.id != tag2.id );
             this.props.updateFilterTags(tagsList);
 
             

@@ -1116,6 +1116,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         createTag: function createTag(tag) {
             return dispatch((0, _tag_actions.createTag)(tag));
         }
+
     };
 };
 
@@ -1510,7 +1511,12 @@ var NotesIndex = function (_React$Component) {
         value: function toggleFilterTag(tag) {
             var _this2 = this;
 
-            if (!this.props.filterTags.includes(tag)) {
+            var tagIds = [];
+            this.props.filterTags.forEach(function (tag) {
+                tagIds.push(tag.id);
+            });
+
+            if (!tagIds.includes(tag.id)) {
                 var tagsList = this.props.filterTags.concat(tag);
                 this.props.updateFilterTags(tagsList);
 
@@ -1522,7 +1528,7 @@ var NotesIndex = function (_React$Component) {
                 });
             } else {
                 var _tagsList = this.props.filterTags.filter(function (tag2) {
-                    return tag != tag2;
+                    return tag.id != tag2.id;
                 });
                 this.props.updateFilterTags(_tagsList);
 

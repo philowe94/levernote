@@ -21,6 +21,7 @@ const mapDispatchToProps = dispatch => {
         updateNote: note => dispatch(updateNote(note)),
         deleteNote: noteId => dispatch(deleteNote(noteId)),
         createTag: tag => dispatch(createTag(tag)),
+
     }
 };
 
