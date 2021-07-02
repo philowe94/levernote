@@ -2733,10 +2733,12 @@ var TagsIndex = function (_React$Component) {
         value: function render() {
             var _this2 = this;
 
-            var tagDivs = Object.values(this.props.tags).map(function (tag) {
+            var tagDivs = Object.values(this.props.tags).sort(function (a, b) {
+                return a.name > b.name ? 1 : -1;
+            }).map(function (tag) {
                 return _react2.default.createElement(
                     'div',
-                    null,
+                    { className: 'tags-index-tag' },
                     _react2.default.createElement(
                         _reactRouterDom.Link,
                         { to: '/notes', onClick: function onClick() {
@@ -2749,11 +2751,11 @@ var TagsIndex = function (_React$Component) {
 
             return _react2.default.createElement(
                 'div',
-                null,
+                { className: 'tags-index' },
                 _react2.default.createElement(
-                    'h1',
-                    null,
-                    'Tags Index'
+                    'div',
+                    { className: 'tags-index-header' },
+                    'Tags'
                 ),
                 tagDivs
             );

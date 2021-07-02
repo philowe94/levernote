@@ -17,8 +17,8 @@ class TagsIndex extends React.Component {
     }
 
     render () {
-        let tagDivs = Object.values(this.props.tags).map((tag) => (
-            <div>
+        let tagDivs = Object.values(this.props.tags).sort((a,b) => (a.name > b.name) ? 1 : -1 ).map((tag) => (
+            <div className="tags-index-tag">
                 <Link to="/notes" onClick={() => this.handleTagLink(tag)}>
                     {tag.name}
                 </Link>
@@ -26,8 +26,8 @@ class TagsIndex extends React.Component {
         ))
 
         return (
-            <div>
-                <h1>Tags Index</h1>
+            <div className="tags-index">
+                <div className="tags-index-header">Tags</div>
                 {tagDivs}
             </div> 
         )
