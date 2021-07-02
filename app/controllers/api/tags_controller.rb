@@ -25,6 +25,7 @@ class Api::TagsController < ApplicationController
 
     def update
         @tag = Tag.find(params[:id])
+        @tag.author_id = current_user.id
 
         if @tag.update(tag_params)
             render :show

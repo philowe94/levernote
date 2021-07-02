@@ -879,6 +879,8 @@ var _reactQuill = __webpack_require__(/*! react-quill */ "./node_modules/react-q
 
 var _reactQuill2 = _interopRequireDefault(_reactQuill);
 
+var _note_tag_api_util = __webpack_require__(/*! ../../util/note_tag_api_util */ "./frontend/util/note_tag_api_util.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -901,11 +903,14 @@ var NoteShow = function (_React$Component) {
             id: null,
             title: '',
             body: '',
-            updated_at: new Date()
+            updated_at: new Date(),
+            newTagName: ''
         };
 
         _this.handleBodyChange = _this.handleBodyChange.bind(_this);
         _this.handleDelete = _this.handleDelete.bind(_this);
+        _this.renderTags = _this.renderTags.bind(_this);
+        _this.handleNewNoteTag = _this.handleNewNoteTag.bind(_this);
         return _this;
     }
 
@@ -947,6 +952,22 @@ var NoteShow = function (_React$Component) {
             }
         }
     }, {
+        key: 'handleNewNoteTag',
+        value: function handleNewNoteTag() {
+            var _this4 = this;
+
+            this.props.createTag({
+                name: this.state.newTagName
+            }).then(function (res) {
+                var note_tag = {
+                    note_id: _this4.props.note.id,
+                    tag_id: res.tag.id
+                };
+                debugger;
+                (0, _note_tag_api_util.createNoteTag)(note_tag);
+            });
+        }
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             if (this.props.note) {
@@ -958,6 +979,44 @@ var NoteShow = function (_React$Component) {
         value: function componentDidUpdate(prevProps) {
             if (this.props.noteId !== prevProps.noteId) {
                 this.setState(this.props.note);
+            }
+        }
+    }, {
+        key: 'renderTags',
+        value: function renderTags() {
+            if (this.props.note) {
+                return _react2.default.createElement(
+                    'div',
+                    null,
+                    this.props.note.tags.map(function (tag) {
+                        return _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(
+                                'button',
+                                null,
+                                _react2.default.createElement('i', { className: 'fas fa-tag fa-fw' }),
+                                tag.name
+                            )
+                        );
+                    }),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement('input', {
+                            type: 'text',
+                            placeholder: 'New tag name',
+                            value: this.props.newTagName,
+                            onChange: this.update('newTagName') }),
+                        _react2.default.createElement(
+                            'button',
+                            {
+                                onClick: this.handleNewNoteTag,
+                                className: 'new-note-tag-button' },
+                            'Add Tag'
+                        )
+                    )
+                );
             }
         }
     }, {
@@ -989,7 +1048,8 @@ var NoteShow = function (_React$Component) {
                     value: this.state.body,
                     placeholder: 'Body',
                     onChange: this.handleBodyChange
-                })
+                }),
+                this.renderTags()
             );
         }
     }]);
@@ -1018,6 +1078,8 @@ Object.defineProperty(exports, "__esModule", {
 var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
 var _note_actions = __webpack_require__(/*! ../../actions/note_actions */ "./frontend/actions/note_actions.js");
+
+var _tag_actions = __webpack_require__(/*! ../../actions/tag_actions */ "./frontend/actions/tag_actions.js");
 
 var _note_show = __webpack_require__(/*! ./note_show */ "./frontend/components/note_show/note_show.jsx");
 
@@ -1050,6 +1112,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         },
         deleteNote: function deleteNote(noteId) {
             return dispatch((0, _note_actions.deleteNote)(noteId));
+        },
+        createTag: function createTag(tag) {
+            return dispatch((0, _tag_actions.createTag)(tag));
         }
     };
 };
@@ -1186,7 +1251,7 @@ var NotebooksIndex = function (_React$Component) {
 
             return function (e) {
                 _this2.setState(_defineProperty({}, field, e.currentTarget.value));
-                _this2.props.updateNote(_this2.state);
+                //this.props.updateNote(this.state);
             };
         }
     }, {
@@ -3358,6 +3423,58 @@ var deleteNote = exports.deleteNote = function deleteNote(noteId) {
     return $.ajax({
         method: 'DELETE',
         url: 'api/notes/' + noteId
+    });
+};
+
+/***/ }),
+
+/***/ "./frontend/util/note_tag_api_util.js":
+/*!********************************************!*\
+  !*** ./frontend/util/note_tag_api_util.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var fetchNoteTags = exports.fetchNoteTags = function fetchNoteTags() {
+    return $.ajax({
+        method: 'GET',
+        url: 'api/note_tags'
+    });
+};
+
+var fetchNoteTag = exports.fetchNoteTag = function fetchNoteTag(note_tagId) {
+    return $.ajax({
+        method: 'GET',
+        url: 'api/note_tags/' + note_tagId + '/'
+    });
+};
+
+var createNoteTag = exports.createNoteTag = function createNoteTag(note_tag) {
+    return $.ajax({
+        method: 'POST',
+        url: 'api/note_tags',
+        data: { note_tag: note_tag }
+    });
+};
+
+var updateNoteTag = exports.updateNoteTag = function updateNoteTag(note_tag) {
+    return $.ajax({
+        method: 'PATCH',
+        url: 'api/note_tags/' + note_tag.id,
+        data: { note_tag: note_tag }
+    });
+};
+
+var deleteNoteTag = exports.deleteNoteTag = function deleteNoteTag(note_tagId) {
+    return $.ajax({
+        method: 'DELETE',
+        url: 'api/note_tags/' + note_tagId
     });
 };
 

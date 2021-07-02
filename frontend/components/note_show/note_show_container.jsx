@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { fetchNotes, fetchNote, updateNote, deleteNote } from '../../actions/note_actions';
+import { createTag } from '../../actions/tag_actions';
 import NoteShow from './note_show';
 
 const mapStateToProps = ({entities: { notes }}, ownProps) => {
@@ -18,7 +19,8 @@ const mapDispatchToProps = dispatch => {
         fetchNotes: () => dispatch(fetchNotes()),
         fetchNote: noteId => dispatch(fetchNote(noteId)),
         updateNote: note => dispatch(updateNote(note)),
-        deleteNote: noteId => dispatch(deleteNote(noteId))
+        deleteNote: noteId => dispatch(deleteNote(noteId)),
+        createTag: tag => dispatch(createTag(tag)),
     }
 };
 

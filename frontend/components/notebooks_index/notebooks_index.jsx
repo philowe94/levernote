@@ -28,7 +28,7 @@ class NotebooksIndex extends React.Component {
 
         return e => {
             this.setState({ [field]: e.currentTarget.value });
-            this.props.updateNote(this.state);
+            //this.props.updateNote(this.state);
         }
     }
 

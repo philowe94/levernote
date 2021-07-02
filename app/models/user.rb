@@ -20,8 +20,8 @@ class User < ApplicationRecord
         class_name: "NoteTag"
 
     has_many :tags,
-        through: :note_tags,
-        source: :tag
+        foreign_key: :author_id,
+        class_name: "Tag"
 
     def self.find_by_credentials(email, password)
         user = User.find_by(email: email)

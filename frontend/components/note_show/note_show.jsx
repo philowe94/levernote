@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import ReactQuill from 'react-quill';
+import { createNoteTag } from '../../util/note_tag_api_util';
 
 class NoteShow extends React.Component {
     constructor(props) {
@@ -9,10 +10,13 @@ class NoteShow extends React.Component {
             title: '',
             body: '',
             updated_at: new Date(),
+            newTagName: '',
         };
 
         this.handleBodyChange = this.handleBodyChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.renderTags = this.renderTags.bind(this);
+        this.handleNewNoteTag = this.handleNewNoteTag.bind(this);
     }
 
     handleBodyChange(value) {
@@ -49,6 +53,20 @@ class NoteShow extends React.Component {
 
     }
 
+    handleNewNoteTag() {
+        this.props.createTag({
+            name: this.state.newTagName
+        }).then((res) => {
+            let note_tag = {
+                note_id: this.props.note.id,
+                tag_id: res.tag.id,
+            }
+            debugger
+            createNoteTag(note_tag)
+        })
+
+    }
+
     componentDidMount(){
         if (this.props.note) {
             this.setState(this.props.note);
@@ -58,6 +76,36 @@ class NoteShow extends React.Component {
     componentDidUpdate(prevProps){
         if (this.props.noteId !== prevProps.noteId) {
             this.setState(this.props.note);
+        }
+    }
+
+    renderTags() {
+        if (this.props.note) {
+            return (
+                <div>
+                    {this.props.note.tags.map((tag) => {
+                        return (
+                            <div>
+                                <button>
+                                    <i className="fas fa-tag fa-fw"></i>{tag.name}
+                                </button>
+                            </div>
+                        )
+                    })}
+                    <div>
+                        <input 
+                            type="text"
+                            placeholder="New tag name"
+                            value={this.props.newTagName}
+                            onChange={this.update('newTagName')}/>
+                        <button 
+                            onClick={this.handleNewNoteTag}
+                            className="new-note-tag-button">
+                            Add Tag
+                        </button>
+                    </div>
+                </div>
+            )
         }
     }
     
@@ -86,6 +134,7 @@ class NoteShow extends React.Component {
                     placeholder="Body"
                     onChange={this.handleBodyChange}
                 />
+                {this.renderTags()}
             </div>
             
         )

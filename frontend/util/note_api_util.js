@@ -34,5 +34,3 @@ export const deleteNote = noteId => (
         url: `api/notes/${noteId}`,
     })
 );
-
-
