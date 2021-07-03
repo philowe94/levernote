@@ -1,6 +1,7 @@
 class Tag < ApplicationRecord
     validates :name, presence: true
     validates :author_id, presence: true
+    validates :name, uniqueness: { scope: :author_id }
 
     belongs_to :user,
         foreign_key: :author_id,

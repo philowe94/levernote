@@ -5,6 +5,7 @@ class SideNav extends React.Component {
     constructor(props) {
         super(props);
         this.handleNewNote = this.handleNewNote.bind(this);
+        this.handleLinkToNotes = this.handleLinkToNotes.bind(this);
     }
 
     handleNewNote() {
@@ -30,6 +31,10 @@ class SideNav extends React.Component {
                     this.props.history.push(`/notes/${res.note.id}`);        
                 }
             })
+    }
+
+    handleLinkToNotes() {
+        this.props.updateFilterTags([]);
     }
 
     render() {
@@ -65,7 +70,7 @@ class SideNav extends React.Component {
                 <ul className="side-nav-list">
                     
                     <li>
-                        <Link to="/notes"><i className="fas fa-sticky-note fa-fw"></i> Notes</Link>
+                        <Link to="/notes" onClick={this.handleLinkToNotes}><i className="fas fa-sticky-note fa-fw"></i> Notes</Link>
                     </li>
                     <li>
                         <Link to="/notebooks"><i className="fas fa-book fa-fw"></i> Notebooks</Link>

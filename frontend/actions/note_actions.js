@@ -23,11 +23,6 @@ const removeNote = (noteId) => ({
 })
 
 //thunk action creators
-//fetchNotes
-//fetchNote
-//createNote
-//updateNote
-//deleteNote
 export const fetchNotes = () => dispatch => (
     NoteApiUtil.fetchNotes()
     .then(notes => dispatch(receiveNotes(notes)))
@@ -53,4 +48,3 @@ export const deleteNote = (noteId) => dispatch => (
     NoteApiUtil.deleteNote(noteId)
     .then(() => dispatch(removeNote(noteId)))
 )
-

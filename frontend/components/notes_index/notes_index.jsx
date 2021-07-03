@@ -71,6 +71,13 @@ class NotesIndex extends React.Component {
         this.filterNotes();
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.filterTags !== prevProps.filterTags) {
+
+            this.filterNotes();
+        }
+    }
+
     renderTags() {
         
         if (this.props.tags == []) {

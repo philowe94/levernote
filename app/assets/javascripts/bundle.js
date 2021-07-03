@@ -166,11 +166,6 @@ var removeNote = function removeNote(noteId) {
 };
 
 //thunk action creators
-//fetchNotes
-//fetchNote
-//createNote
-//updateNote
-//deleteNote
 var fetchNotes = exports.fetchNotes = function fetchNotes() {
     return function (dispatch) {
         return NoteApiUtil.fetchNotes().then(function (notes) {
@@ -207,6 +202,97 @@ var deleteNote = exports.deleteNote = function deleteNote(noteId) {
     return function (dispatch) {
         return NoteApiUtil.deleteNote(noteId).then(function () {
             return dispatch(removeNote(noteId));
+        });
+    };
+};
+
+/***/ }),
+
+/***/ "./frontend/actions/note_tag_actions.js":
+/*!**********************************************!*\
+  !*** ./frontend/actions/note_tag_actions.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.deleteNoteTag = exports.updateNoteTag = exports.createNoteTag = exports.fetchNoteTag = exports.fetchNoteTags = exports.REMOVE_NOTE_TAG = exports.RECEIVE_NOTE_TAG = exports.RECEIVE_NOTE_TAGS = undefined;
+
+var _note_tag_api_util = __webpack_require__(/*! ../util/note_tag_api_util */ "./frontend/util/note_tag_api_util.js");
+
+var NoteTagApiUtil = _interopRequireWildcard(_note_tag_api_util);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+//Export constants
+var RECEIVE_NOTE_TAGS = exports.RECEIVE_NOTE_TAGS = 'RECEIVE_NOTE_TAGS';
+var RECEIVE_NOTE_TAG = exports.RECEIVE_NOTE_TAG = 'RECEIVE_NOTE_TAG';
+var REMOVE_NOTE_TAG = exports.REMOVE_NOTE_TAG = 'REMOVE_NOTE_TAG';
+
+//action creators
+var receiveNoteTags = function receiveNoteTags(note_tags) {
+    return {
+        type: RECEIVE_NOTE_TAGS,
+        note_tags: note_tags
+    };
+};
+
+var receiveNoteTag = function receiveNoteTag(note_tag) {
+    return {
+        type: RECEIVE_NOTE_TAG,
+        note_tag: note_tag
+    };
+};
+
+var removeNoteTag = function removeNoteTag(note_tagId) {
+    return {
+        type: REMOVE_NOTE_TAG,
+        note_tagId: note_tagId
+    };
+};
+
+//thunk action creators
+var fetchNoteTags = exports.fetchNoteTags = function fetchNoteTags() {
+    return function (dispatch) {
+        return NoteTagApiUtil.fetchNoteTags().then(function (note_tags) {
+            return dispatch(receiveNoteTags(note_tags));
+        });
+    };
+};
+
+var fetchNoteTag = exports.fetchNoteTag = function fetchNoteTag(note_tagId) {
+    return function (dispatch) {
+        return NoteTagApiUtil.fetchNoteTag(note_tagId).then(function (note_tag) {
+            return dispatch(receiveNote(note));
+        });
+    };
+};
+
+var createNoteTag = exports.createNoteTag = function createNoteTag(note_tag) {
+    return function (dispatch) {
+        return NoteTagApiUtil.createNoteTag(note_tag).then(function (note_tag) {
+            return dispatch(receiveNoteTag(note_tag));
+        });
+    };
+};
+
+var updateNoteTag = exports.updateNoteTag = function updateNoteTag(note_tag) {
+    return function (dispatch) {
+        return NoteTagApiUtil.updateNoteTag(note_tag).then(function (note_tag) {
+            return dispatch(receiveNoteTag(note_tag));
+        });
+    };
+};
+
+var deleteNoteTag = exports.deleteNoteTag = function deleteNoteTag(note_tagId) {
+    return function (dispatch) {
+        return NoteTagApiUtil.deleteNoteTag(note_tagId).then(function () {
+            return dispatch(removeNoteTag(note_tagId));
         });
     };
 };
@@ -911,6 +997,8 @@ var NoteShow = function (_React$Component) {
         _this.handleDelete = _this.handleDelete.bind(_this);
         _this.renderTags = _this.renderTags.bind(_this);
         _this.handleNewNoteTag = _this.handleNewNoteTag.bind(_this);
+        _this.handleTagLink = _this.handleTagLink.bind(_this);
+        _this.handleRemoveTag = _this.handleRemoveTag.bind(_this);
         return _this;
     }
 
@@ -956,34 +1044,82 @@ var NoteShow = function (_React$Component) {
         value: function handleNewNoteTag() {
             var _this4 = this;
 
-            this.props.createTag({
-                name: this.state.newTagName
-            }).then(function (res) {
+            //find id of tag if it already exists
+            var newtagname = this.state.newTagName;
+            var tag = Object.values(this.props.tags).find(function (tag) {
+                return tag.name === newtagname;
+            });
+            debugger;
+            if (tag) {
                 var note_tag = {
-                    note_id: _this4.props.note.id,
-                    tag_id: res.tag.id
+                    note_id: this.props.note.id,
+                    tag_id: tag.id
                 };
-                debugger;
-                (0, _note_tag_api_util.createNoteTag)(note_tag);
+                (0, _note_tag_api_util.createNoteTag)(note_tag).then(function (res) {
+                    _this4.props.fetchNote(_this4.props.note.id);
+                    _this4.props.fetchNoteTags();
+                });
+            } else {
+                this.props.createTag({
+                    name: this.state.newTagName
+                }).then(function (res) {
+                    var note_tag = {
+                        note_id: _this4.props.note.id,
+                        tag_id: res.tag.id
+                    };
+                    (0, _note_tag_api_util.createNoteTag)(note_tag).then(function (res) {
+                        _this4.props.fetchNote(_this4.props.note.id);
+                        _this4.props.fetchNoteTags();
+                    });
+                });
+            }
+        }
+    }, {
+        key: 'handleTagLink',
+        value: function handleTagLink(tag) {
+            this.props.updateFilterTags([tag]);
+        }
+    }, {
+        key: 'handleRemoveTag',
+        value: function handleRemoveTag(tag) {
+            var _this5 = this;
+
+            //delete the appropriate notetag
+            //need access to the notetags
+            var note_tag_to_delete = Object.values(this.props.note_tags).find(function (note_tag) {
+                return note_tag.note_id === _this5.props.note.id && note_tag.tag_id === tag.id;
+            });
+            debugger;
+            this.props.deleteNoteTag(note_tag_to_delete.id).then(function (res) {
+                _this5.props.fetchNote(_this5.props.note.id);
             });
         }
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            if (this.props.note) {
-                this.setState(this.props.note);
-            }
+            var _this6 = this;
+
+            this.props.fetchTags();
+            this.props.fetchNoteTags();
+            this.props.fetchNotes().then(function (res) {
+                _this6.setState(_this6.props.note);
+            });
         }
     }, {
         key: 'componentDidUpdate',
         value: function componentDidUpdate(prevProps) {
+
             if (this.props.noteId !== prevProps.noteId) {
+                this.props.fetchTags();
+
                 this.setState(this.props.note);
             }
         }
     }, {
         key: 'renderTags',
         value: function renderTags() {
+            var _this7 = this;
+
             if (this.props.note) {
                 return _react2.default.createElement(
                     'div',
@@ -996,7 +1132,30 @@ var NoteShow = function (_React$Component) {
                                 'button',
                                 null,
                                 _react2.default.createElement('i', { className: 'fas fa-tag fa-fw' }),
-                                tag.name
+                                tag.name,
+                                _react2.default.createElement('i', { className: 'fas fa-angle-down' })
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'note-show-tag-dropup' },
+                                _react2.default.createElement(
+                                    'ul',
+                                    null,
+                                    _react2.default.createElement(
+                                        'li',
+                                        { onClick: function onClick() {
+                                                return _this7.handleTagLink(tag);
+                                            } },
+                                        'Filter by tag'
+                                    ),
+                                    _react2.default.createElement(
+                                        'li',
+                                        { onClick: function onClick() {
+                                                return _this7.handleRemoveTag(tag);
+                                            } },
+                                        'Remove tag'
+                                    )
+                                )
                             )
                         );
                     }),
@@ -1005,7 +1164,7 @@ var NoteShow = function (_React$Component) {
                         null,
                         _react2.default.createElement('input', {
                             type: 'text',
-                            placeholder: 'New tag name',
+                            placeholder: 'Type to add...',
                             value: this.props.newTagName,
                             onChange: this.update('newTagName') }),
                         _react2.default.createElement(
@@ -1077,25 +1236,34 @@ Object.defineProperty(exports, "__esModule", {
 
 var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
-var _note_actions = __webpack_require__(/*! ../../actions/note_actions */ "./frontend/actions/note_actions.js");
-
-var _tag_actions = __webpack_require__(/*! ../../actions/tag_actions */ "./frontend/actions/tag_actions.js");
-
 var _note_show = __webpack_require__(/*! ./note_show */ "./frontend/components/note_show/note_show.jsx");
 
 var _note_show2 = _interopRequireDefault(_note_show);
 
+var _note_actions = __webpack_require__(/*! ../../actions/note_actions */ "./frontend/actions/note_actions.js");
+
+var _tag_actions = __webpack_require__(/*! ../../actions/tag_actions */ "./frontend/actions/tag_actions.js");
+
+var _filter_tags_actions = __webpack_require__(/*! ../../actions/filter_tags_actions */ "./frontend/actions/filter_tags_actions.js");
+
+var _note_tag_actions = __webpack_require__(/*! ../../actions/note_tag_actions */ "./frontend/actions/note_tag_actions.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(_ref, ownProps) {
-    var notes = _ref.entities.notes;
+    var _ref$entities = _ref.entities,
+        notes = _ref$entities.notes,
+        tags = _ref$entities.tags,
+        note_tags = _ref$entities.note_tags;
 
     var note = notes[ownProps.match.params.noteId];
 
     return {
         notes: notes,
         note: note,
-        noteId: ownProps.match.params.noteId
+        noteId: ownProps.match.params.noteId,
+        tags: tags,
+        note_tags: note_tags
     };
 };
 
@@ -1113,10 +1281,34 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         deleteNote: function deleteNote(noteId) {
             return dispatch((0, _note_actions.deleteNote)(noteId));
         },
+        fetchTags: function (_fetchTags) {
+            function fetchTags() {
+                return _fetchTags.apply(this, arguments);
+            }
+
+            fetchTags.toString = function () {
+                return _fetchTags.toString();
+            };
+
+            return fetchTags;
+        }(function () {
+            return dispatch(fetchTags());
+        }),
         createTag: function createTag(tag) {
             return dispatch((0, _tag_actions.createTag)(tag));
+        },
+        updateFilterTags: function updateFilterTags(tags) {
+            return dispatch((0, _filter_tags_actions.updateFilterTags)(tags));
+        },
+        fetchNoteTags: function fetchNoteTags() {
+            return dispatch((0, _note_tag_actions.fetchNoteTags)());
+        },
+        createNoteTag: function createNoteTag(note_tag) {
+            return dispatch(_note_tag_actions.createNoteTag);
+        },
+        deleteNoteTag: function deleteNoteTag(note_tagId) {
+            return dispatch((0, _note_tag_actions.deleteNoteTag)(note_tagId));
         }
-
     };
 };
 
@@ -1568,6 +1760,14 @@ var NotesIndex = function (_React$Component) {
             this.props.fetchNotes();
             this.props.fetchTags();
             this.filterNotes();
+        }
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate(prevProps) {
+            if (this.props.filterTags !== prevProps.filterTags) {
+
+                this.filterNotes();
+            }
         }
     }, {
         key: 'renderTags',
@@ -2308,6 +2508,7 @@ var SideNav = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (SideNav.__proto__ || Object.getPrototypeOf(SideNav)).call(this, props));
 
         _this.handleNewNote = _this.handleNewNote.bind(_this);
+        _this.handleLinkToNotes = _this.handleLinkToNotes.bind(_this);
         return _this;
     }
 
@@ -2337,6 +2538,11 @@ var SideNav = function (_React$Component) {
                     _this2.props.history.push('/notes/' + res.note.id);
                 }
             });
+        }
+    }, {
+        key: 'handleLinkToNotes',
+        value: function handleLinkToNotes() {
+            this.props.updateFilterTags([]);
         }
     }, {
         key: 'render',
@@ -2397,7 +2603,7 @@ var SideNav = function (_React$Component) {
                         null,
                         _react2.default.createElement(
                             _reactRouterDom.Link,
-                            { to: '/notes' },
+                            { to: '/notes', onClick: this.handleLinkToNotes },
                             _react2.default.createElement('i', { className: 'fas fa-sticky-note fa-fw' }),
                             ' Notes'
                         )
@@ -2470,6 +2676,8 @@ var _note_actions = __webpack_require__(/*! ../../actions/note_actions */ "./fro
 
 var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
 
+var _filter_tags_actions = __webpack_require__(/*! ../../actions/filter_tags_actions */ "./frontend/actions/filter_tags_actions.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(_ref, ownProps) {
@@ -2489,7 +2697,11 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         },
         createNote: function createNote(note) {
             return dispatch((0, _note_actions.createNote)(note));
+        },
+        updateFilterTags: function updateFilterTags(tags) {
+            return dispatch((0, _filter_tags_actions.updateFilterTags)(tags));
         }
+
     };
 };
 
@@ -2949,13 +3161,18 @@ var _tags_reducer = __webpack_require__(/*! ./tags_reducer */ "./frontend/reduce
 
 var _tags_reducer2 = _interopRequireDefault(_tags_reducer);
 
+var _note_tags_reducer = __webpack_require__(/*! ./note_tags_reducer */ "./frontend/reducers/note_tags_reducer.js");
+
+var _note_tags_reducer2 = _interopRequireDefault(_note_tags_reducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var entitiesReducer = (0, _redux.combineReducers)({
     users: _users_reducer2.default,
     notes: _notes_reducer2.default,
     notebooks: _notebooks_reducer2.default,
-    tags: _tags_reducer2.default
+    tags: _tags_reducer2.default,
+    note_tags: _note_tags_reducer2.default
 });
 
 exports.default = entitiesReducer;
@@ -3024,6 +3241,47 @@ var filterTagsReducer = function filterTagsReducer() {
 };
 
 exports.default = filterTagsReducer;
+
+/***/ }),
+
+/***/ "./frontend/reducers/note_tags_reducer.js":
+/*!************************************************!*\
+  !*** ./frontend/reducers/note_tags_reducer.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _note_tag_actions = __webpack_require__(/*! ../actions/note_tag_actions */ "./frontend/actions/note_tag_actions.js");
+
+var noteTagsReducer = function noteTagsReducer() {
+    var oldState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    Object.freeze(oldState);
+    var newState = Object.assign({}, oldState);
+
+    switch (action.type) {
+        case _note_tag_actions.RECEIVE_NOTE_TAGS:
+            return action.note_tags;
+        case _note_tag_actions.RECEIVE_NOTE_TAG:
+            newState[action.note.id] = action.note_tag;
+            return newState;
+        case _note_tag_actions.REMOVE_NOTE_TAG:
+            delete newState[action.noteId];
+            return newState;
+        default:
+            return oldState;
+    }
+};
+
+exports.default = noteTagsReducer;
 
 /***/ }),
 

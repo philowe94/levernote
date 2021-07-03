@@ -17,6 +17,8 @@ class NoteShow extends React.Component {
         this.handleDelete = this.handleDelete.bind(this);
         this.renderTags = this.renderTags.bind(this);
         this.handleNewNoteTag = this.handleNewNoteTag.bind(this);
+        this.handleTagLink = this.handleTagLink.bind(this);
+        this.handleRemoveTag = this.handleRemoveTag.bind(this);
     }
 
     handleBodyChange(value) {
@@ -54,27 +56,72 @@ class NoteShow extends React.Component {
     }
 
     handleNewNoteTag() {
-        this.props.createTag({
-            name: this.state.newTagName
-        }).then((res) => {
+        //find id of tag if it already exists
+        let newtagname = this.state.newTagName;
+        let tag = Object.values(this.props.tags).find((tag) => {
+            return tag.name === newtagname;
+        })
+        debugger
+        if(tag) {
             let note_tag = {
                 note_id: this.props.note.id,
-                tag_id: res.tag.id,
+                tag_id: tag.id,
             }
-            debugger
             createNoteTag(note_tag)
-        })
+            .then((res) => {
+                this.props.fetchNote(this.props.note.id);
+                this.props.fetchNoteTags();
 
+            });
+        } else {
+            this.props.createTag({
+                name: this.state.newTagName
+            }).then((res) => {
+                let note_tag = {
+                    note_id: this.props.note.id,
+                    tag_id: res.tag.id,
+                }
+                createNoteTag(note_tag)
+                .then((res) => {
+                    this.props.fetchNote(this.props.note.id);
+                    this.props.fetchNoteTags();
+
+                });
+            })
+        }
+    }
+    
+    handleTagLink(tag) {
+        this.props.updateFilterTags([tag]);
+    }
+
+    handleRemoveTag(tag) {
+        //delete the appropriate notetag
+        //need access to the notetags
+        let note_tag_to_delete = Object.values(this.props.note_tags).find((note_tag) => {
+            return (note_tag.note_id === this.props.note.id) && (note_tag.tag_id === tag.id) 
+        })
+        debugger
+        this.props.deleteNoteTag(note_tag_to_delete.id)
+        .then((res) => {
+            this.props.fetchNote(this.props.note.id);
+        });
     }
 
     componentDidMount(){
-        if (this.props.note) {
+        this.props.fetchTags();
+        this.props.fetchNoteTags();
+        this.props.fetchNotes()
+        .then((res) => {
             this.setState(this.props.note);
-        }
+        })
     }
 
     componentDidUpdate(prevProps){
+
         if (this.props.noteId !== prevProps.noteId) {
+            this.props.fetchTags();
+
             this.setState(this.props.note);
         }
     }
@@ -87,15 +134,21 @@ class NoteShow extends React.Component {
                         return (
                             <div>
                                 <button>
-                                    <i className="fas fa-tag fa-fw"></i>{tag.name}
+                                    <i className="fas fa-tag fa-fw"></i>{tag.name}<i className="fas fa-angle-down"></i>
                                 </button>
+                                <div className="note-show-tag-dropup">
+                                    <ul>
+                                        <li onClick={() => this.handleTagLink(tag)}>Filter by tag</li>
+                                        <li onClick={() => this.handleRemoveTag(tag)}>Remove tag</li>
+                                    </ul>
+                                </div>
                             </div>
                         )
                     })}
                     <div>
                         <input 
                             type="text"
-                            placeholder="New tag name"
+                            placeholder="Type to add..."
                             value={this.props.newTagName}
                             onChange={this.update('newTagName')}/>
                         <button 
