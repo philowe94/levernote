@@ -8,6 +8,7 @@ class NotesIndex extends React.Component {
         super(props); 
         this.state = {
             filteredNotes: [],
+            showTags: false
         }
 
         this.toggleFilterTag = this.toggleFilterTag.bind(this);
@@ -124,19 +125,29 @@ class NotesIndex extends React.Component {
         return(
             <div className="notes-index">
                 <div className="notes-index-header">
-                    <div className="notes-index-header-section-1" >
-                        <i className="-open fa-fw"></i>
-                        <div className="notes-index-header-notebook-name">
-                            {this.props.notebookName}
+                    <div className="notes-index-header-title">
+                        <div className="notes-index-header-section-1" >
+                            <i className="-open fa-fw"></i>
+                            <div className="notes-index-header-notebook-name">
+                                {this.props.notebookName}
+                            </div>
+                        </div>
+                        <div className="notes-index-header-2">
+                            {this.props.notes.length} notes
+                            <div 
+                                className="filter-tag-button" 
+                                onClick={() => this.setState({showTags: !this.state.showTags})}>
+                                <i class="fas fa-filter"></i>
+                            </div>
                         </div>
                     </div>
-                    <div className="notes-index-header-2">
-                        {this.props.notes.length} notes
-                    </div>
+                { ((this.props.filterTags.length > 0) || this.state.showTags) ? this.renderTags() : null}
                 </div>
-                {this.renderTags()}
                 
-                <NotesList notes={notes} url={this.props.url}/>
+                <div className="notes-index-content">
+
+                    <NotesList notes={notes} url={this.props.url}/>
+                </div>
             </div>
         )
     }

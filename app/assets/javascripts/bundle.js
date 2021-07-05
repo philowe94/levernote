@@ -1049,7 +1049,7 @@ var NoteShow = function (_React$Component) {
             var tag = Object.values(this.props.tags).find(function (tag) {
                 return tag.name === newtagname;
             });
-            debugger;
+
             if (tag) {
                 var note_tag = {
                     note_id: this.props.note.id,
@@ -1089,7 +1089,7 @@ var NoteShow = function (_React$Component) {
             var note_tag_to_delete = Object.values(this.props.note_tags).find(function (note_tag) {
                 return note_tag.note_id === _this5.props.note.id && note_tag.tag_id === tag.id;
             });
-            debugger;
+
             this.props.deleteNoteTag(note_tag_to_delete.id).then(function (res) {
                 _this5.props.fetchNote(_this5.props.note.id);
             });
@@ -1123,16 +1123,20 @@ var NoteShow = function (_React$Component) {
             if (this.props.note) {
                 return _react2.default.createElement(
                     'div',
-                    null,
+                    { className: 'note-show-footer' },
                     this.props.note.tags.map(function (tag) {
                         return _react2.default.createElement(
                             'div',
-                            null,
+                            { className: 'note-show-tag-container' },
                             _react2.default.createElement(
-                                'button',
-                                null,
+                                'div',
+                                { className: 'note-show-tag' },
                                 _react2.default.createElement('i', { className: 'fas fa-tag fa-fw' }),
-                                tag.name,
+                                _react2.default.createElement(
+                                    'p',
+                                    null,
+                                    tag.name
+                                ),
                                 _react2.default.createElement('i', { className: 'fas fa-angle-down' })
                             ),
                             _react2.default.createElement(
@@ -1160,20 +1164,17 @@ var NoteShow = function (_React$Component) {
                         );
                     }),
                     _react2.default.createElement(
-                        'div',
+                        'form',
                         null,
                         _react2.default.createElement('input', {
                             type: 'text',
                             placeholder: 'Type to add...',
                             value: this.props.newTagName,
                             onChange: this.update('newTagName') }),
-                        _react2.default.createElement(
-                            'button',
-                            {
-                                onClick: this.handleNewNoteTag,
-                                className: 'new-note-tag-button' },
-                            'Add Tag'
-                        )
+                        _react2.default.createElement('input', {
+                            type: 'submit',
+                            onClick: this.handleNewNoteTag,
+                            className: 'new-note-tag-button' })
                     )
                 );
             }
@@ -1688,7 +1689,8 @@ var NotesIndex = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (NotesIndex.__proto__ || Object.getPrototypeOf(NotesIndex)).call(this, props));
 
         _this.state = {
-            filteredNotes: []
+            filteredNotes: [],
+            showTags: false
         };
 
         _this.toggleFilterTag = _this.toggleFilterTag.bind(_this);
@@ -1810,6 +1812,7 @@ var NotesIndex = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
+            var _this5 = this;
 
             var notes = [];
 
@@ -1827,23 +1830,40 @@ var NotesIndex = function (_React$Component) {
                     { className: 'notes-index-header' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'notes-index-header-section-1' },
-                        _react2.default.createElement('i', { className: '-open fa-fw' }),
+                        { className: 'notes-index-header-title' },
                         _react2.default.createElement(
                             'div',
-                            { className: 'notes-index-header-notebook-name' },
-                            this.props.notebookName
+                            { className: 'notes-index-header-section-1' },
+                            _react2.default.createElement('i', { className: '-open fa-fw' }),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'notes-index-header-notebook-name' },
+                                this.props.notebookName
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'notes-index-header-2' },
+                            this.props.notes.length,
+                            ' notes',
+                            _react2.default.createElement(
+                                'div',
+                                {
+                                    className: 'filter-tag-button',
+                                    onClick: function onClick() {
+                                        return _this5.setState({ showTags: !_this5.state.showTags });
+                                    } },
+                                _react2.default.createElement('i', { 'class': 'fas fa-filter' })
+                            )
                         )
                     ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'notes-index-header-2' },
-                        this.props.notes.length,
-                        ' notes'
-                    )
+                    this.props.filterTags.length > 0 || this.state.showTags ? this.renderTags() : null
                 ),
-                this.renderTags(),
-                _react2.default.createElement(_notes_list2.default, { notes: notes, url: this.props.url })
+                _react2.default.createElement(
+                    'div',
+                    { className: 'notes-index-content' },
+                    _react2.default.createElement(_notes_list2.default, { notes: notes, url: this.props.url })
+                )
             );
         }
     }]);

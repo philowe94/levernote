@@ -61,7 +61,7 @@ class NoteShow extends React.Component {
         let tag = Object.values(this.props.tags).find((tag) => {
             return tag.name === newtagname;
         })
-        debugger
+        
         if(tag) {
             let note_tag = {
                 note_id: this.props.note.id,
@@ -101,7 +101,7 @@ class NoteShow extends React.Component {
         let note_tag_to_delete = Object.values(this.props.note_tags).find((note_tag) => {
             return (note_tag.note_id === this.props.note.id) && (note_tag.tag_id === tag.id) 
         })
-        debugger
+        
         this.props.deleteNoteTag(note_tag_to_delete.id)
         .then((res) => {
             this.props.fetchNote(this.props.note.id);
@@ -129,13 +129,13 @@ class NoteShow extends React.Component {
     renderTags() {
         if (this.props.note) {
             return (
-                <div>
+                <div className="note-show-footer">
                     {this.props.note.tags.map((tag) => {
                         return (
-                            <div>
-                                <button>
-                                    <i className="fas fa-tag fa-fw"></i>{tag.name}<i className="fas fa-angle-down"></i>
-                                </button>
+                            <div className="note-show-tag-container">
+                                <div className="note-show-tag">
+                                    <i className="fas fa-tag fa-fw"></i><p>{tag.name}</p><i className="fas fa-angle-down"></i>
+                                </div>
                                 <div className="note-show-tag-dropup">
                                     <ul>
                                         <li onClick={() => this.handleTagLink(tag)}>Filter by tag</li>
@@ -145,18 +145,19 @@ class NoteShow extends React.Component {
                             </div>
                         )
                     })}
-                    <div>
+                    <form>
                         <input 
                             type="text"
                             placeholder="Type to add..."
                             value={this.props.newTagName}
                             onChange={this.update('newTagName')}/>
-                        <button 
+                        <input
+                            type="submit"
                             onClick={this.handleNewNoteTag}
                             className="new-note-tag-button">
-                            Add Tag
-                        </button>
-                    </div>
+                            
+                        </input>
+                    </form>
                 </div>
             )
         }
