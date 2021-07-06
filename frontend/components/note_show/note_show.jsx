@@ -115,8 +115,7 @@ class NoteShow extends React.Component {
 
     componentDidMount(){
         this.props.fetchTags();
-        this.props.fetchNoteTags();
-        this.props.fetchNotes()
+        this.props.fetchNoteTags()
         .then((res) => {
             this.setState(this.props.note);
         })

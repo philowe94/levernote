@@ -1107,8 +1107,7 @@ var NoteShow = function (_React$Component) {
             var _this7 = this;
 
             this.props.fetchTags();
-            this.props.fetchNoteTags();
-            this.props.fetchNotes().then(function (res) {
+            this.props.fetchNoteTags().then(function (res) {
                 _this7.setState(_this7.props.note);
             });
         }
