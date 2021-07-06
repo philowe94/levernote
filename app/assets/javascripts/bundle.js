@@ -1005,24 +1005,30 @@ var NoteShow = function (_React$Component) {
     _createClass(NoteShow, [{
         key: 'handleBodyChange',
         value: function handleBodyChange(value) {
+            var _this2 = this;
+
             console.log(value);
-            this.setState({ body: value });
-            this.props.updateNote(this.state);
+            this.setState({ body: value }, function () {
+
+                _this2.props.updateNote(_this2.state);
+            });
         }
     }, {
         key: 'update',
         value: function update(field) {
-            var _this2 = this;
+            var _this3 = this;
 
             return function (e) {
-                _this2.setState(_defineProperty({}, field, e.currentTarget.value));
-                _this2.props.updateNote(_this2.state);
+                _this3.setState(_defineProperty({}, field, e.currentTarget.value), function () {
+
+                    _this3.props.updateNote(_this3.state);
+                });
             };
         }
     }, {
         key: 'handleDelete',
         value: function handleDelete() {
-            var _this3 = this;
+            var _this4 = this;
 
             var notesArr = Object.values(this.props.notes);
             var nextNoteId = null;
@@ -1032,7 +1038,7 @@ var NoteShow = function (_React$Component) {
 
             if (nextNoteId) {
                 this.props.deleteNote(this.state.id).then(function () {
-                    _this3.props.history.push('' + nextNoteId);
+                    _this4.props.history.push('' + nextNoteId);
                 });
             } else {
 
@@ -1042,7 +1048,7 @@ var NoteShow = function (_React$Component) {
     }, {
         key: 'handleNewNoteTag',
         value: function handleNewNoteTag(e) {
-            var _this4 = this;
+            var _this5 = this;
 
             e.preventDefault();
             //find id of tag if it already exists
@@ -1057,20 +1063,20 @@ var NoteShow = function (_React$Component) {
                     tag_id: tag.id
                 };
                 (0, _note_tag_api_util.createNoteTag)(note_tag).then(function (res) {
-                    _this4.props.fetchNote(_this4.props.note.id);
-                    _this4.props.fetchNoteTags();
+                    _this5.props.fetchNote(_this5.props.note.id);
+                    _this5.props.fetchNoteTags();
                 });
             } else {
                 this.props.createTag({
                     name: this.state.newTagName
                 }).then(function (res) {
                     var note_tag = {
-                        note_id: _this4.props.note.id,
+                        note_id: _this5.props.note.id,
                         tag_id: res.tag.id
                     };
                     (0, _note_tag_api_util.createNoteTag)(note_tag).then(function (res) {
-                        _this4.props.fetchNote(_this4.props.note.id);
-                        _this4.props.fetchNoteTags();
+                        _this5.props.fetchNote(_this5.props.note.id);
+                        _this5.props.fetchNoteTags();
                     });
                 });
             }
@@ -1083,27 +1089,27 @@ var NoteShow = function (_React$Component) {
     }, {
         key: 'handleRemoveTag',
         value: function handleRemoveTag(tag) {
-            var _this5 = this;
+            var _this6 = this;
 
             //delete the appropriate notetag
             //need access to the notetags
             var note_tag_to_delete = Object.values(this.props.note_tags).find(function (note_tag) {
-                return note_tag.note_id === _this5.props.note.id && note_tag.tag_id === tag.id;
+                return note_tag.note_id === _this6.props.note.id && note_tag.tag_id === tag.id;
             });
 
             this.props.deleteNoteTag(note_tag_to_delete.id).then(function (res) {
-                _this5.props.fetchNote(_this5.props.note.id);
+                _this6.props.fetchNote(_this6.props.note.id);
             });
         }
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this6 = this;
+            var _this7 = this;
 
             this.props.fetchTags();
             this.props.fetchNoteTags();
             this.props.fetchNotes().then(function (res) {
-                _this6.setState(_this6.props.note);
+                _this7.setState(_this7.props.note);
             });
         }
     }, {
@@ -1119,7 +1125,7 @@ var NoteShow = function (_React$Component) {
     }, {
         key: 'renderTags',
         value: function renderTags() {
-            var _this7 = this;
+            var _this8 = this;
 
             if (this.props.note) {
                 return _react2.default.createElement(
@@ -1149,14 +1155,14 @@ var NoteShow = function (_React$Component) {
                                     _react2.default.createElement(
                                         'li',
                                         { onClick: function onClick() {
-                                                return _this7.handleTagLink(tag);
+                                                return _this8.handleTagLink(tag);
                                             } },
                                         'Filter by tag'
                                     ),
                                     _react2.default.createElement(
                                         'li',
                                         { onClick: function onClick() {
-                                                return _this7.handleRemoveTag(tag);
+                                                return _this8.handleRemoveTag(tag);
                                             } },
                                         'Remove tag'
                                     )
