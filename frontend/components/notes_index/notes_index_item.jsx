@@ -26,30 +26,28 @@ const NotesIndexItem = props => {
 
     
     return(
-        <Link to={`${props.url}${props.note.id}`} >
-
-        <li>
-                <div className="notes-index-item-title">
-                    {props.note.title}
+        <Link key={props.note.id} to={`${props.url}${props.note.id}`} >
+            <li key={props.note.id}>
+            <div className="notes-index-item-title">
+                {props.note.title}
+            </div>
+            <div className="notes-index-item-body">
+                {strippedbody}...
+            </div>
+            <div className="notes-index-item-footer">
+                <div className="notes-index-item-time">
+                    {convertDate(props.note.updated_at)}
                 </div>
-                <div className="notes-index-item-body">
-                    {strippedbody}...
+                <div className="notes-index-item-tags">
+                    {Object.values(props.note.tags).map((tag) => (
+                        <div key={tag.id} className="notes-index-item-tag">
+                            {tag.name}
+                        </div>
+                    ))}
                 </div>
-                <div className="notes-index-item-footer">
-                    <div className="notes-index-item-time">
-                        {convertDate(props.note.updated_at)}
-                    </div>
-                    <div className="notes-index-item-tags">
-                        {Object.values(props.note.tags).map((tag) => (
-                            <div className="notes-index-item-tag">
-                                {tag.name}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-        </li>
+            </div>
+            </li>
         </Link>
-
     )
 }
    

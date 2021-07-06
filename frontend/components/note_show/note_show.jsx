@@ -6,9 +6,10 @@ class NoteShow extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: null,
+            note: null,
             title: '',
             body: '',
+            notebook_id: null,
             updated_at: new Date(),
             newTagName: '',
         };
@@ -22,16 +23,28 @@ class NoteShow extends React.Component {
     }
 
     handleBodyChange(value) {
-        console.log(value);
-        this.setState({ body: value });
-        this.props.updateNote(this.state);
+        this.setState({ body: value }, () => {
+            let newnote = this.state.note;
+            newnote.title = this.state.title;
+            newnote.body = this.state.body;
+            newnote.notebook_id = this.state.notebook_id;
+            debugger
+            //this.props.updateNote(newnote);
+        });
+        
     }
 
     update(field) {
 
         return e => {
-            this.setState({ [field]: e.currentTarget.value });
-            this.props.updateNote(this.state);
+            this.setState({ [field]: e.currentTarget.value }, () => {
+                let newnote = this.state.note;
+                newnote.title = this.state.title;
+                newnote.body = this.state.body;
+                newnote.notebook_id = this.state.notebook_id;
+                debugger
+                this.props.updateNote(newnote);
+            });
         }
     }
 
@@ -113,7 +126,12 @@ class NoteShow extends React.Component {
         this.props.fetchNoteTags();
         this.props.fetchNotes()
         .then((res) => {
-            this.setState(this.props.note);
+            this.setState({
+                note: this.props.note,
+                title: this.props.note.title,
+                body: this.props.note.body,
+                notebook_id: this.props.note.notebook_id,
+            });        
         })
     }
 
@@ -122,7 +140,12 @@ class NoteShow extends React.Component {
         if (this.props.noteId !== prevProps.noteId) {
             this.props.fetchTags();
 
-            this.setState(this.props.note);
+            this.setState({
+                note: this.props.note,
+                title: this.props.note.title,
+                body: this.props.note.body,
+                notebook_id: this.props.note.notebook_id,
+            });   
         }
     }
 
@@ -132,14 +155,14 @@ class NoteShow extends React.Component {
                 <div className="note-show-footer">
                     {this.props.note.tags.map((tag) => {
                         return (
-                            <div className="note-show-tag-container">
+                            <div key={tag.id} className="note-show-tag-container">
                                 <div className="note-show-tag">
                                     <i className="fas fa-tag fa-fw"></i><p>{tag.name}</p><i className="fas fa-angle-down"></i>
                                 </div>
                                 <div className="note-show-tag-dropup">
                                     <ul>
-                                        <li onClick={() => this.handleTagLink(tag)}>Filter by tag</li>
-                                        <li onClick={() => this.handleRemoveTag(tag)}>Remove tag</li>
+                                        <li key="filter" onClick={() => this.handleTagLink(tag)}>Filter by tag</li>
+                                        <li key="remove" onClick={() => this.handleRemoveTag(tag)}>Remove tag</li>
                                     </ul>
                                 </div>
                             </div>

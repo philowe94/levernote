@@ -21,7 +21,8 @@ class NotesList extends React.Component {
         return(
             <ul className="notes-index-list">
                 {notes.map(note => (
-                    <NotesIndexItem note={note} key={note.id} url={this.props.url} />
+                    <NotesIndexItem key={note.id} note={note} url={this.props.url} />
+
                 ))}
             </ul>
         )

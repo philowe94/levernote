@@ -35,10 +35,14 @@
         .new-notebook-button {
             color: #00a82d;
             border:none;
-            width: 200px;
             background: none;
             font-size: 14px;
             padding-left: 5px;
+            flex-shrink: 0;
+
+            &:hover {
+                color: green;
+            }
         }
     }
 
@@ -73,9 +77,26 @@
             .list-header-updated {
                 width: 20%;
                 display: flex;
+                align-items: center;
 
                 div {
                     flex-grow: 5;
+                }
+
+                .rename-button {
+                    background: lightgray;
+                    border-radius: 3px;
+                    border: none;
+                    margin: 0px 5px 0px 5px;
+                    height: 25px;
+                    padding: 5px 10px 5px 12px;
+                    
+                    
+            
+                    &:hover {
+                        
+                        background: gray;
+                    }
                 }
 
                 .delete-button {
@@ -100,7 +121,80 @@
                 text-decoration: none;
             }
         }
+
+        li:hover:not(:first-child) {
+            background: #dee3e0;
+
+        }
+
+        
     }
 
+
+
    
+}
+
+.rename-notebook-modal {
+    display: flex;
+    flex-direction: column;
+
+    h2 {
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 3;
+        padding: 0px 20px 0px 20px;
+    }
+
+ 
+
+    label {
+        font-size: 12px;
+        line-height: 1.6;
+        padding: 0px 20px 0px 20px;
+
+    }
+
+    .rename-notebook-input {
+        width: 400px;
+        font-size: 16px;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid lightgray;
+        margin: 0px 20px 0px 20px;
+        margin-bottom: 40px;
+    }
+
+    .rename-notebook-modal-buttons {
+        display: flex;
+        flex-direction: row-reverse;
+        border-top: 1px solid lightgray;
+        padding: 20px;
+
+        .rename-notebook-modal-cancel {
+            border-radius: 5px;
+            border: 1px solid lightgray;
+            margin: 5px;
+            padding: 10px;
+            font-size: 14px;
+            &:hover {
+                background-color: lightgray;
+            }
+        }
+
+        
+        .rename-notebook-modal-continue {
+            border-radius: 5px;
+            border: 1px solid #00a82d;
+            margin: 5px;
+            background-color: #00a82d;
+            color: white;
+            padding: 10px;
+            font-size: 14px;
+
+            &:hover {
+                background-color: #008f26
+            }
+        }
+    }
 }

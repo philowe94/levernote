@@ -100,7 +100,7 @@ class NotesIndex extends React.Component {
                         }
 
                         return (
-                            <div className={classname}>
+                            <div key={tag.id} className={classname}>
                                 <button onClick={() => this.toggleFilterTag(tag)}>
                                     <i className="fas fa-tag fa-fw"></i>{tag.name}
                                 </button>
@@ -137,7 +137,7 @@ class NotesIndex extends React.Component {
                             <div 
                                 className="filter-tag-button" 
                                 onClick={() => this.setState({showTags: !this.state.showTags})}>
-                                <i class="fas fa-filter"></i>
+                                <i className="fas fa-filter"></i>
                             </div>
                         </div>
                     </div>

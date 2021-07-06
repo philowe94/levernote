@@ -3,7 +3,7 @@
     color: #333333;
     text-decoration: none;
     height: 100vh;
-    width: 325px;
+    width: 350px;
     display: flex;
     flex-direction: column;
 
@@ -42,6 +42,7 @@
                 border-radius: 5px;
 
                 &:hover {
+                    cursor: pointer;
                     background-color: #e6e6e6;
                 }
             }

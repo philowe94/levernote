@@ -6,7 +6,8 @@ class NoteTag < ApplicationRecord
         foreign_key: :note_id,
         class_name: "Note"
 
-    belongs_to :tag,
+    belongs_to :tag, 
+        dependent: :destroy,
         foreign_key: :tag_id,
         class_name: "Tag"
 end

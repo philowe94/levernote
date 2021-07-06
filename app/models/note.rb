@@ -4,6 +4,10 @@ class Note < ApplicationRecord
     belongs_to :author,
         foreign_key: :author_id,
         class_name: "User"
+    
+    belongs_to :notebook,
+        foreign_key: :notebook_id,
+        class_name: "Notebook"
 
     has_many :note_tags,
         foreign_key: :note_id,
