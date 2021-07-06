@@ -1041,9 +1041,10 @@ var NoteShow = function (_React$Component) {
         }
     }, {
         key: 'handleNewNoteTag',
-        value: function handleNewNoteTag() {
+        value: function handleNewNoteTag(e) {
             var _this4 = this;
 
+            e.preventDefault();
             //find id of tag if it already exists
             var newtagname = this.state.newTagName;
             var tag = Object.values(this.props.tags).find(function (tag) {

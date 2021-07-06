@@ -55,7 +55,8 @@ class NoteShow extends React.Component {
 
     }
 
-    handleNewNoteTag() {
+    handleNewNoteTag(e) {
+        e.preventDefault();
         //find id of tag if it already exists
         let newtagname = this.state.newTagName;
         let tag = Object.values(this.props.tags).find((tag) => {
