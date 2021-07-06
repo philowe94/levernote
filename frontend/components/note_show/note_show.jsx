@@ -150,7 +150,8 @@ class NoteShow extends React.Component {
                         )
                     })}
                     <form>
-                        <input 
+                        <input
+                            className="note-show-new-tag-input" 
                             type="text"
                             placeholder="Type to add..."
                             value={this.props.newTagName}

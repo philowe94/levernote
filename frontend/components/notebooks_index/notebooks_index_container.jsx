@@ -1,5 +1,9 @@
 import { connect } from 'react-redux';
-import { fetchNotebooks, createNotebook, deleteNotebook } from '../../actions/notebook_actions';
+import { 
+    fetchNotebooks, 
+    createNotebook, 
+    deleteNotebook,
+    updateNotebook } from '../../actions/notebook_actions';
 import NotebooksIndex from './notebooks_index';
 
 const mapStateToProps = ({ session, entities : { notebooks, users }}) => {
@@ -13,7 +17,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchNotebooks: () => dispatch(fetchNotebooks()),
         createNotebook: (notebook) => dispatch(createNotebook(notebook)),
-        deleteNotebook: (notebookId) => dispatch(deleteNotebook(notebookId))
+        deleteNotebook: (notebookId) => dispatch(deleteNotebook(notebookId)),
+        updateNotebook: (notebook) => dispatch(updateNotebook(notebook)),
     }
 }
 
