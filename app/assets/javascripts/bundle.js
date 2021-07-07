@@ -1960,15 +1960,12 @@ var NotesIndex = function (_React$Component) {
                 });
             });
 
-            debugger;
-
             if (this.props.currentNotebookId) {
                 var cni = this.props.currentNotebookId;
                 filteredNotes = filteredNotes.filter(function (note) {
                     return cni == note.notebook_id;
                 });
             }
-            debugger;
 
             this.setState({
                 filteredNotes: filteredNotes
@@ -1990,6 +1987,10 @@ var NotesIndex = function (_React$Component) {
         value: function componentDidUpdate(prevProps) {
             if (this.props.filterTags !== prevProps.filterTags) {
 
+                this.filterNotes();
+            }
+
+            if (this.props.notes !== prevProps.notes) {
                 this.filterNotes();
             }
         }

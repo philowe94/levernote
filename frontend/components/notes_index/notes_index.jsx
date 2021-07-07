@@ -61,15 +61,12 @@ class NotesIndex extends React.Component {
             })
         })
 
-        debugger
-
         if(this.props.currentNotebookId) {
             let cni = this.props.currentNotebookId
             filteredNotes = filteredNotes.filter((note) => {
                 return cni == note.notebook_id;
             })
         }
-        debugger
 
         this.setState({
             filteredNotes: filteredNotes
@@ -89,6 +86,10 @@ class NotesIndex extends React.Component {
     componentDidUpdate(prevProps) {
         if (this.props.filterTags !== prevProps.filterTags) {
 
+            this.filterNotes();
+        }
+
+        if (this.props.notes !== prevProps.notes) {
             this.filterNotes();
         }
     }
