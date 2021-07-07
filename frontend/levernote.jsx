@@ -39,7 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }    
     window.getState = store.getState;
     window.dispatch = store.dispatch;
-
+    
+    Modal.setAppElement(document.getElementById('root'));
     const root = document.getElementById("root");
     ReactDOM.render(<Root store={store} />, root);
 });
