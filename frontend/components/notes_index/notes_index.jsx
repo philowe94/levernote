@@ -132,7 +132,7 @@ class NotesIndex extends React.Component {
         let notes = [];
         if (this.props.currentNotebookId &&  Object.values(this.props.notebooks)[this.props.currentNotebookId]) {
             
-            notes = Object.values(this.props.notebooks)[this.props.currentNotebookId-1].notes;
+            notes = this.props.notebooks[this.props.currentNotebookId-1].notes;
         }
 
         if (this.props.filterTags.length > 0 || this.props.currentNotebookId) {
@@ -144,7 +144,8 @@ class NotesIndex extends React.Component {
         let notebookName = "Notes";
 
         if (this.props.currentNotebookId) {
-            notebookName = Object.values(this.props.notebooks)[this.props.currentNotebookId-1].name;
+            
+            notebookName = this.props.notebooks[this.props.currentNotebookId].name;
         }
 
         return(
