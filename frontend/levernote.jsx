@@ -3,6 +3,7 @@ import '@fortawesome/fontawesome-free/js/all.js';
 //react
 import React from "react";
 import ReactDOM from "react-dom";
+import Modal from "react-modal";
 
 //testing
 import * as SessionAPIUtil from './util/session_api_util';
