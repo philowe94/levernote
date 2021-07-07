@@ -312,7 +312,7 @@ var deleteNoteTag = exports.deleteNoteTag = function deleteNoteTag(note_tagId) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.deleteNotebook = exports.updateNotebook = exports.createNotebook = exports.fetchNotebook = exports.fetchNotebooks = exports.REMOVE_NOTEBOOK = exports.RECEIVE_NOTEBOOK = exports.RECEIVE_NOTEBOOKS = undefined;
+exports.updateFilterTags = exports.deleteNotebook = exports.updateNotebook = exports.createNotebook = exports.fetchNotebook = exports.fetchNotebooks = exports.RECEIVE_CURRENT_NOTEBOOK = exports.REMOVE_NOTEBOOK = exports.RECEIVE_NOTEBOOK = exports.RECEIVE_NOTEBOOKS = undefined;
 
 var _notebook_api_util = __webpack_require__(/*! ../util/notebook_api_util */ "./frontend/util/notebook_api_util.js");
 
@@ -325,6 +325,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 var RECEIVE_NOTEBOOKS = exports.RECEIVE_NOTEBOOKS = 'RECEIVE_NOTEBOOKS';
 var RECEIVE_NOTEBOOK = exports.RECEIVE_NOTEBOOK = 'RECEIVE_NOTEBOOK';
 var REMOVE_NOTEBOOK = exports.REMOVE_NOTEBOOK = 'REMOVE_NOTEBOOK';
+var RECEIVE_CURRENT_NOTEBOOK = exports.RECEIVE_CURRENT_NOTEBOOK = 'RECEIVE_CURRENT_NOTEBOOK';
 
 //action creators
 var receiveNotebooks = function receiveNotebooks(notebooks) {
@@ -347,6 +348,13 @@ var removeNotebook = function removeNotebook(notebookId) {
     return {
         type: REMOVE_NOTEBOOK,
         notebookId: notebookId
+    };
+};
+
+var receiveCurrentNotebook = function receiveCurrentNotebook(notebook) {
+    return {
+        type: RECEIVE_CURRENT_NOTEBOOK,
+        notebook: notebook
     };
 };
 
@@ -394,6 +402,12 @@ var deleteNotebook = exports.deleteNotebook = function deleteNotebook(notebookId
         return NotebookApiUtil.deleteNotebook(notebookId).then(function () {
             return dispatch(removeNotebook(notebookId));
         });
+    };
+};
+
+var updateFilterTags = exports.updateFilterTags = function updateFilterTags(notebook) {
+    return function (dispatch) {
+        dispatch(receiveCurrentNotebook(notebook));
     };
 };
 
@@ -1107,7 +1121,8 @@ var NoteShow = function (_React$Component) {
             var _this7 = this;
 
             this.props.fetchTags();
-            this.props.fetchNoteTags().then(function (res) {
+            this.props.fetchNoteTags();
+            this.props.fetchNotes().then(function (res) {
                 _this7.setState(_this7.props.note);
             });
         }
@@ -1119,6 +1134,9 @@ var NoteShow = function (_React$Component) {
                 this.props.fetchTags();
 
                 this.setState(this.props.note);
+                this.setState({
+                    newTagName: ''
+                });
             }
         }
     }, {
@@ -1176,7 +1194,7 @@ var NoteShow = function (_React$Component) {
                             className: 'note-show-new-tag-input',
                             type: 'text',
                             placeholder: 'Type to add...',
-                            value: this.props.newTagName,
+                            value: this.state.newTagName,
                             onChange: this.update('newTagName') }),
                         _react2.default.createElement('input', {
                             type: 'submit',
@@ -1354,19 +1372,25 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var mapStateToProps = function mapStateToProps(state, ownProps) {
 
-    var notebook = state.entities.notebooks[ownProps.match.params.notebookId];
     return {
-        notebook: notebook,
+        notebooks: state.entities.notebooks,
         notes: Object.values(state.entities.notes),
         url: '/notebooks/' + ownProps.match.params.notebookId + '/notes/',
-        notebookName: notebook.name,
         tags: state.entities.tags,
-        filterTags: state.ui.filterTags
+        filterTags: state.ui.filterTags,
+        currentNotebookId: ownProps.match.params.notebookId
+
     };
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
     return {
+        fetchNotebooks: function fetchNotebooks() {
+            return dispatch((0, _notebook_actions.fetchNotebooks)());
+        },
+        fetchNotebook: function fetchNotebook() {
+            return dispatch((0, _notebook_actions.fetchNotebook)());
+        },
         fetchNotes: function fetchNotes() {
             return dispatch((0, _notebook_actions.fetchNotebook)(ownProps.match.params.notebookId));
         },
@@ -1375,7 +1399,11 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
         },
         updateFilterTags: function updateFilterTags(tags) {
             return dispatch((0, _filter_tags_actions.updateFilterTags)(tags));
+        },
+        updateCurrentNotebook: function updateCurrentNotebook(notebook) {
+            return dispatch((0, _notebook_actions.updateCurrentNotebook)(notebook));
         }
+
     };
 };
 
@@ -1783,15 +1811,20 @@ var _notebooks_index2 = _interopRequireDefault(_notebooks_index);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var mapStateToProps = function mapStateToProps(_ref) {
+var mapStateToProps = function mapStateToProps(_ref, ownProps) {
     var session = _ref.session,
         _ref$entities = _ref.entities,
         notebooks = _ref$entities.notebooks,
-        users = _ref$entities.users;
+        users = _ref$entities.users,
+        _ref$ui = _ref.ui,
+        filterTags = _ref$ui.filterTags,
+        currentNotebook = _ref$ui.currentNotebook;
 
     return {
         notebooks: Object.values(notebooks),
-        currentUser: users[session.id]
+        currentUser: users[session.id],
+        filterTags: filterTags,
+        currentNotebook: currentNotebook
     };
 };
 
@@ -1800,6 +1833,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         fetchNotebooks: function fetchNotebooks() {
             return dispatch((0, _notebook_actions.fetchNotebooks)());
         },
+
         createNotebook: function createNotebook(notebook) {
             return dispatch((0, _notebook_actions.createNotebook)(notebook));
         },
@@ -1926,6 +1960,16 @@ var NotesIndex = function (_React$Component) {
                 });
             });
 
+            debugger;
+
+            if (this.props.currentNotebookId) {
+                var cni = this.props.currentNotebookId;
+                filteredNotes = filteredNotes.filter(function (note) {
+                    return cni == note.notebook_id;
+                });
+            }
+            debugger;
+
             this.setState({
                 filteredNotes: filteredNotes
             }, function () {});
@@ -1933,9 +1977,13 @@ var NotesIndex = function (_React$Component) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this.props.fetchNotes();
+            var _this4 = this;
+
             this.props.fetchTags();
-            this.filterNotes();
+            this.props.fetchNotebooks();
+            this.props.fetchNotes().then(function (res) {
+                _this4.filterNotes();
+            });
         }
     }, {
         key: 'componentDidUpdate',
@@ -1948,7 +1996,7 @@ var NotesIndex = function (_React$Component) {
     }, {
         key: 'renderTags',
         value: function renderTags() {
-            var _this4 = this;
+            var _this5 = this;
 
             if (this.props.tags == []) {
                 return _react2.default.createElement('div', null);
@@ -1959,7 +2007,7 @@ var NotesIndex = function (_React$Component) {
                     Object.values(this.props.tags).map(function (tag) {
                         var classname = "notes-index-tag";
                         var tagIds = [];
-                        _this4.props.filterTags.forEach(function (tag) {
+                        _this5.props.filterTags.forEach(function (tag) {
                             tagIds.push(tag.id);
                         });
 
@@ -1973,7 +2021,7 @@ var NotesIndex = function (_React$Component) {
                             _react2.default.createElement(
                                 'button',
                                 { onClick: function onClick() {
-                                        return _this4.toggleFilterTag(tag);
+                                        return _this5.toggleFilterTag(tag);
                                     } },
                                 _react2.default.createElement('i', { className: 'fas fa-tag fa-fw' }),
                                 tag.name
@@ -1986,14 +2034,24 @@ var NotesIndex = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this5 = this;
+            var _this6 = this;
 
             var notes = [];
+            if (this.props.currentNotebookId && Object.values(this.props.notebooks)[this.props.currentNotebookId]) {
 
-            if (this.props.filterTags.length > 0) {
+                notes = Object.values(this.props.notebooks)[this.props.currentNotebookId - 1].notes;
+            }
+
+            if (this.props.filterTags.length > 0 || this.props.currentNotebookId) {
                 notes = this.state.filteredNotes;
             } else {
                 notes = this.props.notes;
+            }
+
+            var notebookName = "Notes";
+
+            if (this.props.currentNotebookId) {
+                notebookName = Object.values(this.props.notebooks)[this.props.currentNotebookId - 1].name;
             }
 
             return _react2.default.createElement(
@@ -2012,7 +2070,7 @@ var NotesIndex = function (_React$Component) {
                             _react2.default.createElement(
                                 'div',
                                 { className: 'notes-index-header-notebook-name' },
-                                this.props.notebookName
+                                notebookName
                             )
                         ),
                         _react2.default.createElement(
@@ -2025,7 +2083,7 @@ var NotesIndex = function (_React$Component) {
                                 {
                                     className: 'filter-tag-button',
                                     onClick: function onClick() {
-                                        return _this5.setState({ showTags: !_this5.state.showTags });
+                                        return _this6.setState({ showTags: !_this6.state.showTags });
                                     } },
                                 _react2.default.createElement('i', { 'class': 'fas fa-filter' })
                             )
@@ -2077,26 +2135,49 @@ var _tag_actions = __webpack_require__(/*! ../../actions/tag_actions */ "./front
 
 var _filter_tags_actions = __webpack_require__(/*! ../../actions/filter_tags_actions */ "./frontend/actions/filter_tags_actions.js");
 
+var _notebook_actions = __webpack_require__(/*! ../../actions/notebook_actions */ "./frontend/actions/notebook_actions.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(_ref) {
     var session = _ref.session,
         _ref$entities = _ref.entities,
         notes = _ref$entities.notes,
+        notebooks = _ref$entities.notebooks,
         tags = _ref$entities.tags,
         filterTags = _ref.ui.filterTags;
 
     return {
+        notebooks: notebooks,
         notes: Object.values(notes),
         url: '/notes/',
         notebookName: "Notes",
         tags: tags,
-        filterTags: filterTags
+        filterTags: filterTags,
+        currentNotebook: null,
+        currentNotebookId: null
     };
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
+        fetchNotebooks: function fetchNotebooks() {
+            return dispatch((0, _notebook_actions.fetchNotebooks)());
+        },
+
+        fetchNotebook: function (_fetchNotebook) {
+            function fetchNotebook(_x) {
+                return _fetchNotebook.apply(this, arguments);
+            }
+
+            fetchNotebook.toString = function () {
+                return _fetchNotebook.toString();
+            };
+
+            return fetchNotebook;
+        }(function (notebookId) {
+            return dispatch(fetchNotebook(notebookId));
+        }),
         logout: function logout() {
             return dispatch((0, _session_actions.logout)());
         },
@@ -2108,7 +2189,11 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         },
         updateFilterTags: function updateFilterTags(tags) {
             return dispatch((0, _filter_tags_actions.updateFilterTags)(tags));
+        },
+        updateCurrentNotebook: function updateCurrentNotebook(notebook) {
+            return dispatch((0, _notebook_actions.updateCurrentNotebook)(notebook));
         }
+
     };
 };
 
@@ -3529,6 +3614,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /***/ }),
 
+/***/ "./frontend/reducers/current_notebook_reducer.js":
+/*!*******************************************************!*\
+  !*** ./frontend/reducers/current_notebook_reducer.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _filter_tags_actions = __webpack_require__(/*! ../actions/filter_tags_actions */ "./frontend/actions/filter_tags_actions.js");
+
+var filterTagsReducer = function filterTagsReducer() {
+    var oldState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var action = arguments[1];
+
+    Object.freeze(oldState);
+    var newState = Object.assign([], oldState);
+
+    switch (action.type) {
+        case _filter_tags_actions.RECEIVE_CURRENT_NOTEBOOK:
+            return action.notebook;
+        default:
+            return oldState;
+    }
+};
+
+exports.default = filterTagsReducer;
+
+/***/ }),
+
 /***/ "./frontend/reducers/entities_reducer.js":
 /*!***********************************************!*\
   !*** ./frontend/reducers/entities_reducer.js ***!
@@ -3957,11 +4077,15 @@ var _filter_tags_reducer = __webpack_require__(/*! ./filter_tags_reducer */ "./f
 
 var _filter_tags_reducer2 = _interopRequireDefault(_filter_tags_reducer);
 
+var _current_notebook_reducer = __webpack_require__(/*! ./current_notebook_reducer */ "./frontend/reducers/current_notebook_reducer.js");
+
+var _current_notebook_reducer2 = _interopRequireDefault(_current_notebook_reducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var uiReducer = (0, _redux.combineReducers)({
-    filterTags: _filter_tags_reducer2.default
-
+    filterTags: _filter_tags_reducer2.default,
+    currentNotebook: _current_notebook_reducer2.default
 });
 
 exports.default = uiReducer;

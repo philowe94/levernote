@@ -115,7 +115,8 @@ class NoteShow extends React.Component {
 
     componentDidMount(){
         this.props.fetchTags();
-        this.props.fetchNoteTags()
+        this.props.fetchNoteTags();
+        this.props.fetchNotes()
         .then((res) => {
             this.setState(this.props.note);
         })
@@ -127,6 +128,9 @@ class NoteShow extends React.Component {
             this.props.fetchTags();
 
             this.setState(this.props.note);
+            this.setState({
+                newTagName: '',
+            })
         }
     }
 
@@ -154,7 +158,7 @@ class NoteShow extends React.Component {
                             className="note-show-new-tag-input" 
                             type="text"
                             placeholder="Type to add..."
-                            value={this.props.newTagName}
+                            value={this.state.newTagName}
                             onChange={this.update('newTagName')}/>
                         <input
                             type="submit"
