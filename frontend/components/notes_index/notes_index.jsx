@@ -28,7 +28,6 @@ class NotesIndex extends React.Component {
             this.setState({
                 filterTags: tagsList,
             }, () => {
-                console.log(this.props.filterTags);
                 this.filterNotes();
             })
         } else {
@@ -39,7 +38,6 @@ class NotesIndex extends React.Component {
             this.setState({
                 filterTags: tagsList,
             }, () => {
-                console.log(this.state.filterTags);
                 this.filterNotes();
             })
         }

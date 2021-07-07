@@ -22,7 +22,6 @@ class NoteShow extends React.Component {
     }
 
     handleBodyChange(value) {
-        console.log(value);
         this.setState({ body: value }, () => {
 
             this.props.updateNote(this.state);
