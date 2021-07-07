@@ -98,9 +98,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 export default connect(mapStateToProps, mapDispatchToProps)(NotesIndex);
 ```
 
-## Future
+### Tags
 
-Implement tagging feature to allow users to assign tags to notes. Notes should be able to have many tags, and users should be able to filter notes based on tags.
+Tags are a table in the database with columns for name and author_id. They have many notes through a join table of NoteTags.
+
+Users are able to create, view, rename, and delete tags. Users can add tags to notes. Users can use tags to filter through their notes, either by one tag at a time or combinations of tags. 
+
+Users see thier tags after logging in and clicking Tags on the left sidebar. This displays a list of the users tags. Users can create tags here. Tags can also be created when viewing a note in the tag section of that note.
+
+Implementing Tags required more complex database code than the previously existing features, as it necessitated the use of a join table. It also involved a lot of modifications to existing components to incorporate the tags. Both the notes index and the individual note components contain new interactive elements related to tags, such as filtering the list of tags, or adding/removing tags from the note.
+
+## Future
 
 Implement search feature to allow users to filter notes based on a string.
 
