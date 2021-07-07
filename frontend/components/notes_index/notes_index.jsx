@@ -47,6 +47,7 @@ class NotesIndex extends React.Component {
     }
 
     filterNotes() {
+
         let filteredNotes = this.props.notes.filter((note) => {
             //get all tag ids from the note
             let tagIds = []
@@ -60,6 +61,16 @@ class NotesIndex extends React.Component {
             })
         })
 
+        debugger
+
+        if(this.props.currentNotebookId) {
+            let cni = this.props.currentNotebookId
+            filteredNotes = filteredNotes.filter((note) => {
+                return cni == note.notebook_id;
+            })
+        }
+        debugger
+
         this.setState({
             filteredNotes: filteredNotes
         }, () => {
@@ -67,9 +78,12 @@ class NotesIndex extends React.Component {
     }
 
     componentDidMount() {
-        this.props.fetchNotes();
         this.props.fetchTags();
-        this.filterNotes();
+        this.props.fetchNotebooks();
+        this.props.fetchNotes()
+        .then((res) => {
+            this.filterNotes();
+        });
     }
 
     componentDidUpdate(prevProps) {
@@ -113,13 +127,23 @@ class NotesIndex extends React.Component {
     }
 
     render() {
-
+        
         let notes = [];
+        if (this.props.currentNotebookId &&  Object.values(this.props.notebooks)[this.props.currentNotebookId]) {
+            
+            notes = Object.values(this.props.notebooks)[this.props.currentNotebookId-1].notes;
+        }
 
-        if (this.props.filterTags.length > 0) {
+        if (this.props.filterTags.length > 0 || this.props.currentNotebookId) {
             notes = this.state.filteredNotes;
         } else {
             notes = this.props.notes;
+        }
+
+        let notebookName = "Notes";
+
+        if (this.props.currentNotebookId) {
+            notebookName = Object.values(this.props.notebooks)[this.props.currentNotebookId-1].name;
         }
 
         return(
@@ -129,7 +153,7 @@ class NotesIndex extends React.Component {
                         <div className="notes-index-header-section-1" >
                             <i className="-open fa-fw"></i>
                             <div className="notes-index-header-notebook-name">
-                                {this.props.notebookName}
+                                {notebookName}
                             </div>
                         </div>
                         <div className="notes-index-header-2">

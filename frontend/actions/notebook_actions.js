@@ -5,6 +5,7 @@ import * as NotebookApiUtil from '../util/notebook_api_util';
 export const RECEIVE_NOTEBOOKS = 'RECEIVE_NOTEBOOKS';
 export const RECEIVE_NOTEBOOK = 'RECEIVE_NOTEBOOK';
 export const REMOVE_NOTEBOOK = 'REMOVE_NOTEBOOK';
+export const RECEIVE_CURRENT_NOTEBOOK = 'RECEIVE_CURRENT_NOTEBOOK';
 
 //action creators
 const receiveNotebooks = (notebooks) => ({
@@ -22,6 +23,11 @@ const receiveNotebook = (notebook, notes = {}) => ({
 const removeNotebook = (notebookId) => ({
     type: REMOVE_NOTEBOOK,
     notebookId
+})
+
+const receiveCurrentNotebook = (notebook) => ({
+    type: RECEIVE_CURRENT_NOTEBOOK,
+    notebook
 })
 
 //thunk actions
@@ -50,3 +56,7 @@ export const deleteNotebook = (notebookId) => dispatch => (
     NotebookApiUtil.deleteNotebook(notebookId)
     .then(() => dispatch(removeNotebook(notebookId)))
 )
+
+export const updateFilterTags = (notebook) => (dispatch) => {
+    dispatch(receiveCurrentNotebook(notebook));
+}
