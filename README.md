@@ -10,7 +10,7 @@ Notes            |  Notebooks
 
 ## Deployment
 
-Initialize the database with `rails db:reset`. You must be running PostgreSQL.
+Initialize the database with `rails db:reset`. You must be running PostgreSQL (sudo service postgresql start).
 
 Start the server with `rails s`
 
