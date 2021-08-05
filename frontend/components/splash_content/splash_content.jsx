@@ -52,7 +52,7 @@ const SplashContent = () => {
                     <h3>More Projects</h3>
                     <ul>
                         <li><a href="https://netzero-application.herokuapp.com/" target="_blank">Net Zero</a></li>
-                        <li><a href="https://philowe94.github.io/alien-game/" target="_blank">Heiankyo Alien</a></li>
+                        <li><a href="https://philowe94.github.io/alien-game/" target="_blank">Alien Game</a></li>
                     </ul>
                 </div>
                 

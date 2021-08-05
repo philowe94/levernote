@@ -3204,7 +3204,7 @@ var SplashContent = function SplashContent() {
                         _react2.default.createElement(
                             'a',
                             { href: 'https://philowe94.github.io/alien-game/', target: '_blank' },
-                            'Heiankyo Alien'
+                            'Alien Game'
                         )
                     )
                 )
