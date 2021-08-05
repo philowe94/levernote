@@ -6,6 +6,7 @@ class User < ApplicationRecord
     validates :password, length: {minimum: 4}, allow_nil: true
 
     after_initialize :ensure_session_token
+    validate :is_email_valid?
 
     has_many :notes,
         foreign_key: :author_id,
@@ -45,6 +46,17 @@ class User < ApplicationRecord
         generate_session_token
         save!
         self.session_token
+    end
+
+    def is_email_valid?
+        email_parts = self.email.split("@")
+        if !email_parts[1]
+            errors.add(:email, "address is invalid")
+        elsif !email_parts[1].split(".")[1]
+            errors.add(:email,"address is invalid")
+        else
+            return true
+        end
     end
 
     private

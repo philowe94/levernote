@@ -2563,7 +2563,7 @@ var SessionForm = function (_React$Component) {
             var _this4 = this;
 
             this.props.processForm({
-                email: "demo",
+                email: "demo@demo.com",
                 password: "password"
             }).then(function () {
                 return _this4.props.history.push('/notes');
