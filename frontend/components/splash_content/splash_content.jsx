@@ -32,18 +32,27 @@ const SplashContent = () => {
             <hr></hr>
 
             <div className="splash-footer">
-                <div className="splash-about">
+                <div className="splash-more">
                     <h3>About</h3>
                     <ul>
-                        <li><a href="https://github.com/philowe94/">Github</a></li>
-                        <li><a href="https://www.linkedin.com/in/philip-lowe-274b9a9a/">Linkedin</a></li>
+                        <li>Philip Lowe</li>
+                        <li><a href="mailto: philip.lowe94@gmail.com">philip.lowe94@gmail.com</a></li>
+                        <li>516-282-5752</li>
                     </ul>
                 </div>
                 <div className="splash-more">
-                    <h3>More From Phil</h3>
+                    <h3>Contact</h3>
                     <ul>
-                        <li><a href="https://netzero-application.herokuapp.com/">Net Zero</a></li>
-                        <li><a href="https://philowe94.github.io/heiankyo-alien/">Heiankyo Alien</a></li>
+                        <li><a href="https://github.com/philowe94/" target="_blank">Github</a></li>
+                        <li><a href="https://www.linkedin.com/in/philip-lowe-274b9a9a/" target="_blank">Linkedin</a></li>
+                        <li><a href="https://philowe94.github.io/portfolio/" target="_blank">Personal Site</a></li>
+                    </ul>
+                </div>
+                <div className="splash-more">
+                    <h3>More Projects</h3>
+                    <ul>
+                        <li><a href="https://netzero-application.herokuapp.com/" target="_blank">Net Zero</a></li>
+                        <li><a href="https://philowe94.github.io/alien-game/" target="_blank">Heiankyo Alien</a></li>
                     </ul>
                 </div>
                 

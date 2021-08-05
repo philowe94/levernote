@@ -779,7 +779,7 @@ var Navbar = function Navbar(_ref) {
                     null,
                     _react2.default.createElement(
                         'a',
-                        { href: 'https://github.com/philowe94/' },
+                        { href: 'https://github.com/philowe94/', target: '_blank' },
                         'Github'
                     )
                 ),
@@ -788,8 +788,17 @@ var Navbar = function Navbar(_ref) {
                     null,
                     _react2.default.createElement(
                         'a',
-                        { href: 'https://www.linkedin.com/in/philip-lowe-274b9a9a/' },
+                        { href: 'https://www.linkedin.com/in/philip-lowe-274b9a9a/', target: '_blank' },
                         'Linkedin'
+                    )
+                ),
+                _react2.default.createElement(
+                    'li',
+                    null,
+                    _react2.default.createElement(
+                        'a',
+                        { href: 'https://philowe94.github.io/portfolio/', target: '_blank' },
+                        'Personal Site'
                     )
                 )
             ),
@@ -2803,7 +2812,7 @@ var SideNav = function (_React$Component) {
             }
 
             var newnote = {
-                title: 'New Note',
+                title: '',
                 body: '',
                 author_id: this.props.currentUser.id,
                 notebook_id: notebookId
@@ -3098,7 +3107,7 @@ var SplashContent = function SplashContent() {
             { className: 'splash-footer' },
             _react2.default.createElement(
                 'div',
-                { className: 'splash-about' },
+                { className: 'splash-more' },
                 _react2.default.createElement(
                     'h3',
                     null,
@@ -3110,9 +3119,41 @@ var SplashContent = function SplashContent() {
                     _react2.default.createElement(
                         'li',
                         null,
+                        'Philip Lowe'
+                    ),
+                    _react2.default.createElement(
+                        'li',
+                        null,
                         _react2.default.createElement(
                             'a',
-                            { href: 'https://github.com/philowe94/' },
+                            { href: 'mailto: philip.lowe94@gmail.com' },
+                            'philip.lowe94@gmail.com'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        '516-282-5752'
+                    )
+                )
+            ),
+            _react2.default.createElement(
+                'div',
+                { className: 'splash-more' },
+                _react2.default.createElement(
+                    'h3',
+                    null,
+                    'Contact'
+                ),
+                _react2.default.createElement(
+                    'ul',
+                    null,
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { href: 'https://github.com/philowe94/', target: '_blank' },
                             'Github'
                         )
                     ),
@@ -3121,8 +3162,17 @@ var SplashContent = function SplashContent() {
                         null,
                         _react2.default.createElement(
                             'a',
-                            { href: 'https://www.linkedin.com/in/philip-lowe-274b9a9a/' },
+                            { href: 'https://www.linkedin.com/in/philip-lowe-274b9a9a/', target: '_blank' },
                             'Linkedin'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'li',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { href: 'https://philowe94.github.io/portfolio/', target: '_blank' },
+                            'Personal Site'
                         )
                     )
                 )
@@ -3133,7 +3183,7 @@ var SplashContent = function SplashContent() {
                 _react2.default.createElement(
                     'h3',
                     null,
-                    'More From Phil'
+                    'More Projects'
                 ),
                 _react2.default.createElement(
                     'ul',
@@ -3143,7 +3193,7 @@ var SplashContent = function SplashContent() {
                         null,
                         _react2.default.createElement(
                             'a',
-                            { href: 'https://netzero-application.herokuapp.com/' },
+                            { href: 'https://netzero-application.herokuapp.com/', target: '_blank' },
                             'Net Zero'
                         )
                     ),
@@ -3152,7 +3202,7 @@ var SplashContent = function SplashContent() {
                         null,
                         _react2.default.createElement(
                             'a',
-                            { href: 'https://philowe94.github.io/heiankyo-alien/' },
+                            { href: 'https://philowe94.github.io/alien-game/', target: '_blank' },
                             'Heiankyo Alien'
                         )
                     )

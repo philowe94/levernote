@@ -85,15 +85,21 @@
     margin-left: auto;
 
     a {
-        color: black;
+        color: green;
         font-family: "Soleil_Bold",Helvetica,Arial,sans-serif;
         text-decoration: none;
         padding: 16px;
         font-size: 16px;
         transition: .1s color ease-in-out;
+        transition: .05s border ease-in-out;
+
+        border: 3px solid green;
+        border-radius: 5px;
+        font-weight: 700;
     }
 
     a:hover {
-        color: green;
+        color: lightgreen;
+        border: 3px solid lightgreen;
     }
 }

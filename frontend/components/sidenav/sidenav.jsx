@@ -17,7 +17,7 @@ class SideNav extends React.Component {
         }
 
         let newnote = {
-            title: 'New Note',
+            title: '',
             body: '',
             author_id: this.props.currentUser.id,
             notebook_id: notebookId
