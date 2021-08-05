@@ -1197,7 +1197,8 @@ var NoteShow = function (_React$Component) {
                     }),
                     _react2.default.createElement(
                         'form',
-                        null,
+                        { className: 'tag-form' },
+                        _react2.default.createElement('i', { className: 'fas green fa-tag fa-fw' }),
                         _react2.default.createElement('input', {
                             className: 'note-show-new-tag-input',
                             type: 'text',

@@ -152,7 +152,9 @@ class NoteShow extends React.Component {
                             </div>
                         )
                     })}
-                    <form>
+                    <form className="tag-form">
+                        <i className="fas green fa-tag fa-fw"></i>
+                        
                         <input
                             className="note-show-new-tag-input" 
                             type="text"
