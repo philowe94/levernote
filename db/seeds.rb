@@ -44,7 +44,7 @@ note3 = Note.create!(
     title: 'Test note', 
     body: '1. Eggs 2. Milk', 
     author_id: udemo.id,
-    notebook_id: notebook1.id    
+    notebook_id: notebook3.id    
 )
 
 note4 = Note.create!(
@@ -65,7 +65,7 @@ note6 = Note.create!(
     title: 'Test note 4', 
     body: '1. Flowers 2. ???', 
     author_id: udemo.id,
-    notebook_id: notebook1.id     
+    notebook_id: notebook3.id     
 )
 
 note7 = Note.create!(
