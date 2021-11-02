@@ -10,6 +10,8 @@ Notes            |  Notebooks
 
 ## Deployment
 
+First, `bundle install` followed by `npm install`
+
 Initialize the database with `rails db:reset`. You must be running PostgreSQL (sudo service postgresql start).
 
 Start the server with `rails s`
