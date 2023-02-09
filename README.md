@@ -12,7 +12,11 @@ Notes            |  Notebooks
 
 First, `bundle install` followed by `npm install`
 
-Initialize the database with `rails db:reset`. You must be running PostgreSQL (sudo service postgresql start).
+Make sure there is a user with permissions to create databases matching your linux account name `sudo -u postgres createuser <yourname> -s`
+
+Start postgreSQL with `sudo service postgresql start`
+
+Initialize the database with `rails db:reset`.
 
 Start the server with `rails s`
 
