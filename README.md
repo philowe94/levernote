@@ -66,7 +66,11 @@ Navigate your broswer to `localhost:3000`
 
 These are instructions on how to deploy to Heroku
 
+Install heroku `curl https://cli-assets.heroku.com/install.sh | sh`
 
+`heroku git:remote -a levernote`
+
+`git push heroku main`
 
 ## Techologies Used
 
