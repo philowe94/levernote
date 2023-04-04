@@ -8,17 +8,65 @@ Notes            |  Notebooks
 :-------------------------:|:-------------------------:
 ![Screenshot of the Notes view](./app/assets/images/screenshot1.png) | ![Screenshot of the Notebooks view](./app/assets/images/screenshot2.png)
 
-## Deployment
+## Local Installation
 
-First, `bundle install` followed by `npm install`
+These deployment instructions are specific to Ubuntu Linux
 
-Initialize the database with `rails db:reset`. You must be running PostgreSQL (sudo service postgresql start).
+`sudo apt-get update` and `sudo apt-get upgrade` before doing anything
+
+You must have ruby 2.7.2 and bundler `sudo apt install ruby-bundler`.
+
+Optionally you can use a version manager for ruby, I use asdf.
+
+- To install asdf, `git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.11.3`
+
+- Set up asdf in your `~/.bashrc`, or whatever file you use to configure your shell, with `echo ". $HOME/.asdf/asdf.sh" >> ~/.bashrc`
+
+- Reload your terminal to pick up the changes to your shell.
+
+- You must have make and gcc installed `sudo apt-get install make` `sudo apt-get install build-essential`
+
+- `asdf plugin-add ruby` followed by `asdf install ruby 2.7.2`
+
+You must have postgreSQL installed.
+
+ - To install postgreSQL, `sudo apt-get install postgresql postgresql-client`
+ 
+ - To launch postgreSQL, `sudo service postgresql start`
+
+ - To install postgreSQL development headers for ruby, `sudo apt-get install libpq-dev`
+
+ - You must create a postgreSQL role that matches your linux username
+    - `sudo -u postgres psql`
+    - In the postgres terminal, `CREATE ROLE <username> WITH LOGIN;`
+    - Give yourself the appropriate permissions `ALTER ROLE <username> CREATEDB;`
+    - Exit the psql terminal with `exit`
+
+ - You must create the databases `createdb levernote_development` `createdb levernote_test`
+
+You must have NVM installed.
+ 
+ - Once installed, `nvm install 10.13.0`
+
+Run `nvm use` so that nvm uses the version specified in the .nvmrc
+
+`bundle install` followed by `npm install`
+
+Install rails with `sudo apt install ruby-railties`
+
+Initialize the database with `rails db:reset`. You must be running PostgreSQL `sudo service postgresql start`.
 
 Start the server with `rails s`
 
-Compile the javascript with `npm run webpack`
+In a different terminal tab, compile the javascript with `npm run webpack`
 
 Navigate your broswer to `localhost:3000`
+
+## Deployment
+
+These are instructions on how to deploy to Heroku
+
+
 
 ## Techologies Used
 
@@ -34,7 +82,7 @@ React is used to create a front-end for the information output by the API. Thunk
 
 ### Notes
 
-Notes are a table in the database with columns for title, body, notebook_id, and author_id.
+Notes are a table in the database with columns for `title`, `body`, `notebook_id`, and `author_id`.
 
 Users are able to create, view, update, and delete notes.
 
