@@ -8,6 +8,16 @@ Notes            |  Notebooks
 :-------------------------:|:-------------------------:
 ![Screenshot of the Notes view](./app/assets/images/screenshot1.png) | ![Screenshot of the Notebooks view](./app/assets/images/screenshot2.png)
 
+## Techologies Used
+
+Levernote is built with PostgreSQL, Rails, React, and Redux
+
+PostgreSQL is used to store the users, notes, and notebooks in a database. 
+
+Rails is used to create an API interface for the back end. Rails performs SQL queries and outputs data from the database in the form of JSON objects.
+
+React is used to create a front-end for the information output by the API. Thunk actions perform API calls and then send the response to a Reducer which populates the Redux store. Then the React components use information from the store, such as the current user or some subset of notes, to present information.
+
 ## Local Installation
 
 These deployment instructions are specific to Ubuntu Linux
@@ -72,15 +82,7 @@ Install heroku `curl https://cli-assets.heroku.com/install.sh | sh`
 
 `git push heroku main`
 
-## Techologies Used
-
-Levernote is built with PostgreSQL, Rails, React, and Redux
-
-PostgreSQL is used to store the users, notes, and notebooks in a database. 
-
-Rails is used to create an API interface for the back end. Rails performs SQL queries and outputs data from the database in the form of JSON objects.
-
-React is used to create a front-end for the information output by the API. Thunk actions perform API calls and then send the response to a Reducer which populates the Redux store. Then the React components use information from the store, such as the current user or some subset of notes, to present information.
+In heroku settings, set the buildpack to `heroku/heroku-buildpack-ruby-2.2`
 
 ## Features
 
