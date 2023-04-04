@@ -169,5 +169,3 @@ Implementing Tags required more complex database code than the previously existi
 Implement search feature to allow users to filter notes based on a string.
 
 Implement note templates to give users preset suggestions for different kinds of notes.
-
-
